@@ -7,5 +7,6 @@
 
 #include "menon/bits/config.hh"
 #include "menon/bits/sv.hh"
+#include "menon/bits/explode.hh"
 
 #endif  // !MENON_STRING_HH_
