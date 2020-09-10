@@ -1,0 +1,8 @@
+﻿#ifndef MENON_VERSION_HH_
+#define MENON_VERSION_HH_
+#pragma once
+
+#define MENON_VERSION     %VERSION%
+#define MENON_LIB_VERSION "%LIB_VERSION%"
+
+#endif  // !MENON_VERSION_HH_
