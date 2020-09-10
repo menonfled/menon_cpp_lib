@@ -6,5 +6,6 @@
 #pragma once
 
 #include "menon/bits/isctype.hh"
+#include "menon/bits/toctrans.hh"
 
 #endif  // !MENON_CTYPE_HH_
