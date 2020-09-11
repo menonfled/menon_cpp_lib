@@ -34,6 +34,7 @@ namespace menon
   /// @param[in]  glue  区切り文字
   /// @param[in]  c     文字列の列
   /// @return     連結した結果をstringとして返す。
+  /// この関数はPHPのimplodeからの借用である。
   template <typename T, typename U>
   auto implode(T glue, U c)
   {
