@@ -10,6 +10,11 @@
 # error Menon C++ Library requires C++20 compilation.
 #endif
 
+/// Windows用処理系の判定
+#if defined(__MINGW32__) || defined(_MSC_VER)
+# include "menon/bits/win_workaround.hh"
+#endif
+
 // Guidelines Support Libraryの判定
 // バージョン番号を直接調べる方法方がないので、<gsl/span_ext>の有無を
 // 調べて古いバージョンの使用を禁止する。
