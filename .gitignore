@@ -38,3 +38,4 @@ doc/rtf/*.rtf
 .vscode/settings.json
 menon/version.hh
 doc/Doxyfile
+test/config.mak
