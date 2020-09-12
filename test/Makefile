@@ -1,12 +1,16 @@
 CC			=	gcc
 CXX 		=	g++
 
-INCLUDES	=	-iquote .. -iquote .
-DEFINES 	= 
+OSTYPE		=	$(shell echo $$OSTYPE);
+
+-include config.mak
+
+INCLUDES	+=	-iquote .. -iquote .
+DEFINES 	+= 
 WARNINGS	=	-Wall -Wextra -Wconversion -Weffc++
 CFLAGS		=	-MMD -g -Og -std=gnu18 $(INCLUDES) $(DEFINES) $(WARNINGS)
 CXXFLAGS	=	-MMD -g -Og -std=gnu++20 $(INCLUDES) $(DEFINES) $(WARNINGS)
-LDFLAGS		=	-lm
+LDFLAGS		+=	-lm
 
 CXXSRCS		=	$(filter %.cc,$(shell ls .))
 OBJS		=	$(CXXSRCS:%.cc=%.o)
