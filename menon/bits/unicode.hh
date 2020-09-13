@@ -6,7 +6,7 @@
 #pragma once
 
 #include "menon/bits/config.hh"
-#include <array>
+#include <utility>
 
 /// バイト順マーク（BOM）
 /// 文字列リテラルの先頭に付加することで使用する。
@@ -95,14 +95,12 @@ namespace menon
   /// char16_tからchar32_tへの変換
   /// @param[in]  c16   char16_t型の文字配列
   /// @param[in]  n     c16が指す配列の要素数
-  /// @return     char32_t型の文字を返す。変換に失敗した場合はナル文字を返す。
-  /// サロゲートペアを考慮し、引数は2要素の配列として受け取る。
-  /// サロゲートペアではない場合は最初の1要素のみを使用し、2要素目は無視する。
+  /// @return     char32_t文字とc16配列の解析した要素数のペアを返す。
   inline auto c16_to_c32(char16_t const* c16, std::size_t n)
   {
-    char32_t c32 = U'\0';
+    std::pair<char32_t, std::size_t> r {};
     if (c16 == nullptr)
-      return c32;
+      return r;
 
     char16_t h = u'\0';
     char16_t l = u'\0';
@@ -112,16 +110,16 @@ namespace menon
     if (n > 1)
       l = c16[1];
 
-    if (0xd800 <= h && h <= 0xdbff)
+    if (n > 1 && 0xd800 <= h && h <= 0xdbff)
     {
       if (0xdc00 <= l && l <= 0xdfff)
-        c32 = static_cast<char32_t>(0x10000 + (h - 0xd800) * 0x400 + (l - 0xdc00));
+        r = { static_cast<char32_t>(0x10000 + (h - 0xd800) * 0x400 + (l - 0xdc00)), 2 };
     }
-    else if (l < 0xdc00 || 0xdfff < l)
+    else if (h < 0xdc00 || 0xdfff < h)
     {
-      c32 = static_cast<char32_t>(h);
+      r = { static_cast<char32_t>(h), 1 };
     }
-    return c32;
+    return r;
   }
 
   /// char16_tからchar32_tへの変換
@@ -142,30 +140,32 @@ namespace menon
   /// @return     char32_t型の文字を返す。変換に失敗した場合はナル文字を返す。
   inline auto c8_to_c32(char8_t const* c8, std::size_t n)
   {
-    char32_t c32 = U'\0';
+    std::pair<char32_t, std::size_t> r {};
+    if (c8 == nullptr)
+      return r;
 
     if (n > 0 && c8[0] <= 0x7f)
     {
-      c32 = static_cast<char32_t>(c8[0]);
+      r = { static_cast<char32_t>(c8[0]), 1 };
     }
     else if (n > 1 && ((c8[0] & 0b1110'0000) == 0b1100'0000))
     {
       if ((c8[1] & 0b1100'0000) == 0b1000'0000)
       {
-        c32 = (c8[0] & 0b0001'1111) << 6 | (c8[1] & 0b0011'1111);
+        r = { (c8[0] & 0b0001'1111) << 6 | (c8[1] & 0b0011'1111), 2 };
       }
     }
     else if (n > 1 && (c8[0] & 0b1111'0000) == 0b1110'0000)
     {
       if (((c8[1] & 0b1100'0000) == 0b1000'0000) && ((c8[2] & 0b1100'0000) == 0b1000'0000))
-        c32 = (c8[0] & 0b0000'1111) << 12 | (c8[1] & 0b0011'1111) << 6 | (c8[2] & 0b0011'1111);
+        r = { (c8[0] & 0b0000'1111) << 12 | (c8[1] & 0b0011'1111) << 6 | (c8[2] & 0b0011'1111), 3 };
     }
     else if (n > 2 && (c8[0] & 0b1111'1000) == 0b1111'0000)
     {
       if (((c8[1] & 0b1100'0000) == 0b1000'0000) && ((c8[2] & 0b1100'0000) == 0b1000'0000) && ((c8[3] & 0b1100'0000) == 0b1000'0000))
-        c32 = (c8[0] & 0b0000'1111) << 18 | (c8[1] & 0b0011'1111) << 12 | (c8[2] & 0b0011'1111) << 6 | (c8[3] & 0b0011'1111);
+        r = { (c8[0] & 0b0000'1111) << 18 | (c8[1] & 0b0011'1111) << 12 | (c8[2] & 0b0011'1111) << 6 | (c8[3] & 0b0011'1111), 4 };
     }
-    return c32;
+    return r;
   }
 
   /// char8_tからchar32_tへの変換

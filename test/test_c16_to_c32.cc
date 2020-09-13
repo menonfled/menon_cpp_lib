@@ -36,7 +36,7 @@ void test(char16_t const* c16, std::size_t n)
 
   char16_t s[8];
   std::copy(c16, c16 + n, s);
-  auto c32 = menon::c16_to_c32(s, n);
+  auto [c32, count] = menon::c16_to_c32(s, n);
 
   BOOST_TEST_EQ((int)c32, (int)utf32);
 

@@ -34,7 +34,7 @@ void test(char32_t c32)
     std::perror("fail:");
   }
 
-  auto r = menon::c8_to_c32(utf8, 4);
+  auto [r, count] = menon::c8_to_c32(utf8, 4);
 
   BOOST_TEST_EQ((int)r, (int)c32);
 }
