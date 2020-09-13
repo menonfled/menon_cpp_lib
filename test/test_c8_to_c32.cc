@@ -36,7 +36,7 @@ void test(char32_t c32)
 
   auto n = menon::c8_to_c32(utf8, 4, &utf32);
 
-  BOOST_TEST(n > 0);
+  BOOST_TEST_GT(n, 0);
   BOOST_TEST_EQ((int)utf32, (int)c32);
 }
 
