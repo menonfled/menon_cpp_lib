@@ -52,6 +52,18 @@ namespace menon
     }
     return c32;
   }
+
+  /// char16_tからchar32_tへの変換
+  /// @param[in]  c16   char16_t型の文字
+  /// @return     char32_t型の文字を返す。変換に失敗した場合はナル文字を返す。
+  /// サロゲートペアには対応しない。
+  /// サロゲートペアの片側を指定した場合はナル文字を返す。
+  constexpr auto c16_to_c32(char16_t c16)
+  {
+    if ((0xd800 <= c16 && c16 <= 0xdbff) && (0xdc00 <= c16 && c16 <= 0xdfff))
+      return U'\0';
+    return static_cast<char32_t>(c16);
+  }
 }
 
 #endif  // !MENON_BITS_UNICODE_HH_
