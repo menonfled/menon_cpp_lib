@@ -25,5 +25,11 @@ int main()
 #if MENON_HAS_GSL
   BOOST_TEST_EQ(menon::sv(gsl::basic_string_span<char>(s, 3)), "abc"sv);
 #endif
+
+  {
+    constexpr auto sv = "abcde"sv;
+    constexpr auto a = menon::sv_to_array<3>("abcde"sv);
+    BOOST_TEST_ALL_EQ(a.begin(), a.end(), sv.begin(), sv.begin() + 3);
+  }
   return boost::report_errors();
 }

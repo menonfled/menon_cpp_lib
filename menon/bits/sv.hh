@@ -9,6 +9,7 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
+#include <array>
 #include "menon/bits/config.hh"
 #if MENON_HAS_BOOST
 #include <boost/utility/string_view.hpp>
@@ -89,6 +90,24 @@ namespace menon
     return std::basic_string_view<Char, Traits>(sv.data(), sv.size());
   }
 #endif
+
+  /// arrayからstring_viewへの変換
+  /// @param[in]  sv    string_view文字列
+  /// @return     svの内容を変換したarrayを返す。
+  /// この関数を呼び出す際は明示的にarraryの要素数Nを指定する必要がある。
+  /// Nがsv.size()より小さい場合はNだけコピーされる。
+  /// 逆にNがsv.size()より大きい場合は余った要素にナル文字を格納する。
+  template <std::size_t N, typename Char, typename Traits>
+  constexpr auto sv_to_array(std::basic_string_view<Char, Traits> sv)
+  {
+    std::array<Char, N> r {};
+    std::size_t n = sv.size();
+    if (N < n)
+      n = N;
+    for (std::size_t i = 0; i < n; i++)
+      r[i] = sv[i];
+    return r;
+  }
 }
 
 #endif  // !MENON_BITS_SV_HH_
