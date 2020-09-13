@@ -14,13 +14,10 @@ namespace menon
   /// @return     cの要素にvalueに一致する要素があればその要素へのポインタを返す。なければnullptrを返す。
   template <typename C>
   inline auto find(C& c, typename C::value_type value)
-    -> decltype(&*begin(c))
+    -> decltype(&*c.begin())
   {
-    using ::std::begin;
-    using ::std::end;
-    auto last = end(c);
-    auto it = std::find(begin(c), last, value);
-    if (it != last)
+    auto it = std::find(c.begin(), c.end(), value);
+    if (it != c.end())
       return &*it;
     return nullptr;
   }
@@ -60,13 +57,10 @@ namespace menon
   /// find関数との違いは、cfind関数はconst修飾されたポインタを返すことである。
   template <typename C>
   inline auto cfind(C& c, typename C::value_type value)
-    -> decltype(&*cbegin(c))
+    -> decltype(&*c.cbegin())
   {
-    using ::std::cbegin;
-    using ::std::cend;
-    auto last = cend(c);
-    auto it = std::find(cbegin(c), last, value);
-    if (it != last)
+    auto it = std::find(c.cbegin(), c.cend(), value);
+    if (it != c.cend())
       return &*it;
     return nullptr;
   }
