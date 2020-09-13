@@ -3,6 +3,8 @@
 #include <vector>
 #include <deque>
 #include <list>
+#include <map>
+#include <string>
 
 int main()
 {
@@ -51,6 +53,28 @@ int main()
       BOOST_TEST_EQ(*p, 7);
     }
     p = menon::find(l, 6);
+    BOOST_TEST_EQ(p, nullptr);
+  }
+
+  std::map<std::string, int> m = { { "d", 3 }, { "y", 2 }, { "c", 7 }, { "v", 1 } };
+  {
+    auto p = menon::find(m, "c");
+    BOOST_TEST_NE(p, nullptr);
+    if (p != nullptr)
+    {
+      BOOST_TEST_EQ(*p, 7);
+    }
+    p = menon::find(m, "k");
+    BOOST_TEST_EQ(p, nullptr);
+  }
+  {
+    auto p = menon::cfind(m, "c");
+    BOOST_TEST_NE(p, nullptr);
+    if (p != nullptr)
+    {
+      BOOST_TEST_EQ(*p, 7);
+    }
+    p = menon::cfind(m, "k");
     BOOST_TEST_EQ(p, nullptr);
   }
   return boost::report_errors();
