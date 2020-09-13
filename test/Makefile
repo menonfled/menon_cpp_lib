@@ -1,3 +1,4 @@
+# Menon C++ Libraryのテストコード用Makefile
 CC			=	gcc
 CXX 		=	g++
 

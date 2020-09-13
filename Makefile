@@ -1,3 +1,4 @@
+# Makefile for Menon C++ Library
 VER_TEXT	=	$(shell cat version.txt)
 VER_LIST	=	$(subst ., ,$(VER_TEXT))
 MAJOR_VER	=	$(word 1,$(VER_LIST))

@@ -1,3 +1,4 @@
+# Menon C++ Libraryのドキュメント用Makefile
 CXXSRCS	=	$(shell ls ../menon/*.hh ../menon/bits/*.hh)
 INDEX		=	./html/index.html
 
