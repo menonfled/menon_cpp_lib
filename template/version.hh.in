@@ -1,4 +1,6 @@
-﻿#ifndef MENON_VERSION_HH_
+﻿/// @file   menon/version.hh
+/// @author @menonfled  
+#ifndef MENON_VERSION_HH_
 #define MENON_VERSION_HH_
 #pragma once
 
