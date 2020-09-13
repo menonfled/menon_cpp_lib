@@ -42,7 +42,7 @@ void test(char16_t const* c16, std::size_t n)
 
   if (n == 1)
   {
-    c32 = menon::c16_to_c32(c16[0]);
+    auto c32 = menon::c16_to_c32(c16[0]);
     BOOST_TEST_EQ((int)c32, (int)utf32);
   }
 }
