@@ -34,9 +34,9 @@ void test(char16_t const* c16, std::size_t n)
     std::perror("fail:");
   }
 
-  std::array<char16_t, 2> s {};
-  std::copy(c16, c16 + n, s.data());
-  auto c32 = menon::c16_to_c32(s);
+  char16_t s[8];
+  std::copy(c16, c16 + n, s);
+  auto c32 = menon::c16_to_c32(s, n);
 
   BOOST_TEST_EQ((int)c32, (int)utf32);
 

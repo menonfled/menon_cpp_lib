@@ -20,7 +20,7 @@ namespace menon
   /// @return     char16_t型の文字を返す。
   /// サロゲートペアを考慮し、結果は2要素のarrayとして返す。
   /// 不要な要素にはナル文字を格納する。
-  auto c32_to_c16(char32_t c32)
+  inline auto c32_to_c16(char32_t c32)
   {
     std::array<char16_t, 2> c16;
     if (c32 < 0x10000)
@@ -42,7 +42,7 @@ namespace menon
   /// 値に応じて結果のarrayには1～4要素を格納する。
   /// 不要な要素にはナル文字を格納する。
   /// c32が不正な値の場合は全要素ナル文字を格納する。
-  auto c32_to_c8(char32_t c32)
+  inline auto c32_to_c8(char32_t c32)
   {
     std::array<char8_t, 4> c8 {};
 
@@ -76,19 +76,19 @@ namespace menon
 
   /// char16_tからchar32_tへの変換
   /// @param[in]  c16   char16_t型の文字配列
+  /// @param[in]  n     c16が指す配列の要素数
   /// @return     char32_t型の文字を返す。変換に失敗した場合はナル文字を返す。
   /// サロゲートペアを考慮し、引数は2要素の配列として受け取る。
   /// サロゲートペアではない場合は最初の1要素のみを使用し、2要素目は無視する。
-  template <std::size_t N>
-  auto c16_to_c32(std::array<char16_t, N> const& c16)
+  inline auto c16_to_c32(char16_t const* c16, std::size_t n)
   {
     char32_t c32 = U'\0';
     char16_t h = u'\0';
     char16_t l = u'\0';
 
-    if (N > 0)
+    if (n > 0)
       h = c16[0];
-    if (N > 1)
+    if (n > 1)
       l = c16[1];
 
     if (0xd800 <= h && h <= 0xdbff)
@@ -117,29 +117,29 @@ namespace menon
 
   /// char8_tからchar32_tへの変換
   /// @param[in]  c8    char8_t型の文字配列
+  /// @param[in]  n     c8が指す配列の要素数
   /// @return     char32_t型の文字を返す。変換に失敗した場合はナル文字を返す。
-  template <std::size_t N>
-  auto c8_to_c32(std::array<char8_t, N> c8)
+  auto c8_to_c32(char8_t const* c8, std::size_t n)
   {
     char32_t c32 = U'\0';
 
-    if (N > 0 && c8[0] <= 0x7f)
+    if (n > 0 && c8[0] <= 0x7f)
     {
       c32 = static_cast<char32_t>(c8[0]);
     }
-    else if (N > 1 && ((c8[0] & 0b1110'0000) == 0b1100'0000))
+    else if (n > 1 && ((c8[0] & 0b1110'0000) == 0b1100'0000))
     {
       if ((c8[1] & 0b1100'0000) == 0b1000'0000)
       {
         c32 = (c8[0] & 0b0001'1111) << 6 | (c8[1] & 0b0011'1111);
       }
     }
-    else if (N > 1 && (c8[0] & 0b1111'0000) == 0b1110'0000)
+    else if (n > 1 && (c8[0] & 0b1111'0000) == 0b1110'0000)
     {
       if (((c8[1] & 0b1100'0000) == 0b1000'0000) && ((c8[2] & 0b1100'0000) == 0b1000'0000))
         c32 = (c8[0] & 0b0000'1111) << 12 | (c8[1] & 0b0011'1111) << 6 | (c8[2] & 0b0011'1111);
     }
-    else if (N > 2 && (c8[0] & 0b1111'1000) == 0b1111'0000)
+    else if (n > 2 && (c8[0] & 0b1111'1000) == 0b1111'0000)
     {
       if (((c8[1] & 0b1100'0000) == 0b1000'0000) && ((c8[2] & 0b1100'0000) == 0b1000'0000) && ((c8[3] & 0b1100'0000) == 0b1000'0000))
         c32 = (c8[0] & 0b0000'1111) << 18 | (c8[1] & 0b0011'1111) << 12 | (c8[2] & 0b0011'1111) << 6 | (c8[3] & 0b0011'1111);
