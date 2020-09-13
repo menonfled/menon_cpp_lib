@@ -1,4 +1,4 @@
-/// @file   menon/encoding.hh
+﻿/// @file   menon/encoding.hh
 /// @author @menonfled
 /// 各種エンコーディング変換のための宣言・定義
 #ifndef MENON_ENCODING_HH_

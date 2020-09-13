@@ -1,4 +1,4 @@
-#include "menon/encoding.hh"
+﻿#include "menon/encoding.hh"
 #include <boost/core/lightweight_test.hpp>
 #include <algorithm>
 #include <iconv.h>

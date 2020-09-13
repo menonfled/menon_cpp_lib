@@ -1,4 +1,4 @@
-/// @file   menon/bits/unicode.hh
+﻿/// @file   menon/bits/unicode.hh
 /// @author @menonfled
 /// Unicode関連処理の宣言・定義
 #ifndef MENON_BITS_UNICODE_HH_

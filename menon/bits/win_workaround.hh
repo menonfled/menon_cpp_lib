@@ -1,4 +1,4 @@
-/// @file   menon/bits/win_workarond.hh
+﻿/// @file   menon/bits/win_workarond.hh
 /// @author @menonfled
 /// Windows用処理系で定義されないPOSIXまたはGLibc関数の代替定義
 #ifndef MENON_BITS_WIN_WORKAROUND_HH_
