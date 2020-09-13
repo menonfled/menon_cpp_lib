@@ -33,10 +33,16 @@ void test(char32_t c32)
     std::perror("fail:");
   }
 
-  auto c16 = menon::c32_to_c16(c32);
+  char16_t c16[8];
+  auto n = menon::c32_to_c16(c32, c16, 8);
 
-  BOOST_TEST_EQ((int)c16[0], (int)utf16[0]);
-  BOOST_TEST_EQ((int)c16[1], (int)utf16[1]);
+  BOOST_TEST(n > 0);
+  if (n > 0)
+  {
+    BOOST_TEST_EQ((int)c16[0], (int)utf16[0]);
+    if (n > 1)
+      BOOST_TEST_EQ((int)c16[1], (int)utf16[1]);
+  }
 }
 
 int main()

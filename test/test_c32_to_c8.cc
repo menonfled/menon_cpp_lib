@@ -34,9 +34,10 @@ void test(char32_t c32)
     std::perror("fail:");
   }
 
-  auto c8 = menon::c32_to_c8(c32);
+  char8_t c8[8];
+  auto n =  menon::c32_to_c8(c32, c8, 8);
 
-  BOOST_TEST(std::equal(c8.begin(), c8.end(), utf8 + 0, utf8 + c8.size()));
+  BOOST_TEST(std::equal(c8 + 0, c8 + n, utf8 + 0, utf8 + n));
 }
 
 int main()
