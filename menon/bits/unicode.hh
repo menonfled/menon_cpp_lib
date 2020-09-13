@@ -8,6 +8,11 @@
 #include "menon/bits/config.hh"
 #include <array>
 
+/// バイト順マーク（BOM）
+/// 文字列リテラルの先頭に付加することで使用する。
+/// u8""またはu""を前置することでchar8_tまたはchar16_t型の文字列にすることができる。 
+#define MENON_BYTE_ORDER_MARK "\ufeff"
+
 namespace menon
 {
   /// char32_tからchar16_tへの変換
