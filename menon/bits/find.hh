@@ -14,11 +14,28 @@ namespace menon
   /// @return     cの要素にvalueに一致する要素があればその要素へのポインタを返す。なければnullptrを返す。
   template <typename C>
   inline auto find(C& c, typename C::value_type value)
-    -> decltype(&*c.begin())
+    -> decltype(&*begin(c))
   {
-    auto it = std::find(c.begin(), c.end(), value);
-    if (it != c.end())
+    using ::std::begin;
+    using ::std::end;
+    auto last = end(c);
+    auto it = std::find(begin(c), last, value);
+    if (it != last)
       return &*it;
+    return nullptr;
+  }
+
+  /// 配列から値を探索する。
+  /// @param[in]  a     配列
+  /// @param[in]  value 探索する値
+  /// @return     aの要素にvalueに一致する要素があればその要素へのポインタを返す。なければnullptrを返す。
+  template <typename T, std::size_t N>
+  inline auto find(T (&a)[N], T value)
+    -> T*
+  {
+    auto p = std::find(a + 0, a + N, value);
+    if (p != a + N)
+      return p;
     return nullptr;
   }
 
@@ -40,14 +57,32 @@ namespace menon
   /// @param[in]  c     列コンテナ
   /// @param[in]  value 探索する値
   /// @return     cの要素にvalueに一致する要素があればその要素へのポインタを返す。なければnullptrを返す。
-  /// find関数との違いは、cfind関数はC::const_pointerを返すことである。
+  /// find関数との違いは、cfind関数はconst修飾されたポインタを返すことである。
   template <typename C>
   inline auto cfind(C& c, typename C::value_type value)
-    -> typename C::const_pointer
+    -> decltype(&*cbegin(c))
   {
-    auto it = std::find(c.cbegin(), c.cend(), value);
-    if (it != c.cend())
+    using ::std::cbegin;
+    using ::std::cend;
+    auto last = cend(c);
+    auto it = std::find(cbegin(c), last, value);
+    if (it != last)
       return &*it;
+    return nullptr;
+  }
+
+  /// 配列から値を探索する。
+  /// @param[in]  a     配列
+  /// @param[in]  value 探索する値
+  /// @return     aの要素にvalueに一致する要素があればその要素へのポインタを返す。なければnullptrを返す。
+  /// find関数との違いは、cfind関数はconst修飾されたポインタを返すことである。
+  template <typename T, std::size_t N>
+  inline auto cfind(T const (&a)[N], T value)
+    -> T const*
+  {
+    auto p = std::find(a + 0, a + N, value);
+    if (p != a + N)
+      return p;
     return nullptr;
   }
 
