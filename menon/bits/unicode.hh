@@ -49,8 +49,6 @@ namespace menon
   /// @param[out] c8    char8_t文字の格納先配列
   /// @param[in]  n     c8が指す配列の要素数
   /// @return     c8に格納した要素数を返す。
-  /// 値に応じて結果のu8には1～4要素を格納する。
-  /// 不要な要素にはナル文字を格納する。
   inline auto c32_to_c8(char32_t c32, char8_t* c8, std::size_t n)
     -> std::size_t
   {
@@ -138,7 +136,6 @@ namespace menon
   /// @param[in]  c16   char16_t型の文字
   /// @return     char32_t型の文字を返す。変換に失敗した場合はナル文字を返す。
   /// サロゲートペアには対応しない。
-  /// サロゲートペアの片側を指定した場合はナル文字を返す。
   inline auto c16_to_c32(char16_t c16)
   {
     if ((0xd800 <= c16 && c16 <= 0xdbff) && (0xdc00 <= c16 && c16 <= 0xdfff))
@@ -208,6 +205,42 @@ namespace menon
     if (c8 <= 0x7f)
       c32 = c8;
     return c32;
+  }
+
+  /// char16_tからchar8_tへの変換
+  /// @param[in]  c16   char16_t型の文字
+  /// @param[in]  n1    c16が指す配列の要素数
+  /// @param[out] c8    char8_t文字の格納先配列
+  /// @param[in]  n2    c8が指す配列の要素数
+  /// @return     c16を解析した要素数とc8に格納した要素数をpairとして返す。
+  inline auto c16_to_c8(char16_t const* c16, std::size_t n1, char8_t* c8, std::size_t n2)
+    -> std::pair<std::size_t, std::size_t>
+  {
+    char32_t c32 = 0;
+    n1 = c16_to_c32(c16, n1, &c32);
+    if (n1 > 0)
+      n2 = c32_to_c8(c32, c8, n2);
+    else
+      n2 = 0;
+    return { n1, n2 };
+  }
+
+  /// char8_tからchar16_tへの変換
+  /// @param[in]  c8    char8_t型の文字
+  /// @param[in]  n1    c8が指す配列の要素数
+  /// @param[out] c16   char16_t文字の格納先配列
+  /// @param[in]  n2    c16が指す配列の要素数
+  /// @return     c8を解析した要素数とc16に格納した要素数をpairとして返す。
+  inline auto c8_to_c16(char8_t const* c8, std::size_t n1, char16_t* c16, std::size_t n2)
+    -> std::pair<std::size_t, std::size_t>
+  {
+    char32_t c32 = 0;
+    n1 = c8_to_c32(c8, n1, &c32);
+    if (n1 > 0)
+      n2 = c32_to_c16(c32, c16, n2);
+    else
+      n2 = 0;
+    return { n1, n2 };
   }
 }
 
