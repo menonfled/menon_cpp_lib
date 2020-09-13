@@ -95,12 +95,14 @@ namespace menon
   /// char16_tからchar32_tへの変換
   /// @param[in]  c16   char16_t型の文字配列
   /// @param[in]  n     c16が指す配列の要素数
-  /// @return     char32_t文字とc16配列の解析した要素数のペアを返す。
-  inline auto c16_to_c32(char16_t const* c16, std::size_t n)
+  /// @param[out] c32   変換したchar32_t文字の格納先
+  /// @return     c16配列の解析した要素数を返す。
+  /// c32がnullptrの場合は変換結果を格納しない。
+  inline auto c16_to_c32(char16_t const* c16, std::size_t n, char32_t* c32)
+    -> std::size_t
   {
-    std::pair<char32_t, std::size_t> r {};
     if (c16 == nullptr)
-      return r;
+      return 0;
 
     char16_t h = u'\0';
     char16_t l = u'\0';
@@ -113,13 +115,23 @@ namespace menon
     if (n > 1 && 0xd800 <= h && h <= 0xdbff)
     {
       if (0xdc00 <= l && l <= 0xdfff)
-        r = { static_cast<char32_t>(0x10000 + (h - 0xd800) * 0x400 + (l - 0xdc00)), 2 };
+      {
+        if (c32 != nullptr)
+          *c32 = static_cast<char32_t>(0x10000 + (h - 0xd800) * 0x400 + (l - 0xdc00));
+        n = 2;
+      }
     }
     else if (h < 0xdc00 || 0xdfff < h)
     {
-      r = { static_cast<char32_t>(h), 1 };
+      if (c32 != nullptr)
+        *c32 = static_cast<char32_t>(h);
+      n = 1;
     }
-    return r;
+    else
+    {
+      n = 0;
+    }
+    return n;
   }
 
   /// char16_tからchar32_tへの変換
@@ -137,35 +149,53 @@ namespace menon
   /// char8_tからchar32_tへの変換
   /// @param[in]  c8    char8_t型の文字配列
   /// @param[in]  n     c8が指す配列の要素数
-  /// @return     char32_t型の文字を返す。変換に失敗した場合はナル文字を返す。
-  inline auto c8_to_c32(char8_t const* c8, std::size_t n)
+  /// @param[out] c32   変換したchar32_t文字の格納先
+  /// @return     c16配列の解析した要素数を返す。
+  /// c32がnullptrの場合は変換結果を格納しない。
+  inline auto c8_to_c32(char8_t const* c8, std::size_t n, char32_t* c32)
+    -> std::size_t
   {
-    std::pair<char32_t, std::size_t> r {};
     if (c8 == nullptr)
-      return r;
+      return 0;
 
     if (n > 0 && c8[0] <= 0x7f)
     {
-      r = { static_cast<char32_t>(c8[0]), 1 };
+      if (c32 != nullptr)
+        *c32 = static_cast<char32_t>(c8[0]);
+      n = 1;
     }
     else if (n > 1 && ((c8[0] & 0b1110'0000) == 0b1100'0000))
     {
       if ((c8[1] & 0b1100'0000) == 0b1000'0000)
       {
-        r = { (c8[0] & 0b0001'1111) << 6 | (c8[1] & 0b0011'1111), 2 };
+        if (c32 != nullptr)
+          *c32 = (c8[0] & 0b0001'1111) << 6 | (c8[1] & 0b0011'1111);
+        n = 2;
       }
     }
     else if (n > 1 && (c8[0] & 0b1111'0000) == 0b1110'0000)
     {
       if (((c8[1] & 0b1100'0000) == 0b1000'0000) && ((c8[2] & 0b1100'0000) == 0b1000'0000))
-        r = { (c8[0] & 0b0000'1111) << 12 | (c8[1] & 0b0011'1111) << 6 | (c8[2] & 0b0011'1111), 3 };
+      {
+        if (c32 != nullptr)
+          *c32 = (c8[0] & 0b0000'1111) << 12 | (c8[1] & 0b0011'1111) << 6 | (c8[2] & 0b0011'1111);
+        n = 3;
+      }
     }
     else if (n > 2 && (c8[0] & 0b1111'1000) == 0b1111'0000)
     {
       if (((c8[1] & 0b1100'0000) == 0b1000'0000) && ((c8[2] & 0b1100'0000) == 0b1000'0000) && ((c8[3] & 0b1100'0000) == 0b1000'0000))
-        r = { (c8[0] & 0b0000'1111) << 18 | (c8[1] & 0b0011'1111) << 12 | (c8[2] & 0b0011'1111) << 6 | (c8[3] & 0b0011'1111), 4 };
+      {
+        if (c32 != nullptr)
+          *c32 = (c8[0] & 0b0000'1111) << 18 | (c8[1] & 0b0011'1111) << 12 | (c8[2] & 0b0011'1111) << 6 | (c8[3] & 0b0011'1111);
+        n = 4;
+      }
     }
-    return r;
+    else
+    {
+      n = 0;
+    }
+    return n;
   }
 
   /// char8_tからchar32_tへの変換
