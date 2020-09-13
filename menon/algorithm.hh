@@ -5,5 +5,6 @@
 #define MENON_ALGORITHM_HH_
 #pragma once
 
+#include "menon/bits/find.hh"
 
 #endif  // !MENON_ALGORITHM_HH_
