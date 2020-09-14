@@ -4,6 +4,7 @@
 #include <deque>
 #include <list>
 #include <map>
+#include <set>
 #include <string>
 
 int main()
@@ -55,7 +56,6 @@ int main()
     p = menon::find(l, 6);
     BOOST_TEST_EQ(p, nullptr);
   }
-  #if 1
   int a[] = { 3, 2, 7, 1, 9, 5 };
   {
     auto p = menon::find(a, 7);
@@ -79,7 +79,30 @@ int main()
     p = menon::cfind(a, 6);
     BOOST_TEST_EQ(p, nullptr);
   }
-  #endif
+
+  {
+    std::set s = { 3, 2, 7, 1, 9, 5 };
+    {
+      auto p = menon::find(s, 7);
+      BOOST_TEST_NE(p, nullptr);
+      if (p != nullptr)
+      {
+        BOOST_TEST_EQ(*p, 7);
+      }
+      p = menon::find(s, 6);
+      BOOST_TEST_EQ(p, nullptr);
+    }
+    {
+      auto p = menon::cfind(s, 7);
+      BOOST_TEST_NE(p, nullptr);
+      if (p != nullptr)
+      {
+        BOOST_TEST_EQ(*p, 7);
+      }
+      p = menon::cfind(s, 6);
+      BOOST_TEST_EQ(p, nullptr);
+    }
+  }
 
   std::map<std::string, int> m = { { "d", 3 }, { "y", 2 }, { "c", 7 }, { "v", 1 } };
   {
