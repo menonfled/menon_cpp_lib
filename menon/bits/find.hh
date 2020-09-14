@@ -40,9 +40,9 @@ namespace menon
   /// @param[in]  c     setコンテナ
   /// @param[in]  key   探索するキー
   /// @return     cにkeyに一致する要素があればその値へのポインタを返す。なければnullptrを返す。
-  template <typename C>
+  template <typename C> requires std::is_same_v<typename C::key_type, typename C::value_type>
   inline auto find(C& c, typename C::key_type key)
-    -> decltype(&*c.insert(c.begin(), key))
+    -> decltype(&*c.find(key))
   {
     auto it = c.find(key);
     if (it != c.end())
