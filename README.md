@@ -12,3 +12,7 @@ MinGW-w64またはCygwinを使用する場合には、以下の内容のconfig.m
 ```c++:config.mak
  LDFLAGS	=	-liconv
 ```
+## Visual Studioについて
+現状、テストプログラムはVisual Studioに対応していません。
+ライブラリ自体はインクルードするだけですので使えるかもしれません（未検証です）。
+
