@@ -8,6 +8,10 @@
 #if defined(__MINGW32__) || defined(_MSC_VER)
 #include <cstdio>
 
+#ifdef _MSC_VER
+#pragma comment(lib, "oldnames.lib")
+#endif
+
 namespace menon
 {
   inline void flockfile(FILE* stream)
