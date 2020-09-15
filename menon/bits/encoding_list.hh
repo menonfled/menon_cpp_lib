@@ -458,7 +458,7 @@ namespace menon
       return -1;
     }
 
-#if defined(_MSC_VER) || (defined(__MING32__) && !defined(__clang__))
+#if defined(_MSC_VER) || (defined(__MINGW32__) && !defined(__clang__))
     constexpr int default_encoding_key = find_encoding_key("CP932");
 #else
     constexpr int default_encoding_key = find_encoding_key("UTF-8");

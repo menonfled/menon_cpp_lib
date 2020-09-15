@@ -29,7 +29,7 @@ namespace menon
       auto key = detail::find_encoding_key(encoding);
       if (key < 0)
         return nullptr;
-      r = key;
+      _ = key;
     }
     return detail::encoding_list[r];
   }
