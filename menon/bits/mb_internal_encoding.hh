@@ -6,7 +6,6 @@
 #pragma once
 
 #include "menon/bits/encoding_list.hh"
-#include <optional>
 
 namespace menon
 {
