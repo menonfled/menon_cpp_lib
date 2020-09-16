@@ -14,5 +14,6 @@ int main()
   BOOST_TEST_CSTR_EQ(menon::mb_external_encoding("EUC-JP"), "UTF-8");
 #endif
   BOOST_TEST_CSTR_EQ(menon::mb_external_encoding(), "EUC-JP");
+  BOOST_TEST_EQ(menon::mb_external_encoding("xxx"), nullptr);
   return boost::report_errors();
 }
