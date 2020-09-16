@@ -15,5 +15,31 @@ int main()
 #endif
   BOOST_TEST_CSTR_EQ(menon::mb_internal_encoding(), "EUC-JP");
   BOOST_TEST_EQ(menon::mb_internal_encoding("xxx"), nullptr);
+
+  constexpr auto char32_encoding = menon::get_internal_encording<char32_t>();
+  BOOST_TEST_CSTR_EQ(char32_encoding, "UTF-32");
+
+  constexpr auto char16_encoding = menon::get_internal_encording<char16_t>();
+  BOOST_TEST_CSTR_EQ(char16_encoding, "UTF-16");
+
+  constexpr auto char8_encoding = menon::get_internal_encording<char8_t>();
+  BOOST_TEST_CSTR_EQ(char8_encoding, "UTF-8");
+
+  constexpr auto wchar_encoding = menon::get_internal_encording<wchar_t>();
+#if defined(_MSC_VER) || defined(__MINGW32__) || defined(__CYGWIN__)
+  BOOST_TEST_CSTR_EQ(wchar_encoding, "UTF-16");
+#else
+  BOOST_TEST_CSTR_EQ(char32_encoding, "UTF-32");
+#endif
+
+  auto char_encoding = menon::get_internal_encording<char>();
+  BOOST_TEST_CSTR_EQ(char_encoding, menon::mb_internal_encoding());
+
+  auto schar_encoding = menon::get_internal_encording<signed char>();
+  BOOST_TEST_CSTR_EQ(schar_encoding, menon::mb_internal_encoding());
+
+  auto uchar_encoding = menon::get_internal_encording<unsigned char>();
+  BOOST_TEST_CSTR_EQ(uchar_encoding, menon::mb_internal_encoding());
+
   return boost::report_errors();
 }

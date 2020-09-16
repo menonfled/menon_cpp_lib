@@ -34,6 +34,57 @@ namespace menon
     }
     return detail::encoding_list[r];
   }
+
+  /// 文字型に対応する内部文字エンコーディングの取得
+  /// @return   内部文字エンコーディングを返す。
+  template <typename Char>
+  char const* get_internal_encording();
+
+  template <>
+  constexpr char const* get_internal_encording<char32_t>()
+  {
+    return detail::encoding_list[detail::find_encoding_key("UTF-32")];
+  }
+
+  template <>
+  constexpr char const* get_internal_encording<char16_t>()
+  {
+    return detail::encoding_list[detail::find_encoding_key("UTF-16")];
+  }
+
+  template <>
+  constexpr char const* get_internal_encording<char8_t>()
+  {
+    return detail::encoding_list[detail::find_encoding_key("UTF-8")];
+  }
+
+  template <>
+  constexpr char const* get_internal_encording<wchar_t>()
+  {
+    if (sizeof(wchar_t) == 2)
+      return detail::encoding_list[detail::find_encoding_key("UTF-16")];
+    else if (sizeof(wchar_t) == 4)
+      return detail::encoding_list[detail::find_encoding_key("UTF-16")];
+    return mb_internal_encoding();
+  }
+
+  template <>
+  inline char const* get_internal_encording<char>()
+  {
+    return mb_internal_encoding();
+  }
+
+  template <>
+  inline char const* get_internal_encording<signed char>()
+  {
+    return mb_internal_encoding();
+  }
+
+  template <>
+  inline char const* get_internal_encording<unsigned char>()
+  {
+    return mb_internal_encoding();
+  }
 }
 
 #endif  // !MENON_BITS_MB_INTERNAL_ENCODING_HH_
