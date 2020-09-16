@@ -7,5 +7,6 @@
 
 #include "menon/bits/unicode.hh"
 #include "menon/bits/mb_internal_encoding.hh"
+#include "menon/bits/mb_external_encoding.hh"
 
 #endif  // !MENON_ENCODING_HH_
