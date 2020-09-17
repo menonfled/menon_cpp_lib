@@ -18,7 +18,7 @@ namespace menon
   /// この関数はPHPからの借用だが、成功時はtrueではなく以前に設定されていたエンコーディング文字列を、
   /// 失敗時はfalseではなくnullptrを返す点に注意
   inline auto mb_internal_encoding(char const* encoding = nullptr)
-    -> const char*
+    -> char const*
   {
     static thread_local int _ = detail::default_encoding_key;
 
