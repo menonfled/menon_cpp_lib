@@ -8,9 +8,9 @@ OSTYPE		=	$(shell echo $$OSTYPE);
 
 INCLUDES	+=	-iquote .. -iquote .
 DEFINES 	+= 
-WARNINGS	=	-Wall -Wextra -Wconversion -Weffc++
-CFLAGS		=	-MMD -g -Og -std=gnu18 $(INCLUDES) $(DEFINES) $(WARNINGS)
-CXXFLAGS	=	-MMD -g -Og -std=gnu++20 $(INCLUDES) $(DEFINES) $(WARNINGS)
+WARNINGS	+=	-Wall -Wextra -Wconversion -Weffc++
+CFLAGS		+=	-MMD -g -Og -std=gnu18 $(ENCODING) $(INCLUDES) $(DEFINES) $(WARNINGS)
+CXXFLAGS	+=	-MMD -g -Og -std=gnu++20 $(ENCODING) $(INCLUDES) $(DEFINES) $(WARNINGS)
 LDFLAGS		+=	-lm
 
 CXXSRCS		=	$(filter %.cc,$(shell ls .))
