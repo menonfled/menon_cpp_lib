@@ -10,5 +10,6 @@
 #include "menon/bits/explode.hh"
 #include "menon/bits/implode.hh"
 #include "menon/bits/strlen.hh"
+#include "menon/bits/strcmp.hh"
 
 #endif  // !MENON_STRING_HH_
