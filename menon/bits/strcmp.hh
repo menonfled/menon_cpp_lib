@@ -18,6 +18,10 @@ namespace menon
     }
   }
 
+  /// 文字列の比較
+  /// @param[in]  s1  比較対象の文字列
+  /// @param[in]  s2  比較対象の文字列
+  /// @retuen     s1 < s2のときは負、s1 == s2のときは0、s1 > s2のときは正の値を返す。
   template <typename T, typename U>
   constexpr auto strcmp(T const& s1, U const& s2)
   {
