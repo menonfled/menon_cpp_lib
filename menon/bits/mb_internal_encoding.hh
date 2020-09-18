@@ -43,13 +43,21 @@ namespace menon
   template <>
   constexpr char const* get_internal_encording<char32_t>()
   {
-    return detail::encoding_list[detail::find_encoding_key("UTF-32")];
+  #if defined(_MSC_VER) || __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+    return detail::encoding_list[detail::find_encoding_key("UTF-32LE")];
+  #else
+    return detail::encoding_list[detail::find_encoding_key("UTF-32BE")];
+  #endif
   }
 
   template <>
   constexpr char const* get_internal_encording<char16_t>()
   {
-    return detail::encoding_list[detail::find_encoding_key("UTF-16")];
+  #if defined(_MSC_VER) || __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+    return detail::encoding_list[detail::find_encoding_key("UTF-16LE")];
+  #else
+    return detail::encoding_list[detail::find_encoding_key("UTF-16BE")];
+  #endif
   }
 
   template <>
@@ -62,9 +70,9 @@ namespace menon
   constexpr char const* get_internal_encording<wchar_t>()
   {
     if (sizeof(wchar_t) == 2)
-      return detail::encoding_list[detail::find_encoding_key("UTF-16")];
+      return get_internal_encording<char16_t>();
     else if (sizeof(wchar_t) == 4)
-      return detail::encoding_list[detail::find_encoding_key("UTF-16")];
+      return get_internal_encording<char32_t>();
     return mb_internal_encoding();
   }
 

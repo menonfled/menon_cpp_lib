@@ -17,19 +17,27 @@ int main()
   BOOST_TEST_EQ(menon::mb_internal_encoding("xxx"), nullptr);
 
   constexpr auto char32_encoding = menon::get_internal_encording<char32_t>();
-  BOOST_TEST_CSTR_EQ(char32_encoding, "UTF-32");
-
   constexpr auto char16_encoding = menon::get_internal_encording<char16_t>();
-  BOOST_TEST_CSTR_EQ(char16_encoding, "UTF-16");
+#if defined(_MSC_VER) || __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  BOOST_TEST_CSTR_EQ(char32_encoding, "UTF-32LE");
+  BOOST_TEST_CSTR_EQ(char16_encoding, "UTF-16LE");
+#else
+  BOOST_TEST_CSTR_EQ(char32_encoding, "UTF-32BE");
+  BOOST_TEST_CSTR_EQ(char16_encoding, "UTF-16BE");
+#endif
 
   constexpr auto char8_encoding = menon::get_internal_encording<char8_t>();
   BOOST_TEST_CSTR_EQ(char8_encoding, "UTF-8");
 
   constexpr auto wchar_encoding = menon::get_internal_encording<wchar_t>();
 #if defined(_MSC_VER) || defined(__MINGW32__) || defined(__CYGWIN__)
-  BOOST_TEST_CSTR_EQ(wchar_encoding, "UTF-16");
+  BOOST_TEST_CSTR_EQ(wchar_encoding, "UTF-16LE");
 #else
-  BOOST_TEST_CSTR_EQ(char32_encoding, "UTF-32");
+# if defined(_MSC_VER) || __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+    BOOST_TEST_CSTR_EQ(char32_encoding, "UTF-32LE");
+# else
+    BOOST_TEST_CSTR_EQ(char32_encoding, "UTF-32BE");
+# endif
 #endif
 
   auto char_encoding = menon::get_internal_encording<char>();
