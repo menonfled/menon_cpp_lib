@@ -38,10 +38,10 @@ namespace menon
   /// 文字型に対応する内部文字エンコーディングの取得
   /// @return   内部文字エンコーディングを返す。
   template <typename Char>
-  char const* get_internal_encording();
+  char const* get_internal_encoding();
 
   template <>
-  constexpr char const* get_internal_encording<char32_t>()
+  constexpr char const* get_internal_encoding<char32_t>()
   {
   #if defined(_MSC_VER) || __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
     return detail::encoding_list[detail::find_encoding_key("UTF-32LE")];
@@ -51,7 +51,7 @@ namespace menon
   }
 
   template <>
-  constexpr char const* get_internal_encording<char16_t>()
+  constexpr char const* get_internal_encoding<char16_t>()
   {
   #if defined(_MSC_VER) || __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
     return detail::encoding_list[detail::find_encoding_key("UTF-16LE")];
@@ -61,35 +61,35 @@ namespace menon
   }
 
   template <>
-  constexpr char const* get_internal_encording<char8_t>()
+  constexpr char const* get_internal_encoding<char8_t>()
   {
     return detail::encoding_list[detail::find_encoding_key("UTF-8")];
   }
 
   template <>
-  constexpr char const* get_internal_encording<wchar_t>()
+  constexpr char const* get_internal_encoding<wchar_t>()
   {
     if (sizeof(wchar_t) == 2)
-      return get_internal_encording<char16_t>();
+      return get_internal_encoding<char16_t>();
     else if (sizeof(wchar_t) == 4)
-      return get_internal_encording<char32_t>();
+      return get_internal_encoding<char32_t>();
     return mb_internal_encoding();
   }
 
   template <>
-  inline char const* get_internal_encording<char>()
+  inline char const* get_internal_encoding<char>()
   {
     return mb_internal_encoding();
   }
 
   template <>
-  inline char const* get_internal_encording<signed char>()
+  inline char const* get_internal_encoding<signed char>()
   {
     return mb_internal_encoding();
   }
 
   template <>
-  inline char const* get_internal_encording<unsigned char>()
+  inline char const* get_internal_encoding<unsigned char>()
   {
     return mb_internal_encoding();
   }
