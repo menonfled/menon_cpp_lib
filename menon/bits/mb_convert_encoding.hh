@@ -1,6 +1,6 @@
 ﻿/// @file   menon/bits/mb_convert_encoding.hh
-/// @author @menonleft
 /// mb_convert_encoding関数の定義
+/// @author @menonleft
 #ifndef MENON_BITS_MB_CONVERT_ENCODING_HH_
 #define MENON_BITS_MB_CONVERT_ENCODING_HH_
 #pragma once

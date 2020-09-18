@@ -1,6 +1,6 @@
 ﻿/// @file menon/bits/config.hh
-/// @author @menonfled
 /// 外部ライブラリのインストール状況の調査と各種設定
+/// @author @menonfled
 #ifndef MENON_BITS_CONFIG_HH_
 #define MENON_BITS_CONFIG_HH_
 #pragma once

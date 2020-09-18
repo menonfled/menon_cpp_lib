@@ -1,6 +1,6 @@
 ﻿/// @file   menon/bits/explode.hh
-/// @author @menonfled
 /// explode関数の定義
+/// @author @menonfled
 #ifndef MENON_BITS_EXPLODE_HH_
 #define MENON_BITS_EXPLODE_HH_
 #pragma once

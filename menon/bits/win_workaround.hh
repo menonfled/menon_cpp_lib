@@ -1,6 +1,6 @@
-﻿/// @file   menon/bits/win_workarond.hh
-/// @author @menonfled
+﻿/// @file   menon/bits/win_workaround.hh
 /// Windows用処理系で定義されないPOSIXまたはGLibc関数の代替定義
+/// @author @menonfled
 #ifndef MENON_BITS_WIN_WORKAROUND_HH_
 #define MENON_BITS_WIN_WORKAROUND_HH_
 #pragma once

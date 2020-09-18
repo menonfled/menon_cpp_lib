@@ -1,6 +1,6 @@
 ﻿/// @file menon/bits/sv.hh
-/// @aothor @menonfled
 /// さまざまな形式の文字列をstring_viewに変換するためのヘルパー関数の定義
+/// @aothor @menonfled
 #ifndef MENON_BITS_SV_HH_
 #define MENON_BITS_SV_HH_
 #pragma once

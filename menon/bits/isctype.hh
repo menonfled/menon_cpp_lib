@@ -1,5 +1,4 @@
 ﻿/// @file   menon/bits/isctype.hh
-/// author  @menonfled
 /// 文字種判別関数の定義
 ///
 /// このヘッダーファイルで定義する関数は下記を除きCの同名の関数と同様に機能する。
@@ -8,6 +7,8 @@
 /// - 文字の0x00～0x7fについてのみ判定を行い、それ以外はfalseを返す
 /// - ロケールに関係なくCロケールと同様に判定を行う
 /// - 結果をintではなくboolで返す
+///
+/// @author @menonfled
 #ifndef MENON_BITS_ISCTYPE_HH_
 #define MENON_BITS_ISCTYPE_HH_
 #pragma once

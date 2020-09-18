@@ -1,6 +1,6 @@
-﻿/// @file   menon/bits/encoding_lits.hh
-/// @author @menonfled
+﻿/// @file   menon/bits/encoding_list.hh
 /// mb_internal_encodingおよびmb_external_encodingに指定可能なエンコーディング一覧の定義
+/// @author @menonfled
 #ifndef MENON_BITS_ENCODONG_LIST_HH_
 #define MENON_BITS_ENCODONG_LIST_HH_
 #pragma once

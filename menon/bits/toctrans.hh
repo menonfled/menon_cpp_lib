@@ -1,6 +1,6 @@
 ﻿/// @file   menon/bits/toctrans.hh
-/// @author @menonfled
 /// 文字種変換関数の定義
+/// @author @menonfled
 #ifndef MENON_BITS_TOCTRANS_HH_
 #define MENON_BITS_TOCTRANS_HH_
 #pragma once

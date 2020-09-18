@@ -1,3 +1,6 @@
+/// @file   menon/bits/find.hh
+/// find関数の定義
+/// @author @menonfled
 #ifndef MENON_BITS_FIND_HH_
 #define MENON_BITS_FIND_HH_
 #pragma once

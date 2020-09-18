@@ -1,6 +1,6 @@
 ﻿/// @file   menon/bits/mb_external_encoding.hh
-/// @author @menonfled
 /// mb_external_encoding関数の定義
+/// @author @menonfled
 #ifndef MENON_BITS_MB_EXTERENAL_ENCODING_HH_
 #define MENON_BITS_MB_EXTERENAL_ENCODING_HH_
 #pragma once

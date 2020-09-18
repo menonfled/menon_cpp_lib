@@ -1,6 +1,6 @@
 ﻿/// @file   menon/bits/strcmp.hh
-/// @author @menonfled
 /// strcmp系関数の定義
+/// @author @menonfled
 #ifndef MENON_BITS_STRCMP_HH_
 #define MENON_BITS_STRCMP_HH_
 #pragma once

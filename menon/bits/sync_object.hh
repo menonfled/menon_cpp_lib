@@ -1,6 +1,6 @@
 ﻿/// @file   menon/bits/sync_object.hh
-/// @author @menonfled
 /// ライブラリ内で使用する同期オブジェクトの定義
+/// @author @menonfled
 #ifndef MENON_BITS_SYNC_OBJECT_HH_
 #define MENON_BITS_SYNC_OBJECT_HH_
 #pragma once

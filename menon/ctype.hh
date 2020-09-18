@@ -1,6 +1,6 @@
 ﻿/// @file   menon/ctype.hh
-/// @author @menonfled
 /// 文字種の判定・変換に関する定義
+/// @author @menonfled
 #ifndef MENON_CTYPE_HH_
 #define MENON_CTYPE_HH_
 #pragma once

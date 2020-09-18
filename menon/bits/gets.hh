@@ -1,6 +1,6 @@
 ﻿/// @file   menon/bits/gets.hh
-/// @author @menonfled
 /// gets関数の定義
+/// @author @menonfled
 #ifndef MENON_BITS_GETS_HH_
 #define MENON_BITS_GETS_HH_
 #pragma once

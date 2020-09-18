@@ -1,6 +1,6 @@
 ﻿/// @file   menon/bits/mb_internal_encoding.hh
-/// @author @menonfled
 /// mb_internal_encoding関数の定義
+/// @author @menonfled
 #ifndef MENON_BITS_MB_INTERNAL_ENCODING_HH_
 #define MENON_BITS_MB_INTERNAL_ENCODING_HH_
 #pragma once

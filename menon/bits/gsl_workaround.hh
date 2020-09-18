@@ -1,6 +1,6 @@
 ﻿/// @file   menon/bits/gsl_workaround.hh
-/// @author @menonfled
 /// Guidelines Support Libraryがインストールされていない場合の代替定義
+/// @author @menonfled
 #ifndef MENON_BITS_GSL_WORKAROUND_HH_
 #define MENON_BITS_GSL_WORKAROUND_HH_
 #pragma once

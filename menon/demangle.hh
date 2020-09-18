@@ -1,6 +1,6 @@
 ﻿/// @file   menon/demangle.hh
-/// @author @menonfled
 /// 型名のデマングルを行う関数の定義
+/// @author @menonfled
 #ifndef MENON_DEMANGLE_HH_
 #define MENON_DEMANGLE_HH_
 #pragma once

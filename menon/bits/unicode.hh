@@ -1,6 +1,6 @@
 ﻿/// @file   menon/bits/unicode.hh
-/// @author @menonfled
 /// Unicode関連処理の宣言・定義
+/// @author @menonfled
 #ifndef MENON_BITS_UNICODE_HH_
 #define MENON_BITS_UNICODE_HH_
 #pragma once

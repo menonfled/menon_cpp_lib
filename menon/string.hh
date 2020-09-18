@@ -1,6 +1,6 @@
 ﻿/// @file menon/string.hh
+/// 入出力のための宣言・定義
 /// @arthor @menonfled
-/// 文字列操作のための宣言・定義
 #ifndef MENON_STRING_HH_
 #define MENON_STRING_HH_
 #pragma once
