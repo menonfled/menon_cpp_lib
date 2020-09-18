@@ -6,6 +6,14 @@ int main()
   using namespace std::literals::string_view_literals;
   using namespace std::literals::string_literals;
   char s[] = "abc";
+
+  constexpr auto r1 = menon::sv("abc");
+  constexpr auto r2 = menon::sv("abc"sv);
+  BOOST_TEST_EQ(r1, r2);
+  constexpr auto r3 = menon::sv("abc", 2);
+  BOOST_TEST_EQ(r3, "ab"s);
+  // constexpr auto r4 = menon::sv('a');
+
   BOOST_TEST_EQ(menon::sv('a'), "a"sv);
 
   BOOST_TEST_EQ(menon::sv("abc", 2), "ab"sv);
