@@ -40,6 +40,12 @@ namespace menon
       }
       return 0;
     }
+
+    template <typename Char, typename Traits>
+    inline auto strncasecmp_helper(std::basic_string_view<Char, Traits> sv1, std::basic_string_view<Char, Traits> sv2, std::size_t n)
+    {
+      return strcasecmp_helper(sv1.substr(0, n), sv2.substr(0, n));
+    }
   }
 
   /// 文字列の比較
@@ -74,6 +80,18 @@ namespace menon
   {
     using menon::sv;
     return detail::strcasecmp_helper(sv(s1), sv(s2));
+  }
+
+  /// 指定文字数だけ大文字小文字を区別せずに文字列を比較
+  /// @param[in]  s1  比較対象の文字列
+  /// @param[in]  s2  比較対象の文字列
+  /// @param[in]  n   指定文字数
+  /// @retuen     s1 < s2のときは負、s1 == s2のときは0、s1 > s2のときは正の値を返す。
+  template <typename T, typename U>
+  inline auto strncasecmp(T const& s1, U const& s2, std::size_t n)
+  {
+    using menon::sv;
+    return detail::strncasecmp_helper(sv(s1), sv(s2), n);
   }
 }
 

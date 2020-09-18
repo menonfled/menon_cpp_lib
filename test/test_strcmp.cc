@@ -14,7 +14,7 @@ int main()
     BOOST_TEST(menon::strncmp(s, sv, 5) == 0);
     BOOST_TEST(menon::strncmp(s, "abcrtylk", 3) == 0);
     BOOST_TEST(menon::strncmp(s, "fgnrk", 5) < 0);
-    BOOST_TEST(menon::strncmp(s, "aaekj", 5) > 0);
+    BOOST_TEST(menon::strncmp(s, "aaekj", 10) > 0);
 
     BOOST_TEST(menon::strcasecmp(s, sv) == 0);
     BOOST_TEST(menon::strcasecmp(s, "fgnrk") < 0);
@@ -22,6 +22,14 @@ int main()
     BOOST_TEST(menon::strcasecmp(s, "AbcDefGhi") == 0);
     BOOST_TEST(menon::strcasecmp(s, "FgNrk") < 0);
     BOOST_TEST(menon::strcasecmp(s, "aAeKJ") > 0);
+
+    BOOST_TEST(menon::strncasecmp(s, sv, 5) == 0);
+    BOOST_TEST(menon::strncasecmp(s, "AbCrTyLK", 3) == 0);
+    BOOST_TEST(menon::strncasecmp(s, "fgnrk", 5) < 0);
+    BOOST_TEST(menon::strncasecmp(s, "aaekj", 5) > 0);
+    BOOST_TEST(menon::strncasecmp(s, "AbcDefGhi", 5) == 0);
+    BOOST_TEST(menon::strncasecmp(s, "FgNrk", 5) < 0);
+    BOOST_TEST(menon::strncasecmp(s, "aAeKJ", 10) > 0);
   }
   {
     std::wstring s = L"abcdefghi";
@@ -34,7 +42,7 @@ int main()
     BOOST_TEST(menon::strncmp(s, sv, 5) == 0);
     BOOST_TEST(menon::strncmp(s, L"abcrtylk", 3) == 0);
     BOOST_TEST(menon::strncmp(s, L"fgnrk", 5) < 0);
-    BOOST_TEST(menon::strncmp(s, L"aaekj", 5) > 0);
+    BOOST_TEST(menon::strncmp(s, L"aaekj", 10) > 0);
 
     BOOST_TEST(menon::strcasecmp(s, sv) == 0);
     BOOST_TEST(menon::strcasecmp(s, L"fgnrk") < 0);
@@ -42,6 +50,14 @@ int main()
     BOOST_TEST(menon::strcasecmp(s, L"AbcDefGhi") == 0);
     BOOST_TEST(menon::strcasecmp(s, L"FgNrk") < 0);
     BOOST_TEST(menon::strcasecmp(s, L"aAeKJ") > 0);
+
+    BOOST_TEST(menon::strncasecmp(s, sv, 5) == 0);
+    BOOST_TEST(menon::strncasecmp(s, L"AbCrTyLK", 3) == 0);
+    BOOST_TEST(menon::strncasecmp(s, L"fgnrk", 5) < 0);
+    BOOST_TEST(menon::strncasecmp(s, L"aaekj", 5) > 0);
+    BOOST_TEST(menon::strncasecmp(s, L"AbcDefGhi", 5) == 0);
+    BOOST_TEST(menon::strncasecmp(s, L"FgNrk", 5) < 0);
+    BOOST_TEST(menon::strncasecmp(s, L"aAeKJ", 10) > 0);
   }
   return boost::report_errors();
 }
