@@ -20,5 +20,16 @@ int main()
   BOOST_TEST_EQ(menon::strlen(s.c_str(), s.size()), n);
   BOOST_TEST_EQ(menon::strlen(std::string_view(s)), n);
 
+  BOOST_TEST_EQ(menon::strnlen(s, n), n);
+  BOOST_TEST_EQ(menon::strnlen(s, 4), 4);
+  BOOST_TEST_EQ(menon::strnlen(s, 100), n);
+  BOOST_TEST_EQ(menon::strnlen(s.c_str(), n), n);
+  BOOST_TEST_EQ(menon::strnlen(s.c_str(), s.size()), n);
+  BOOST_TEST_EQ(menon::strnlen(s.c_str(), 5), 5);
+  BOOST_TEST_EQ(menon::strnlen(s.c_str(), 100), n);
+  BOOST_TEST_EQ(menon::strnlen(std::string_view(s), n), n);
+  BOOST_TEST_EQ(menon::strnlen(std::string_view(s), 5), 5);
+  BOOST_TEST_EQ(menon::strnlen(std::string_view(s), 100), n);
+
   return boost::report_errors();
 }
