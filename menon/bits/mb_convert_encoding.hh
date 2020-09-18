@@ -11,12 +11,51 @@
 #include <memory>
 #include <string_view>
 #include <string>
+#include <type_traits>
 #include <cstring>
 #include <cerrno>
 #include <iconv.h>
 
 namespace menon
 {
+  namespace detail
+  {
+    template <typename ToChar, typename FromChar, typename Traits>
+    auto mb_convert_encoding_helper(std::basic_string_view<FromChar, Traits> sv, char const* to_encoding, char const* from_encoding)
+      -> std::basic_string<ToChar>
+    {
+      if (sizeof(ToChar) == sizeof(FromChar) && (to_encoding == from_encoding || std::strcmp(to_encoding, from_encoding) == 0))
+        return { reinterpret_cast<ToChar const*>(sv.data()), sv.size() };
+
+      if (auto cd = iconv_open(to_encoding, from_encoding))
+      {
+        std::size_t inbyteleft = sv.size() * sizeof(FromChar);
+        char* p_inbuf = const_cast<char*>(sv.data());
+        constexpr std::size_t outbufsize = 1024;
+        std::string r;
+        r.reserve(outbufsize);
+
+        while (inbyteleft > 0)
+        {
+          char outbuf[outbufsize];
+          std::size_t outbyteleft = outbufsize;
+          char* p_outbuf = outbuf;
+
+          errno = 0;
+          if (iconv(cd, &p_inbuf, &inbyteleft, &p_outbuf, &outbyteleft) == std::size_t(-1))
+            throw std::invalid_argument(std::string("menon::mb_convert_encoding: ") + std::strerror(errno));
+          r.append(outbuf, outbufsize - outbyteleft);
+        }
+        iconv_close(cd);
+        if constexpr (std::is_same_v<ToChar, char>)
+          return r;
+        else
+          return { reinterpret_cast<ToChar>(r.data()), r.size() / sizeof(ToChar) };
+      }
+      throw std::invalid_argument("menon::mb_convert_encoding");
+    }
+  }
+
   /// 文字列のエンコーディングを変換する。
   /// @param[in]  sv            変換対象の文字列
   /// @param[in]  to_encoding   変換先エンコーディング
@@ -26,32 +65,7 @@ namespace menon
   inline auto mb_convert_encoding(std::string_view sv, char const* to_encoding, char const* from_encoding = mb_internal_encoding())
     -> std::string
   {
-    if (to_encoding == from_encoding || std::strcmp(to_encoding, from_encoding) == 0)
-      return { sv.data(), sv.size() };
-
-    if (auto cd = iconv_open(to_encoding, from_encoding))
-    {
-      std::size_t inbyteleft = sv.size();
-      char* p_inbuf = const_cast<char*>(sv.data());
-      constexpr std::size_t outbufsize = 1024;
-      std::string r;
-      r.reserve(outbufsize);
-
-      while (inbyteleft > 0)
-      {
-        char outbuf[outbufsize];
-        std::size_t outbyteleft = outbufsize;
-        char* p_outbuf = outbuf;
-
-        errno = 0;
-        if (iconv(cd, &p_inbuf, &inbyteleft, &p_outbuf, &outbyteleft) == std::size_t(-1))
-          throw std::invalid_argument(std::string("menon::mb_convert_encoding: ") + std::strerror(errno));
-        r.append(outbuf, outbufsize - outbyteleft);
-      }
-      iconv_close(cd);
-      return r;
-    }
-    throw std::invalid_argument("menon::mb_convert_encoding");
+    return detail::mb_convert_encoding_helper<char>(sv, to_encoding, from_encoding);
   }
 }
 
