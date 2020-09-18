@@ -26,23 +26,30 @@ namespace menon
   inline auto mb_convert_encoding(std::string_view sv, char const* to_encoding, char const* from_encoding = mb_internal_encoding())
     -> std::string
   {
-    if (std::strcmp(to_encoding, from_encoding) == 0)
+    if (to_encoding == from_encoding || std::strcmp(to_encoding, from_encoding) == 0)
       return { sv.data(), sv.size() };
 
     if (auto cd = iconv_open(to_encoding, from_encoding))
     {
-      std::size_t outbufsize = sv.size() * 4;
       std::size_t inbyteleft = sv.size();
-      std::size_t outbyteleft = outbufsize;
-      auto outbuf = std::make_unique<char[]>(outbufsize);
       char* p_inbuf = const_cast<char*>(sv.data());
-      char* p_outbuf = outbuf.get();
+      constexpr std::size_t outbufsize = 1024;
+      std::string r;
+      r.reserve(outbufsize);
 
-      errno = 0;
-      if (iconv(cd, &p_inbuf, &inbyteleft, &p_outbuf, &outbyteleft) == std::size_t(-1))
-        throw std::invalid_argument(std::string("menon::mb_convert_encoding: ") + std::strerror(errno));
+      while (inbyteleft > 0)
+      {
+        char outbuf[outbufsize];
+        std::size_t outbyteleft = outbufsize;
+        char* p_outbuf = outbuf;
+
+        errno = 0;
+        if (iconv(cd, &p_inbuf, &inbyteleft, &p_outbuf, &outbyteleft) == std::size_t(-1))
+          throw std::invalid_argument(std::string("menon::mb_convert_encoding: ") + std::strerror(errno));
+        r.append(outbuf, outbufsize - outbyteleft);
+      }
       iconv_close(cd);
-      return { outbuf.get(), outbufsize - outbyteleft };
+      return r;
     }
     throw std::invalid_argument("menon::mb_convert_encoding");
   }
