@@ -5,6 +5,7 @@
 #define MENON_BITS_MB_CONVERT_ENCODING_HH_
 #pragma once
 
+#include "menon/bits/sv.hh"
 #include "menon/bits/mb_internal_encoding.hh"
 #include "menon/bits/mb_external_encoding.hh"
 #include <stdexcept>
@@ -30,7 +31,7 @@ namespace menon
       if (auto cd = iconv_open(to_encoding, from_encoding))
       {
         std::size_t inbyteleft = sv.size() * sizeof(FromChar);
-        char* p_inbuf = const_cast<char*>(sv.data());
+        char* p_inbuf = const_cast<char*>(reinterpret_cast<char const*>(sv.data()));
         constexpr std::size_t outbufsize = 1024;
         std::string r;
         r.reserve(outbufsize);
@@ -50,7 +51,7 @@ namespace menon
         if constexpr (std::is_same_v<ToChar, char>)
           return r;
         else
-          return { reinterpret_cast<ToChar>(r.data()), r.size() / sizeof(ToChar) };
+          return { reinterpret_cast<ToChar const*>(r.data()), r.size() / sizeof(ToChar) };
       }
       throw std::invalid_argument("menon::mb_convert_encoding");
     }
@@ -66,6 +67,19 @@ namespace menon
     -> std::string
   {
     return detail::mb_convert_encoding_helper<char>(sv, to_encoding, from_encoding);
+  }
+
+  /// 文字列のエンコーディングを変換する。
+  /// @param[in]  sv            変換対象の文字列
+  /// @param[in]  to_encoding   変換先エンコーディング
+  /// この関数を呼び出す際は、返却値の文字型をテンプレート実引数として明示的に指定すること。
+  template <typename Char, typename T>
+  inline auto mb_convert_encoding(T s, char const* to_encoding)
+  {
+    using ::menon::sv;
+    auto t = sv(s);
+    using from_char_type = typename decltype(t)::value_type;
+    return detail::mb_convert_encoding_helper<Char>(t, to_encoding, get_internal_encoding<from_char_type>());
   }
 }
 
