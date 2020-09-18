@@ -21,7 +21,7 @@ namespace menon
   /// @param[in]  c   変換対象の文字
   /// @return     cの型に応じたstd::basic_string_view
   template <typename Char>
-  constexpr auto sv(Char const& c)
+  inline auto sv(Char const& c)
   {
     return std::basic_string_view<Char>(&c, 1);
   }
