@@ -34,7 +34,7 @@ namespace menon
       return !std::ferror(stream);
     }
 
-    inline auto gets_raw(std::string& buf, std::istream is)
+    inline auto gets_raw(std::string& buf, std::istream& is)
       -> bool
     {
       std::getline(is, buf);
@@ -55,12 +55,12 @@ namespace menon
       {
         if (to_encoding == from_encoding || std::strcmp(to_encoding, from_encoding) == 0)
         {
-          s = std::move(buf);
+          s.swap(buf);
           return true;
         }
       }
       using ::menon::sv;
-      s = mb_convert_encoding<Char>(sv(buf), from_encoding);
+      s = mb_convert_encoding<Char>(sv(buf), to_encoding);
       return true;
     }
   }
@@ -109,7 +109,93 @@ namespace menon
   {
     return gets(s, N, stream);
   }
+
+  /// ストリームから1行読み込む
+  /// @param[in]  s       入力した文字列の格納先
+  /// @param[in]  stream  ストリーム
+  /// @return     sを返す。
+  /// 1行の長さがnより大きい場合は格納できない文字を捨てる。
+  template <typename Char, typename Traits, typename Allocator>
+  auto gets(std::basic_string<Char, Traits, Allocator>& s, std::FILE* stream = stdin)
+    -> std::basic_string<Char, Traits, Allocator>&
+  {
+    if (stream == nullptr)
+      throw std::invalid_argument(__func__);
+
+    std::basic_string<Char> buf;
+    if (!detail::gets_helper(buf, stream))
+      throw std::invalid_argument("menon::gets");
+    if constexpr (std::is_same_v<std::basic_string<Char, Traits, Allocator>, std::basic_string<Char>>)
+      s.swap(buf);
+    else
+      s.assign(buf.cbegin(), buf.cend());
+    return s;
+ }
+
+  /// ストリームから1行読み込む
+  /// @param[in]  s       入力した文字列の格納先
+  /// @param[in]  n       配列sの要素数
+  /// @param[in]  stream  ストリーム
+  /// @return     sを返す。
+  /// 標準関数のgets関数と同様だが以下の点が異なる。
+  ///
+  /// - istreamを指定する。
+  /// - 格納先配列の要素数を指定できる。
+  ///
+  /// 1行の長さがnより大きい場合は格納できない文字を捨てる。
+  template <typename Char>
+  auto gets(Char* s, int n, std::istream& stream)
+    -> Char*
+  {
+    if (s == nullptr || n < 1)
+      throw std::invalid_argument(__func__);
+
+    std::basic_string<Char> buf;
+    if (detail::gets_helper(buf, stream))
+    {
+      n = std::min(static_cast<int>(buf.size()), n - 1);
+      buf.copy(s, n);
+      s[n] = {};
+      return s;
+    }
+    return  nullptr;
+ }
+
+  /// ストリームから1行読み込む
+  /// @param[in]  s       入力した文字列の格納先
+  /// @param[in]  stream  ストリーム
+  /// @return     sを返す。
+  /// 標準関数のgets関数と同様だが以下の点が異なる。
+  ///
+  /// - istreamを指定する。
+  /// - 格納先配列の要素数までしか書き込まれない。
+  ///
+  /// 1行の長さがnより大きい場合は格納できない文字を捨てる。
+  template <typename Char, std::size_t N>
+  inline auto gets(Char (&s)[N], std::istream& stream)
+  {
+    return gets(s, N, stream);
+  }
+
+  /// ストリームから1行読み込む
+  /// @param[in]  s       入力した文字列の格納先
+  /// @param[in]  stream  ストリーム
+  /// @return     sを返す。
+  /// 1行の長さがnより大きい場合は格納できない文字を捨てる。
+  template <typename Char, typename Traits, typename Allocator>
+  auto gets(std::basic_string<Char, Traits, Allocator>& s, std::istream& stream)
+    -> std::basic_string<Char, Traits, Allocator>&
+  {
+    std::basic_string<Char> buf;
+    if (!detail::gets_helper(buf, stream))
+      throw std::invalid_argument("menon::gets");
+    if constexpr (std::is_same_v<std::basic_string<Char, Traits, Allocator>, std::basic_string<Char>>)
+      s.swap(buf);
+    else
+      s.assign(buf.cbegin(), buf.cend());
+    return s;
+ }
+
 }
 
 #endif  // !MENON_BITS_GETS_HH_
-
