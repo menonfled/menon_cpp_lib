@@ -26,7 +26,7 @@ realclean: clean
 $(VERSION_HH): ./template/version.hh.in version.txt
 	cp ./template/version.hh.in $@
 	sed -i "s/%VERSION%/$(shell printf '%d%02d%02d' $(VER_LIST))/g" $@
-	sed -i "s/%LIB_VERSION%/$(shell printf '%d_%d' $(VER_LIST))/g" $@
+	sed -i "s/%LIB_VERSION%/$(shell printf '%d_%d' $(wordlist 1,2,$(VER_LIST)))/g" $@
 
 $(DOXYFILE): ./template/Doxyfile.in version.txt
 	cp ./template/Doxyfile.in $@
