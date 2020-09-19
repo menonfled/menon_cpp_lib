@@ -114,7 +114,6 @@ namespace menon
   /// @param[in]  s       入力した文字列の格納先
   /// @param[in]  stream  ストリーム
   /// @return     sを返す。
-  /// 1行の長さがnより大きい場合は格納できない文字を捨てる。
   template <typename Char, typename Traits, typename Allocator>
   auto gets(std::basic_string<Char, Traits, Allocator>& s, std::FILE* stream = stdin)
     -> std::basic_string<Char, Traits, Allocator>&
@@ -181,7 +180,6 @@ namespace menon
   /// @param[in]  s       入力した文字列の格納先
   /// @param[in]  stream  ストリーム
   /// @return     sを返す。
-  /// 1行の長さがnより大きい場合は格納できない文字を捨てる。
   template <typename Char, typename Traits, typename Allocator>
   auto gets(std::basic_string<Char, Traits, Allocator>& s, std::istream& stream)
     -> std::basic_string<Char, Traits, Allocator>&
