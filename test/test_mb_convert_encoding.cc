@@ -9,6 +9,7 @@ int main()
   char const* eucjp_s = "\xca\xb8\xbb\xfa\xa5\xa8\xa5\xf3\xa5\xb3\xa1\xbc\xa5\xc7\xa5\xa3\xa5\xf3\xa5\xb0\xa4\xce\xca\xd1\xb4\xb9\xa5\xc6\xa5\xb9\xa5\xc8";
   char16_t const* c16_s = u"\u6587\u5b57\u30a8\u30f3\u30b3\u30fc\u30c7\u30a3\u30f3\u30b0\u306e\u5909\u63db\u30c6\u30b9\u30c8";
   char32_t const* c32_s = U"\u6587\u5b57\u30a8\u30f3\u30b3\u30fc\u30c7\u30a3\u30f3\u30b0\u306e\u5909\u63db\u30c6\u30b9\u30c8";
+  wchar_t const* wcs_s = L"\u6587\u5b57\u30a8\u30f3\u30b3\u30fc\u30c7\u30a3\u30f3\u30b0\u306e\u5909\u63db\u30c6\u30b9\u30c8";
 
   BOOST_TEST_CSTR_EQ(menon::mb_convert_encoding(s, "CP932").c_str(), cp932_s);
   BOOST_TEST_CSTR_EQ(menon::mb_convert_encoding(s, "UTF-8", "CP932").c_str(), utf8_s);
@@ -17,5 +18,7 @@ int main()
   BOOST_TEST(menon::mb_convert_encoding<char>(c16_s, "CP932") == cp932_s);
   BOOST_TEST(menon::mb_convert_encoding<char>(c32_s, "UTF-8") == utf8_s);
   BOOST_TEST(menon::mb_convert_encoding<char32_t>(s, menon::get_internal_encoding<char32_t>()) == c32_s);
+  BOOST_TEST(menon::mb_convert_encoding<wchar_t>(s, menon::get_internal_encoding<wchar_t>()) == wcs_s);
+  BOOST_TEST(menon::mb_convert_encoding<char>(wcs_s, "UTF-8") == utf8_s);
   return boost::report_errors();
 }
