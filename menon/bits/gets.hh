@@ -10,9 +10,61 @@
 #include <cstdio>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
 namespace menon
 {
+  namespace detail
+  {
+    inline auto gets_raw(std::string& buf, std::FILE* stream)
+      -> bool
+    {
+      flockfile(stream);
+      auto _ = gsl::finally([stream] {
+        funlockfile(stream);
+      });
+
+      while (!std::feof(stream))
+      {
+        auto c = getc_unlocked(stream);
+        if (c == EOF || c == '\n')
+          break;
+        buf.push_back(char(c));
+      }
+      return !std::ferror(stream);
+    }
+
+    inline auto gets_raw(std::string& buf, std::istream is)
+      -> bool
+    {
+      std::getline(is, buf);
+      return !is.bad();
+    }
+
+    template <typename Char, typename Stream>
+    auto gets_helper(std::basic_string<Char>& s, Stream& stream)
+      -> bool
+    {
+      std::string buf;
+      buf.reserve(256);
+      if (!detail::gets_raw(buf, stream))
+        return false;
+      auto to_encoding = get_internal_encoding<Char>();
+      auto from_encoding = mb_external_encoding();
+      if constexpr (std::is_same_v<Char, char>)
+      {
+        if (to_encoding == from_encoding || std::strcmp(to_encoding, from_encoding) == 0)
+        {
+          s = std::move(buf);
+          return true;
+        }
+      }
+      using ::menon::sv;
+      s = mb_convert_encoding<Char>(sv(buf), from_encoding);
+      return true;
+    }
+  }
+
   /// ストリームから1行読み込む
   /// @param[in]  s       入力した文字列の格納先
   /// @param[in]  n       配列sの要素数
@@ -31,28 +83,15 @@ namespace menon
     if (s == nullptr || n < 1 || stream == nullptr)
       throw std::invalid_argument(__func__);
 
-    std::string buf;
-    buf.reserve(256);
+    std::basic_string<Char> buf;
+    if (detail::gets_helper(buf, stream))
     {
-      flockfile(stream);
-      auto _ = gsl::finally([stream] {
-        funlockfile(stream);
-      });
-
-      while (!std::feof(stream))
-      {
-        auto c = getc_unlocked(stream);
-        if (c == EOF || c == Char('\n'))
-          break;
-        buf.push_back(char(c));
-      }
+      n = std::min(static_cast<int>(buf.size()), n - 1);
+      buf.copy(s, n);
+      s[n] = {};
+      return s;
     }
-    using ::menon::sv;
-    auto t = mb_convert_encoding<Char>(sv(buf), mb_external_encoding());
-    n = std::min(static_cast<int>(t.size()), n - 1);
-    t.copy(s, n);
-    s[n] = {};
-    return s;
+    return  nullptr;
  }
 
   /// ストリームから1行読み込む
