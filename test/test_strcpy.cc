@@ -7,6 +7,7 @@ int main()
   using namespace std::literals;
 
   std::string s = "abcdefghi";
+  std::string sbuf;
   char buf[5];
   wchar_t wbuf[5];
 
@@ -15,6 +16,8 @@ int main()
 
   BOOST_TEST_CSTR_EQ(menon::strcpy(buf, s), "abcd");
   BOOST_TEST_CSTR_EQ(menon::strcpy(&buf[0], 4, s), "abc");
+
+  BOOST_TEST_EQ(menon::strcpy(sbuf, s), s);
 
   BOOST_TEST_EQ(std::wcscmp(menon::strcpy(wbuf, L"abcdefg"), L"abcd"), 0);
 

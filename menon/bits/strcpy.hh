@@ -54,6 +54,20 @@ namespace menon
     using ::menon::sv;
     return detail::strcpy_helper(s1, N, sv(s2));
   }
+
+  /// 文字列のコピー
+  /// @param[out] s1    コピー結果の格納先
+  /// @param[in]  s2    コピー元の文字列
+  /// @return     s1を返す。
+  template <typename Char, typename Traits, typename Allocator, typename String>
+  inline auto strcpy(std::basic_string<Char, Traits, Allocator>& s1, String const& s2)
+    -> std::basic_string<Char, Traits, Allocator>&
+  {
+    using ::menon::sv;
+    auto t = sv(s2);
+    s1.assign(t.cbegin(), t.cend());
+    return s1;
+  }
 }
 
 #endif  // !MENON_BITS_STRCPY_HH_
