@@ -11,7 +11,14 @@ int main()
     BOOST_TEST_EQ(menon::implode(",", t), "abc,def,ghi"s);
   }
   {
+    auto t = { "abc"s, "def"s, "ghi"s };
+    BOOST_TEST_EQ(menon::implode(","sv, t), "abc,def,ghi"s);
+  }
+  {
     BOOST_TEST_EQ(menon::implode(",", { "abc"s, "def"s, "ghi"s }), "abc,def,ghi"s);
+  }
+  {
+    BOOST_TEST_EQ(menon::implode(","s, { "abc"s, "def"s, "ghi"s }), "abc,def,ghi"s);
   }
   {
     std::vector t = { "abc"s, "def"s, "ghi"s };
