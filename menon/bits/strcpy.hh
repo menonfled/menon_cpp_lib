@@ -68,6 +68,30 @@ namespace menon
     s1.assign(t.cbegin(), t.cend());
     return s1;
   }
+
+  /// 文字列のコピー
+  /// @param[out] s1    コピー結果の格納先
+  /// @param[in]  s2    コピー元の文字列
+  /// @param[in]  n     コピーする要素数
+  /// @return     s1を返す。
+  /// 標準関数のstrncpy関数同様、必ずn要素だけs1に書き込む。
+  /// s2の長さがnに満たない場合、残りの領域にはナル文字を書き込む。
+  /// s2の長さがn以上の場合はナル文字が書き込まれない。
+  template <typename Char, typename String>
+  auto strncpy(Char* s1, String const& s2, std::size_t n)
+  {
+    if (n == 0)
+      return s1;
+    if (s1 == nullptr)
+      throw std::invalid_argument("menon::strncpy"); 
+    using ::menon::sv;
+    auto t = sv(s2);
+    auto length = std::min(static_cast<std::size_t>(t.size()), n);
+    t.copy(s1, length);
+    if (length < n)
+      std::fill_n(s1 + length, n - length, Char('\0'));
+    return s1;
+  }
 }
 
 #endif  // !MENON_BITS_STRCPY_HH_
