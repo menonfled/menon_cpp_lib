@@ -15,6 +15,11 @@ int main()
   constexpr auto r3 = menon::strlen("abcde"sv);
   BOOST_TEST_EQ(r3, 5);
 
+  {
+    char const s[16] = "abc"; 
+    BOOST_TEST_EQ(menon::strlen(s, 16), 3);
+  }
+
   BOOST_TEST_EQ(menon::strlen(s), n);
   BOOST_TEST_EQ(menon::strlen(s.c_str()), n);
   BOOST_TEST_EQ(menon::strlen(s.c_str(), s.size()), n);
