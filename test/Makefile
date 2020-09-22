@@ -23,10 +23,12 @@ all: $(TESTS)
 clean:
 	-rm -f *.o $(TESTS) $(subst .okay,.out,$(TESTS)) $(DEPENDS)
 
-%.okay: %.cc
+%.out: %.cc
 	@echo $<
-	@$(CXX) $(CXXFLAGS) -o $*.out $< $(LDFLAGS)
-	@./$*.out
+	@$(CXX) $(CXXFLAGS) -o $@ $< $(LDFLAGS)
+
+%.okay: %.out
+	@./$<
 	@touch $@
 
 -include $(DEPENDS)
