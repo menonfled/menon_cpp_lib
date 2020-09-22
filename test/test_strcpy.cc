@@ -22,8 +22,6 @@ int main()
     BOOST_TEST_EQ(menon::strcpy(sbuf, s), s);
 
     BOOST_TEST_EQ(std::wcscmp(menon::strcpy(wbuf, L"abcdefg"), L"abcd"), 0);
-
-    BOOST_TEST_THROWS(menon::strcpy((char*)nullptr, 3, "abc"), std::invalid_argument);
   }
 
   {
@@ -32,8 +30,6 @@ int main()
     BOOST_TEST_EQ(std::memcmp(menon::strncpy(buf, "abc", 5), "abc\0\0", 5), 0);
 
     BOOST_TEST_EQ(std::wmemcmp(menon::strncpy(wbuf, L"abcdef", 3), L"abc", 3), 0);
-
-    BOOST_TEST_THROWS(menon::strncpy((char*)nullptr, "abc", 5), std::invalid_argument);
   }
   return boost::report_errors();
 }

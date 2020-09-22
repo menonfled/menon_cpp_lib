@@ -17,8 +17,7 @@ namespace menon
     {
       if (n == 0)
         return s;
-      if (s == nullptr)
-        throw std::invalid_argument("menon::strcpy");
+      Expects(s != nullptr);
 
       if (n > sv.size() + 1)
         n = sv.size() + 1;
@@ -82,8 +81,8 @@ namespace menon
   {
     if (n == 0)
       return s1;
-    if (s1 == nullptr)
-      throw std::invalid_argument("menon::strncpy"); 
+    Expects(s1 != nullptr);
+
     using ::menon::sv;
     auto t = sv(s2);
     auto length = std::min(static_cast<std::size_t>(t.size()), n);
