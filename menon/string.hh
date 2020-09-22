@@ -12,5 +12,6 @@
 #include "menon/bits/strlen.hh"
 #include "menon/bits/strcmp.hh"
 #include "menon/bits/strcpy.hh"
+#include "menon/bits/strcat.hh"
 
 #endif  // !MENON_STRING_HH_
