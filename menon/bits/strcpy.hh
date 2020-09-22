@@ -68,7 +68,7 @@ namespace menon
     return s1;
   }
 
-  /// 文字列のコピー
+  /// 指定文字数だけ文字列をコピー
   /// @param[out] s1    コピー結果の格納先
   /// @param[in]  s2    コピー元の文字列
   /// @param[in]  n     コピーする要素数
