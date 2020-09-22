@@ -16,16 +16,17 @@ LDFLAGS		+=	-lm
 CXXSRCS		=	$(filter %.cc,$(shell ls .))
 OBJS		=	$(CXXSRCS:%.cc=%.o)
 DEPENDS		=	$(CXXSRCS:%.cc=%.d)
-TESTS		=	$(CXXSRCS:%.cc=%.test)
+TESTS		=	$(CXXSRCS:%.cc=%.okay)
 
 all: $(TESTS)
 
 clean:
-	-rm -f *.o $(TESTS) $(DEPENDS)
+	-rm -f *.o $(TESTS) $(subst .okay,.out,$(TESTS)) $(DEPENDS)
 
-%.test: %.cc
-	$(CXX) $(CXXFLAGS) -o $@ $< $(LDFLAGS)
-	./$@
+%.okay: %.cc
+	$(CXX) $(CXXFLAGS) -o $*.out $< $(LDFLAGS)
+	./$*.out
+	touch $@
 
 -include $(DEPENDS)
 
