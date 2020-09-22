@@ -38,9 +38,17 @@ namespace menon
   /// 標準関数のstrlenの利便性を向上した関数。
   template <typename Char>
   constexpr auto strlen(Char const* s, std::size_t n)
+    -> std::size_t
   {
-    using menon::sv;
-    return detail::strlen_helper(sv(s, n));
+    if (n == 0)
+      return 0;
+    Expects(s != nullptr);
+
+    auto ss = s;
+    auto t = s + n;
+    while (ss != t && *ss != 0)
+      ++ss;
+    return ss - s;
   }
 
   /// 指定文字数以内の文字列の長さを求める
