@@ -80,8 +80,12 @@ namespace menon
   auto gets(Char* s, int n, std::FILE* stream = stdin)
     -> Char*
   {
-    if (s == nullptr || n < 1 || stream == nullptr)
-      throw std::invalid_argument(__func__);
+    Expects(s != nullptr);
+    Expects(n >= 0);
+    Expects(stream != nullptr);
+
+    if (n == 0)
+      return s;
 
     std::basic_string<Char> buf;
     if (detail::gets_helper(buf, stream))
@@ -118,8 +122,7 @@ namespace menon
   auto gets(std::basic_string<Char, Traits, Allocator>& s, std::FILE* stream = stdin)
     -> std::basic_string<Char, Traits, Allocator>&
   {
-    if (stream == nullptr)
-      throw std::invalid_argument(__func__);
+    Expects(stream != nullptr);
 
     std::basic_string<Char> buf;
     if (!detail::gets_helper(buf, stream))
@@ -146,8 +149,11 @@ namespace menon
   auto gets(Char* s, int n, std::istream& stream)
     -> Char*
   {
-    if (s == nullptr || n < 1)
-      throw std::invalid_argument(__func__);
+    Expects(s != nullptr);
+    Expects(n >= 0);
+
+    if (n == 0)
+      return s;
 
     std::basic_string<Char> buf;
     if (detail::gets_helper(buf, stream))
@@ -186,14 +192,13 @@ namespace menon
   {
     std::basic_string<Char> buf;
     if (!detail::gets_helper(buf, stream))
-      throw std::invalid_argument("menon::gets");
+      throw std::runtime_error("menon::gets");
     if constexpr (std::is_same_v<std::basic_string<Char, Traits, Allocator>, std::basic_string<Char>>)
       s.swap(buf);
     else
       s.assign(buf.cbegin(), buf.cend());
     return s;
  }
-
 }
 
 #endif  // !MENON_BITS_GETS_HH_
