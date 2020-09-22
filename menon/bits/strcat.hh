@@ -7,6 +7,7 @@
 
 #include "menon/bits/strlen.hh"
 #include "menon/bits/strcpy.hh"
+#include <type_traits>
 
 namespace menon
 {
@@ -52,6 +53,21 @@ namespace menon
   {
     using ::menon::sv;
     return detail::strcat_helper(s1, N, sv(s2));
+  }
+
+  /// 文字列の連結
+  /// @param[in,out]  s1    先行部分の文字列および結果の格納先
+  /// @param[in]      s2    連結するの文字列
+  /// @return         s1を返す。
+  /// s1に格納されている文字列にs2が指す文字列を連結し、結果をs1に格納する。
+  template <typename Char, typename Traits, typename Allocator, typename String>
+  auto strcat(std::basic_string<Char, Traits, Allocator>& s1, String const& s2)
+    -> std::basic_string<Char, Traits, Allocator>&
+  {
+    using ::menon::sv;
+    auto ss2 = sv(s2);
+    static_assert(std::is_same_v<Char, typename decltype(ss2)::value_type>);
+    return s1.append(ss2.cbegin(), ss2.cend());
   }
 }
 

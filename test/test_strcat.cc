@@ -26,5 +26,12 @@ int main()
     wchar_t wcs[16] = L"abc";
     BOOST_TEST_EQ(std::wcscmp(menon::strcat(wcs, L"def"), L"abcdef"), 0);
   }
+  {
+    std::string str = "abc";
+    BOOST_TEST_EQ(menon::strcat(str, "def"), "abcdef");
+
+    std::wstring wstr = L"abc";
+    BOOST_TEST_EQ(std::wcscmp(menon::strcat(wstr, L"def").c_str(), L"abcdef"), 0);
+  }
   return boost::report_errors();
 }
