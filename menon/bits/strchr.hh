@@ -20,6 +20,9 @@ namespace menon
   constexpr auto strchr(Char* s, std::remove_cv_t<Char> c)
     -> Char*
   {
+    if (s == nullptr)
+      return nullptr;
+
     using ::menon::sv;
     auto t = sv(s);
     using sv_type = decltype(t);
