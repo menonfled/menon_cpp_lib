@@ -63,8 +63,8 @@ namespace menon
   /// - limitが正の場合、結果には最大limitの要素が含まれ、その最後の要素にはstrの残りの部分が含まれる。
   /// - limitが負の場合、最後の-limit個を除くすべての要素が返される。
   /// - limitが0の場合、1を指定したものとして扱われる。
-  template <typename T, typename U>
-  auto explode(T delimiter, U str, int limit = INT_MAX)
+  template <typename String1, typename String2>
+  auto explode(String1 const& delimiter, String2 const& str, int limit = INT_MAX)
   {
     using ::menon::sv;
     auto s = sv(str);
@@ -86,8 +86,8 @@ namespace menon
   ///
   /// 分割結果の格納先をrで指定することができる。
   /// これにより、string_viewのvectorだけでなく、stringのvectorやlistなどを用いることもできる。
-  template <typename T, typename U, typename Target>
-  auto explode(T delimiter, U str, Target& r, int limit = INT_MAX)
+  template <typename String1, typename String2, typename Target>
+  auto explode(String1 const& delimiter, String2 const& str, Target& r, int limit = INT_MAX)
     -> Target&
   {
     using ::menon::sv;
