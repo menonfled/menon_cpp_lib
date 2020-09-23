@@ -24,8 +24,8 @@ namespace menon
   /// @return     文字列sの（ナル文字を除く）要素数を返す。
   /// 標準関数のstrlenの利便性を向上した関数。
   /// 文字型へのポインタのほか、basic_stringやbasic_string_viewを渡すことも可能。
-  template <typename T>
-  constexpr auto strlen(T s)
+  template <typename String>
+  constexpr auto strlen(String const& s)
   {
     using menon::sv;
     return detail::strlen_helper(sv(s));
@@ -57,8 +57,8 @@ namespace menon
   /// @return     文字列sの（ナル文字を除く）要素数を返す。
   /// 標準関数のstrlenの利便性を向上した関数。
   /// 文字型へのポインタのほか、basic_stringやbasic_string_viewを渡すことも可能。
-  template <typename T>
-  constexpr auto strnlen(T s, std::size_t n)
+  template <typename String>
+  constexpr auto strnlen(String const& s, std::size_t n)
   {
     using menon::sv;
     return detail::strlen_helper(sv(s).substr(0, n));
