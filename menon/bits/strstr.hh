@@ -6,6 +6,7 @@
 #pragma once
 
 #include "menon/bits/sv.hh"
+#include <iterator>
 #include <type_traits>
 
 namespace menon
