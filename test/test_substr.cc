@@ -5,12 +5,13 @@ int main()
 {
   using namespace std::literals;
 
-  char s[] = "abcdef";
-  wchar_t wcs[] = L"abcdef";
+  constexpr auto s = "abcdef";
+  constexpr auto wcs = L"abcdef";
   auto str = "abcdef"s;
   auto wstr = L"abcdef"s;
 
-  BOOST_TEST_EQ(menon::substr(s, 2, 3), "cde");
+  constexpr auto t = menon::substr(s, 2, 3);  
+  BOOST_TEST_EQ(t, "cde");
   BOOST_TEST_EQ(menon::substr(s, 2, 10), "cdef");
   BOOST_TEST_THROWS(menon::substr(s, 10, 3), std::out_of_range);
 
