@@ -5,7 +5,11 @@
 #define MENON_BITS_TOCTRANS_HH_
 #pragma once
 
+#include "menon/bits/sv.hh"
 #include "menon/bits/isctype.hh"
+#include <string>
+#include <algorithm>
+#include <iterator>
 
 namespace menon
 {
@@ -58,6 +62,38 @@ namespace menon
     if (name == "toupper")
       return toupper;
     return {};
+  }
+
+  /// 文字列を小文字に変換する。
+  /// @param[in]  s     変換対象の文字列
+  /// @return     sに含まれる'A'～'Z'を'a'～'z'に変換した文字列を返す。
+  template <typename String>
+  auto strtolower(String const& s)
+  {
+    using ::menon::sv;
+    auto t = sv(s);
+    using sv_type = decltype(t);
+    using char_type = typename sv_type::value_type;
+    std::basic_string<char_type> r;
+    r.reserve(t.size());
+    std::transform(t.cbegin(), t.cend(), std::back_inserter(r), &menon::tolower<char_type>);
+    return r;
+  }
+
+  /// 文字列を大文字に変換する。
+  /// @param[in]  s     変換対象の文字列
+  /// @return     sに含まれる'a'～'z'を'A'～'Z'に変換した文字列を返す。
+  template <typename String>
+  auto strtoupper(String const& s)
+  {
+    using ::menon::sv;
+    auto t = sv(s);
+    using sv_type = decltype(t);
+    using char_type = typename sv_type::value_type;
+    std::basic_string<char_type> r;
+    r.reserve(t.size());
+    std::transform(t.cbegin(), t.cend(), std::back_inserter(r), &menon::toupper<char_type>);
+    return r;
   }
 }
 
