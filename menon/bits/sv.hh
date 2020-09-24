@@ -64,7 +64,7 @@ namespace menon
   /// @param[in]  str 変換対象の文字列
   /// @return     strの型に応じたstd::basic_string_view
   template <typename Char, typename Traits, typename Allocator>
-  constexpr auto sv(std::basic_string<Char, Traits, Allocator> str)
+  constexpr auto sv(std::basic_string<Char, Traits, Allocator> const& str)
   {
     return std::basic_string_view<Char, Traits>(str);
   }
