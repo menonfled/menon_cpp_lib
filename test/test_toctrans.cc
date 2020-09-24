@@ -1,7 +1,6 @@
 ﻿#include "menon/ctype.hh"
 #include <boost/core/lightweight_test.hpp>
 #include <cctype>
-#include <iostream>
 
 template <typename Char>
 void test()
