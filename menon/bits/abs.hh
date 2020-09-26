@@ -9,6 +9,7 @@
 #include <type_traits>
 #include <limits>
 #include <stdexcept>
+#include <complex>
 #include <concepts>
 
 namespace menon
@@ -44,6 +45,15 @@ namespace menon
     return value < 0 ? -value : +value;
   }
 
+  /// 複素数の絶対値
+  /// @param[in]  value     絶対値を求める複素数
+  /// @return     valueの絶対値を返す。
+  template <std::floating_point T>
+  constexpr auto abs(std::complex<T> const& value)
+  {
+    return std::abs(value);
+  }
+
   /// 符号付き整数の絶対値
   /// @param[in]  value     絶対値を求める値
   /// @return     valueの絶対値を符号無し整数型として返す。
@@ -71,6 +81,15 @@ namespace menon
   constexpr auto uabs(T value)
   {
     return value < 0 ? -value : +value;
+  }
+
+  /// 複素数の絶対値
+  /// @param[in]  value     絶対値を求める複素数
+  /// @return     valueの絶対値を返す。
+  template <std::floating_point T>
+  constexpr auto uabs(std::complex<T> const& value)
+  {
+    return std::abs(value);
   }
 }
 
