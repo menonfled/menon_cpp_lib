@@ -43,6 +43,35 @@ namespace menon
   {
     return value < 0 ? -value : +value;
   }
+
+  /// 符号付き整数の絶対値
+  /// @param[in]  value     絶対値を求める値
+  /// @return     valueの絶対値を符号無し整数型として返す。
+  template <std::signed_integral T>
+  constexpr auto uabs(T value)
+  {
+    auto t = +value;
+    auto u = std::make_unsigned_t<decltype(t)>(t);
+    return t < 0 ? -u : +u;
+  }
+
+  /// 符号無し整数の絶対値
+  /// @param[in]  value     絶対値を求める値
+  /// @return     valueを整数拡張した型として返す。
+  template <std::unsigned_integral T>
+  constexpr auto uabs(T value)
+  {
+    return +value;
+  }
+
+  /// 浮動小数点数の絶対値
+  /// @param[in]  value     絶対値を求める値
+  /// @return     valueの絶対値を返す。
+  template <std::floating_point T>
+  constexpr auto uabs(T value)
+  {
+    return value < 0 ? -value : +value;
+  }
 }
 
 #endif  // !MENON_BITS_ABS_HH_
