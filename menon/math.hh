@@ -9,5 +9,6 @@
 #include <ccomplex>
 
 #include "menon/bits/abs.hh"
+#include "menon/bits/div.hh"
 
 #endif  // !MENON_BITS_MATH_HH_
