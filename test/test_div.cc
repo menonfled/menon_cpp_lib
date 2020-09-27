@@ -30,6 +30,8 @@ int main()
     auto d = menon::div(12345.0, 67);
     BOOST_TEST_EQ(d.quot, 12345 / 67);
     BOOST_TEST_EQ(d.rem, 12345 % 67);
+    BOOST_TEST_EQ(menon::div(12.345, 5.3).quot, 2);
+    BOOST_TEST_EQ(menon::div(12.345, 5.3).rem, 12.345 - 5.3*2);
     BOOST_TEST_THROWS(menon::div(123.0, 0), std::invalid_argument);
     BOOST_TEST_EQ(menon::div(INT_MIN, -1.0).quot, INT_MIN * -1.0);
     BOOST_TEST(std::isnan(menon::div(INFINITY, INFINITY).quot));
