@@ -8,7 +8,10 @@
 
 namespace menon
 {
-  constexpr char const alnum[] = "0123456789abcdefghijklmnopqrstuvwxyz";
+  namespace detail
+  {
+    constexpr char const alnum[] = "0123456789abcdefghijklmnopqrstuvwxyz";
+  }
 }
 
 #endif  // !MENON_BITS_ALNUM_HH_
