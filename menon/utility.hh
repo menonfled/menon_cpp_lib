@@ -6,5 +6,6 @@
 #pragma once
 
 #include "menon/bits/strto.hh"
+#include "menon/bits/swap.hh"
 
 #endif  // !MENON_BITS_UTILITY_HH_
