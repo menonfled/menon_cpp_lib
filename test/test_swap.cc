@@ -4,6 +4,7 @@
 #include <vector>
 #include <set>
 #include <algorithm>
+#include <iterator>
 
 int main()
 {
@@ -20,6 +21,15 @@ int main()
     menon::swap(a, b);
     BOOST_TEST_EQ(a, 456);
     BOOST_TEST_EQ(b, 123);
+  }
+  {
+    int a[] = { 1, 2, 3 };
+    int b[] = { 4, 5, 6 };
+    int x[] = { 1, 2, 3 };
+    int y[] = { 4, 5, 6 };
+    menon::swap(a, b);
+    BOOST_TEST_ALL_EQ(std::begin(a), std::end(a), std::begin(y), std::end(y));
+    BOOST_TEST_ALL_EQ(std::begin(b), std::end(b), std::begin(x), std::end(x));
   }
   {
     std::string a = "abc";
