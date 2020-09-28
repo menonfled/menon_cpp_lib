@@ -19,6 +19,10 @@ int main()
     BOOST_TEST_EQ(menon::strto<long>("abcd", &endpos, 36), std::strtol("abcd", nullptr, 36));
     BOOST_TEST_EQ(endpos, 4);
     BOOST_TEST_THROWS(menon::strto<int>("999999999999999999999", &endpos), std::overflow_error);
+
+    BOOST_TEST_EQ(menon::strto<unsigned int>("12345", &endpos), 12345u);
+    BOOST_TEST_EQ(menon::strto<unsigned int>("ffffffff", &endpos, 16), 0xffffffff);
+    BOOST_TEST_THROWS(menon::strto<unsigned int>("100000000", &endpos, 16), std::overflow_error);
   }
   return boost::report_errors();
 }
