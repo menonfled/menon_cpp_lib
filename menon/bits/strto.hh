@@ -83,7 +83,7 @@ namespace menon
         if (auto ptr = std::strchr(detail::alnum, c))
         {
           auto d = static_cast<T>(ptr - detail::alnum);
-          if (r + d < r)
+          if (r + d <= r)
             *overflow = true;
           r += d;
           ++next;
