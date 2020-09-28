@@ -83,9 +83,17 @@ namespace menon
         if (auto ptr = std::strchr(detail::alnum, c))
         {
           auto d = static_cast<T>(ptr - detail::alnum);
-          if (r + d <= r)
-            *overflow = true;
+          if constexpr (std::is_integral_v<T>)
+          {
+            if (r + d <= r)
+              *overflow = true;
+          }
           r += d;
+          if constexpr (std::is_floating_point_v<T>)
+          {
+            if (r > std::numeric_limits<T>::max())
+              *overflow = true;
+          }
           ++next;
         }
         else
