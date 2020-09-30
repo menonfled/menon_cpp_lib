@@ -10,6 +10,7 @@
 #include <string_view>
 #include <type_traits>
 #include <array>
+#include <utility>
 #include "menon/bits/config.hh"
 #if MENON_HAS_BOOST
 #include <boost/utility/string_view.hpp>
@@ -108,6 +109,14 @@ namespace menon
       r[i] = sv[i];
     return r;
   }
+
+  /// sv関数適用の可否
+  /// 実質的に何からの文字列型であることを示す。
+  template <typename T>
+  concept sv_like = requires (T&& arg)
+  {
+    sv(std::forward<T>(arg));
+  };
 }
 
 #endif  // !MENON_BITS_SV_HH_
