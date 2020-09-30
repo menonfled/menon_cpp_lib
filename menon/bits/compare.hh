@@ -47,27 +47,6 @@ namespace menon
   {
     return detail::lt_helper(+lhs, +rhs);
   }
-
-  /// 文字列の比較（左辺 < 右辺）
-  /// @param[in]  lhs     左辺
-  /// @param[in]  rhs     右辺
-  /// lhs < rhsの場合はtrueを、それ以外はfalseを返す。
-  template <sv_like T, sv_like U>
-  constexpr bool lt(T const& lhs, T const& rhs)
-  {
-    using ::menon::sv;
-    return sv(lhs) < sv(rhs);
-  }
-
-  /// 一般的なオブジェクトの比較（左辺 < 右辺）
-  /// @param[in]  lhs     左辺
-  /// @param[in]  rhs     右辺
-  /// lhs < rhsの場合はtrueを、それ以外はfalseを返す。
-  template <typename T>
-  constexpr bool lt(T const& lhs, T const& rhs)
-  {
-    return lhs < rhs;
-  }
 }
 
 #endif  // !MENON_BITS_COMPARE_HH_
