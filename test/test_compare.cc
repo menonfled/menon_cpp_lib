@@ -12,5 +12,6 @@ int main()
   BOOST_TEST(menon::lt(-2, 1));
   BOOST_TEST(menon::lt(-2, 1u));
   BOOST_TEST(menon::lt(123.45, 345.67));
+  BOOST_TEST(!menon::lt(123.45, 123.45));
   return boost::report_errors();
 }
