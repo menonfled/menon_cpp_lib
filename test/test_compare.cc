@@ -1,12 +1,8 @@
 ﻿#include "menon/utility.hh"
 #include <boost/core/lightweight_test.hpp>
-#include <string>
-#include <string_view>
 
 int main()
 {
-  using namespace std::literals;
-
   BOOST_TEST(menon::lt(1, 2));
   BOOST_TEST(!menon::lt(2, 1));
   BOOST_TEST(!menon::lt(2, 2));
