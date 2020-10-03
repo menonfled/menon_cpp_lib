@@ -36,6 +36,30 @@ namespace menon
       using type = decltype(lhs + rhs);
       return static_cast<type>(lhs) < static_cast<type>(rhs);
     }
+
+    template <std::integral T, std::integral U>
+    constexpr bool eq_helper(T lhs, U rhs)
+    {
+      return lhs == rhs;
+    }
+
+    template <std::signed_integral T, std::unsigned_integral U>
+    constexpr bool eq_helper(T lhs, U rhs)
+    {
+      if (lhs < 0)
+        return false;
+      using type = decltype(lhs + rhs);
+      return static_cast<type>(lhs) == static_cast<type>(rhs);
+    }
+
+    template <std::unsigned_integral T, std::signed_integral U>
+    constexpr bool eq_helper(T lhs, U rhs)
+    {
+      if (rhs < 0)
+        return false;
+      using type = decltype(lhs + rhs);
+      return static_cast<type>(lhs) == static_cast<type>(rhs);
+    }
   }
 
   /// 整数の比較（左辺 < 右辺）
@@ -86,6 +110,36 @@ namespace menon
   constexpr bool ge(T lhs, U rhs)
   {
     return !lt(lhs, rhs);
+  }
+
+  /// 整数の等値判定（左辺 ＝ 右辺）
+  /// @param[in]  lhs     左辺
+  /// @param[in]  rhs     右辺
+  /// lhs ＝ rhsの場合はtrueを、それ以外はfalseを返す。
+  template <std::integral T, std::integral U>
+  constexpr bool eq(T lhs, U rhs)
+  {
+    return detail::eq_helper(+lhs, +rhs);
+  }
+
+  /// 浮動小数点数の等値判定（左辺 ＝ 右辺）
+  /// @param[in]  lhs     左辺
+  /// @param[in]  rhs     右辺
+  /// lhs ＝ rhsの場合はtrueを、それ以外はfalseを返す。
+  template <std::floating_point T>
+  constexpr bool eq(T lhs, T rhs)
+  {
+    return lhs == rhs;
+  }
+
+  /// 算術値の不一致判定（左辺 ≠ 右辺）
+  /// @param[in]  lhs     左辺
+  /// @param[in]  rhs     右辺
+  /// lhs ≠ rhsの場合はtrueを、それ以外はfalseを返す。
+  template <typename T, typename U>
+  constexpr bool ne(T lhs, U rhs)
+  {
+    return !eq(lhs, rhs);
   }
 }
 

@@ -48,5 +48,28 @@ int main()
   BOOST_TEST(!menon::ge(123.45, 345.67));
   BOOST_TEST(menon::ge(123.45, 123.45));
 
+  BOOST_TEST(!menon::eq(1, 2));
+  BOOST_TEST(!menon::eq(2, 1));
+  BOOST_TEST(menon::eq(2, 2));
+  BOOST_TEST(!menon::eq(1L, 2));
+  BOOST_TEST(!menon::eq(2, 1L));
+  BOOST_TEST(menon::eq(2, 2LL));
+  BOOST_TEST(!menon::eq(-2, 1));
+  BOOST_TEST(!menon::eq(-2, 1u));
+  BOOST_TEST(!menon::eq(123.45, 345.67));
+  BOOST_TEST(menon::eq(123.45, 123.45));
+
+  BOOST_TEST(menon::ne(1, 2));
+  BOOST_TEST(menon::ne(2, 1));
+  BOOST_TEST(!menon::ne(2, 2));
+  BOOST_TEST(menon::ne(1L, 2));
+  BOOST_TEST(menon::ne(2, 1L));
+  BOOST_TEST(!menon::ne(2, 2LL));
+  BOOST_TEST(menon::ne(-2, 1));
+  BOOST_TEST(menon::ne(-2, 1u));
+  BOOST_TEST(menon::ne(-1, ~0u));
+  BOOST_TEST(menon::ne(123.45, 345.67));
+  BOOST_TEST(!menon::ne(123.45, 123.45));
+
   return boost::report_errors();
 }
