@@ -67,6 +67,26 @@ namespace menon
   {
     return lt(rhs, lhs);
   }
+
+  /// 算術値の比較（左辺 ≦ 右辺）
+  /// @param[in]  lhs     左辺
+  /// @param[in]  rhs     右辺
+  /// lhs ≦ rhsの場合はtrueを、それ以外はfalseを返す。
+  template <typename T, typename U>
+  constexpr bool le(T lhs, U rhs)
+  {
+    return !lt(rhs, lhs);
+  }
+
+  /// 算術値の比較（左辺 ≧ 右辺）
+  /// @param[in]  lhs     左辺
+  /// @param[in]  rhs     右辺
+  /// lhs ≧ rhsの場合はtrueを、それ以外はfalseを返す。
+  template <typename T, typename U>
+  constexpr bool ge(T lhs, U rhs)
+  {
+    return !lt(lhs, rhs);
+  }
 }
 
 #endif  // !MENON_BITS_COMPARE_HH_
