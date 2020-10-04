@@ -48,6 +48,9 @@ namespace menon
   template <typename T, typename U>
   auto div(T numer, U denom)
   {
+    static_assert(std::is_arithmetic_v<T>);
+    static_assert(std::is_arithmetic_v<U>);
+
     using value_type = decltype(numer / denom);
     if (denom == 0 && numer != 0)
       throw std::invalid_argument("menon::div");
