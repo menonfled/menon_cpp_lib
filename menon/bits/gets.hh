@@ -17,7 +17,7 @@ namespace menon
   namespace detail
   {
     template <bool KeepDelimiter, char Delimiter = '\n'>
-    auto gets_raw(std::string& buf, std::FILE* stream)
+    auto gets_raw(std::string& buf, std::FILE* stream, int n)
       -> bool
     {
       flockfile(stream);
@@ -27,6 +27,9 @@ namespace menon
 
       while (!std::feof(stream))
       {
+        if (n >= 0 && static_cast<int>(buf.size()) >= n)
+          break;
+
         auto c = getc_unlocked(stream);
         if (c == EOF)
           break;
@@ -42,25 +45,46 @@ namespace menon
     }
 
     template <bool KeepDelimiter, char Delimiter = '\n'>
-    auto gets_raw(std::string& buf, std::istream& is)
+    auto gets_raw(std::string& buf, std::istream& is, int n)
       -> bool
     {
-      std::getline(is, buf, Delimiter);
-      if constexpr (KeepDelimiter)
+      std::istream::sentry x(is);
+      if (x)
       {
-        if (!is.eof())
-          buf.push_back(Delimiter);
+        while (is)
+        {
+          if (n >= 0 && static_cast<int>(buf.size()) >= n)
+            break;
+
+          char c;
+          is.get(c);
+          if (c == Delimiter)
+          {
+            if constexpr (KeepDelimiter)
+            {
+              buf.push_back(c);
+            }
+            break;
+          }
+          buf.push_back(c);
+        }
       }
       return !is.bad();
     }
 
-    template <typename Char, typename Stream>
-    auto gets_helper(std::basic_string<Char>& s, Stream& stream)
+    template <bool KeepDelimiter, char Delimiter, typename Char, typename Stream>
+    auto gets_helper(std::basic_string<Char>& s, Stream& stream, int n = -1)
       -> bool
     {
+      if (n == 0)
+      {
+        s.clear();
+        return true;
+      }
+
       std::string buf;
       buf.reserve(256);
-      if (!detail::gets_raw<false>(buf, stream))
+      if (!detail::gets_raw<KeepDelimiter, Delimiter>(buf, stream, n))
         return false;
       auto to_encoding = get_internal_encoding<Char>();
       auto from_encoding = mb_external_encoding();
@@ -101,7 +125,7 @@ namespace menon
       return s;
 
     std::basic_string<Char> buf;
-    if (detail::gets_helper(buf, stream))
+    if (detail::gets_helper<false, '\n'>(buf, stream))
     {
       n = std::min(static_cast<int>(buf.size()), n - 1);
       buf.copy(s, n);
@@ -138,7 +162,7 @@ namespace menon
     Expects(stream != nullptr);
 
     std::basic_string<Char> buf;
-    if (!detail::gets_helper(buf, stream))
+    if (!detail::gets_helper<false, '\n'>(buf, stream))
       throw std::invalid_argument("menon::gets");
     if constexpr (std::is_same_v<std::basic_string<Char, Traits, Allocator>, std::basic_string<Char>>)
       s.swap(buf);
@@ -169,7 +193,7 @@ namespace menon
       return s;
 
     std::basic_string<Char> buf;
-    if (detail::gets_helper(buf, stream))
+    if (detail::gets_helper<false, '\n'>(buf, stream))
     {
       n = std::min(static_cast<int>(buf.size()), n - 1);
       buf.copy(s, n);
@@ -204,7 +228,132 @@ namespace menon
     -> std::basic_string<Char, Traits, Allocator>&
   {
     std::basic_string<Char> buf;
-    if (!detail::gets_helper(buf, stream))
+    if (!detail::gets_helper<false, '\n'>(buf, stream))
+      throw std::runtime_error("menon::gets");
+    if constexpr (std::is_same_v<std::basic_string<Char, Traits, Allocator>, std::basic_string<Char>>)
+      s.swap(buf);
+    else
+      s.assign(buf.cbegin(), buf.cend());
+    return s;
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /// ストリームから1行読み込む
+  /// @param[in]  s       入力した文字列の格納先
+  /// @param[in]  n       配列sの要素数
+  /// @param[in]  stream  ストリーム
+  /// @return     sを返す。
+  /// 標準関数のfgets関数と同様だが以下の点が異なる。
+  ///
+  /// - 標準入力以外のストリームを指定できる。
+  template <typename Char>
+  auto fgets(Char* s, int n, std::FILE* stream)
+    -> Char*
+  {
+    Expects(s != nullptr);
+    Expects(n >= 0);
+    Expects(stream != nullptr);
+
+    if (n == 0)
+      return s;
+
+    std::basic_string<Char> buf;
+    if (detail::gets_helper<true, '\n'>(buf, stream, n - 1))
+    {
+      n = std::min(static_cast<int>(buf.size()), n - 1);
+      buf.copy(s, n);
+      s[n] = {};
+      return s;
+    }
+    return  nullptr;
+  }
+
+  /// ストリームから1行読み込む
+  /// @param[in]  s       入力した文字列の格納先
+  /// @param[in]  n       sに格納する最大の文字数
+  /// @param[in]  stream  ストリーム
+  /// @return     sを返す。
+  template <typename Char, typename Traits, typename Allocator>
+  auto fgets(std::basic_string<Char, Traits, Allocator>& s, int n, std::FILE* stream)
+    -> std::basic_string<Char, Traits, Allocator>&
+  {
+    Expects(n >= 0);
+    Expects(stream != nullptr);
+
+    if (n == 0)
+    {
+      s.clear();
+      return s;
+    }
+
+    std::basic_string<Char> buf;
+    if (!detail::gets_helper<true, '\n'>(buf, stream, n))
+      throw std::invalid_argument("menon::gets");
+    if constexpr (std::is_same_v<std::basic_string<Char, Traits, Allocator>, std::basic_string<Char>>)
+      s.swap(buf);
+    else
+      s.assign(buf.cbegin(), buf.cend());
+    return s;
+ }
+
+  /// ストリームから1行読み込む
+  /// @param[in]  s       入力した文字列の格納先
+  /// @param[in]  n       配列sの要素数（n >= 0）
+  /// @param[in]  stream  ストリーム
+  /// @return     sを返す。
+  /// 標準関数のgets関数と同様だが以下の点が異なる。
+  ///
+  /// - istreamを指定する。
+  template <typename Char>
+  auto fgets(Char* s, int n, std::istream& stream)
+    -> Char*
+  {
+    Expects(s != nullptr);
+    Expects(n >= 0);
+
+    if (n == 0)
+      return s;
+
+    std::basic_string<Char> buf;
+    if (detail::gets_helper<true, '\n'>(buf, stream))
+    {
+      n = std::min(static_cast<int>(buf.size()), n - 1);
+      buf.copy(s, n);
+      s[n] = {};
+      return s;
+    }
+    return  nullptr;
+ }
+
+  /// ストリームから1行読み込む
+  /// @param[in]  s       入力した文字列の格納先
+  /// @param[in]  n       sに格納する最大の文字数（n >= 0）
+  /// @param[in]  stream  ストリーム
+  /// @return     sを返す。
+  template <typename Char, typename Traits, typename Allocator>
+  auto fgets(std::basic_string<Char, Traits, Allocator>& s, int n, std::istream& stream)
+    -> std::basic_string<Char, Traits, Allocator>&
+  {
+    std::basic_string<Char> buf;
+    if (!detail::gets_helper<true, '\n'>(buf, stream, n))
       throw std::runtime_error("menon::gets");
     if constexpr (std::is_same_v<std::basic_string<Char, Traits, Allocator>, std::basic_string<Char>>)
       s.swap(buf);
