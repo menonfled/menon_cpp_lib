@@ -1,5 +1,5 @@
 ﻿/// @file   menon/bits/gets.hh
-/// gets関数の定義
+/// gets系関数の定義
 /// @author @menonfled
 #ifndef MENON_BITS_GETS_HH_
 #define MENON_BITS_GETS_HH_
