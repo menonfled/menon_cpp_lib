@@ -6,5 +6,6 @@
 #pragma once
 
 #include "menon/bits/gets.hh"
+#include "menon/bits/iostream.hh"
 
 #endif  // !MENON_IO_HH_
