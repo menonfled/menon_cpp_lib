@@ -134,6 +134,54 @@ namespace menon
     {
       return os << mb_convert_encoding<char>(s, mb_internal_encoding());
     }
+
+    /// u8stringへのistreamからの入力
+    /// @param[in,out]  is    入力ストリーム
+    /// @param[in]      s     入力した文字列の格納先
+    /// @return         isを返す。
+    inline std::istream& operator>>(std::istream& is, std::u8string& s)
+    {
+      std::string buf;
+      is >> buf;
+      s = mb_convert_encoding<char8_t>(buf, get_internal_encoding<char8_t>());
+      return is;
+    }
+
+    /// u16stringへのistreamからの入力
+    /// @param[in,out]  is    入力ストリーム
+    /// @param[in]      s     入力した文字列の格納先
+    /// @return         isを返す。
+    inline std::istream& operator>>(std::istream& is, std::u16string& s)
+    {
+      std::string buf;
+      is >> buf;
+      s = mb_convert_encoding<char16_t>(buf, get_internal_encoding<char16_t>());
+      return is;
+    }
+
+    /// u32stringへのistreamからの入力
+    /// @param[in,out]  is    入力ストリーム
+    /// @param[in]      s     入力した文字列の格納先
+    /// @return         isを返す。
+    inline std::istream& operator>>(std::istream& is, std::u32string& s)
+    {
+      std::string buf;
+      is >> buf;
+      s = mb_convert_encoding<char32_t>(buf, get_internal_encoding<char32_t>());
+      return is;
+    }
+
+    /// wstringへのistreamからの入力
+    /// @param[in,out]  is    入力ストリーム
+    /// @param[in]      s     入力した文字列の格納先
+    /// @return         isを返す。
+    inline std::istream& operator>>(std::istream& is, std::wstring& s)
+    {
+      std::string buf;
+      is >> buf;
+      s = mb_convert_encoding<wchar_t>(buf, get_internal_encoding<wchar_t>());
+      return is;
+    }
   }
 }
 
