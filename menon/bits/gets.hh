@@ -16,7 +16,8 @@ namespace menon
 {
   namespace detail
   {
-    inline auto gets_raw(std::string& buf, std::FILE* stream)
+    template <bool KeepDelimiter, char Delimiter = '\n'>
+    auto gets_raw(std::string& buf, std::FILE* stream)
       -> bool
     {
       flockfile(stream);
@@ -27,17 +28,29 @@ namespace menon
       while (!std::feof(stream))
       {
         auto c = getc_unlocked(stream);
-        if (c == EOF || c == '\n')
+        if (c == EOF)
           break;
+        if (c == Delimiter)
+        {
+          if constexpr (KeepDelimiter)
+            buf.push_back(char(c));
+          break;
+        }
         buf.push_back(char(c));
       }
       return !std::ferror(stream);
     }
 
-    inline auto gets_raw(std::string& buf, std::istream& is)
+    template <bool KeepDelimiter, char Delimiter = '\n'>
+    auto gets_raw(std::string& buf, std::istream& is)
       -> bool
     {
-      std::getline(is, buf);
+      std::getline(is, buf, Delimiter);
+      if constexpr (KeepDelimiter)
+      {
+        if (!is.eof())
+          buf.push_back(Delimiter);
+      }
       return !is.bad();
     }
 
@@ -47,7 +60,7 @@ namespace menon
     {
       std::string buf;
       buf.reserve(256);
-      if (!detail::gets_raw(buf, stream))
+      if (!detail::gets_raw<false>(buf, stream))
         return false;
       auto to_encoding = get_internal_encoding<Char>();
       auto from_encoding = mb_external_encoding();
