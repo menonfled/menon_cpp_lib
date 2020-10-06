@@ -61,8 +61,17 @@ void test_input()
   ss >> u16s;
   BOOST_TEST(u16s == u"変換テスト");
 
+  ss.str(test_s);
+  ss.clear(std::istream::goodbit);
+  std::u32string u32s;
+  ss >> u32s;
+  BOOST_TEST(u32s == U"変換テスト");
 
-
+  ss.str(test_s);
+  ss.clear(std::istream::goodbit);
+  std::wstring ws;
+  ss >> ws;
+  BOOST_TEST(ws == L"変換テスト");
 }
 
 int main()
