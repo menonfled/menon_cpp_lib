@@ -143,7 +143,7 @@ namespace menon
     {
       std::string buf;
       is >> buf;
-      s = mb_convert_encoding<char8_t>(buf, get_internal_encoding<char8_t>());
+      s = mb_convert_encoding<char8_t>(buf);
       return is;
     }
 
@@ -155,7 +155,7 @@ namespace menon
     {
       std::string buf;
       is >> buf;
-      s = mb_convert_encoding<char16_t>(buf, get_internal_encoding<char16_t>());
+      s = mb_convert_encoding<char16_t>(buf);
       return is;
     }
 
@@ -167,7 +167,7 @@ namespace menon
     {
       std::string buf;
       is >> buf;
-      s = mb_convert_encoding<char32_t>(buf, get_internal_encoding<char32_t>());
+      s = mb_convert_encoding<char32_t>(buf);
       return is;
     }
 
@@ -179,7 +179,7 @@ namespace menon
     {
       std::string buf;
       is >> buf;
-      s = mb_convert_encoding<wchar_t>(buf, get_internal_encoding<wchar_t>());
+      s = mb_convert_encoding<wchar_t>(buf);
       return is;
     }
   }

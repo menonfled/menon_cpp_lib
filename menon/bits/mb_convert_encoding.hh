@@ -74,7 +74,7 @@ namespace menon
   /// @param[in]  to_encoding   変換先エンコーディング
   /// この関数を呼び出す際は、返却値の文字型をテンプレート実引数として明示的に指定すること。
   template <typename Char, typename T>
-  inline auto mb_convert_encoding(T s, char const* to_encoding)
+  inline auto mb_convert_encoding(T s, char const* to_encoding = get_internal_encoding<Char>())
   {
     using ::menon::sv;
     auto t = sv(s);
