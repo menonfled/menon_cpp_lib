@@ -5,6 +5,8 @@
 #define MENON_ALGORITHM_HH_
 #pragma once
 
+#include <algorithm>
+#include <cstdlib>
 #include "menon/bits/find.hh"
 #include "menon/bits/for_each_n.hh"
 
