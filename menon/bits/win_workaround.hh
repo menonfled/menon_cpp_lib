@@ -10,6 +10,7 @@
 
 #ifdef _MSC_VER
 #pragma comment(lib, "oldnames.lib")
+using off_t = __int64;
 #endif
 
 namespace menon
