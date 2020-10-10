@@ -24,6 +24,7 @@ int main()
     auto stream = std::fopen(path, "rb");
     menon::fseek(stream, 100, SEEK_SET);
     BOOST_TEST_EQ(std::ftell(stream), 100);
+    BOOST_TEST_EQ(std::ftell(stream), menon::ftell(stream));
     std::fclose(stream);
   }
 

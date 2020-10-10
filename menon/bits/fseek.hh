@@ -107,6 +107,28 @@ namespace menon
       throw std::runtime_error("menon::fseek");
     return 0;
   }
+
+  /// シーク位置の取得
+  /// @param[in]  stream    入力ストリーム
+  /// @return     現在のシーク位置を返す。
+  /// @throw      失敗時はruntime_error例外が発生する。
+  /// 標準関数のftellはlong型の表現範囲に依存する。
+  /// long型が32ビットの場合、2Gバイトを超えるファイルには対応しない。
+  /// 2Gバイトを超えるファイルに対応するシークは処理系によって異なる関数が定義されている。
+  /// この関数はそうした処理間の差異を吸収することを目的とする。
+  inline off_t ftell(std::FILE* stream)
+  {
+    Expects(stream != nullptr);
+    errno = 0;
+#ifdef _MSC_VER
+    auto r = _ftelli64(stream);
+#else
+    auto r = ftello(stream);
+#endif
+    if (r < 0)
+      throw std::runtime_error(std::strerror(errno));
+    return r;
+  }
 }
 
 #endif  // !MENON_BITS_FSEEK_HH_
