@@ -8,5 +8,6 @@
 #include "menon/bits/filelength.hh"
 #include "menon/bits/gets.hh"
 #include "menon/bits/iostream.hh"
+#include "menon/bits/fseek.hh"
 
 #endif  // !MENON_IO_HH_
