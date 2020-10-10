@@ -5,6 +5,7 @@
 #define MENON_IO_HH_
 #pragma once
 
+#include "menon/bits/filelength.hh"
 #include "menon/bits/gets.hh"
 #include "menon/bits/iostream.hh"
 
