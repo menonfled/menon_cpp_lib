@@ -48,8 +48,8 @@ namespace menon
   template <typename T, typename U>
   auto div(T numer, U denom)
   {
-    static_assert(std::is_arithmetic_v<T>);
-    static_assert(std::is_arithmetic_v<U>);
+    static_assert(std::numeric_limits<T>::is_specialized);
+    static_assert(std::numeric_limits<U>::is_specialized);
 
     using value_type = decltype(numer / denom);
     if (denom == 0 && numer != 0)
