@@ -18,5 +18,6 @@
 #include "menon/bits/strstr.hh"
 #include "menon/bits/strpbrk.hh"
 #include "menon/bits/substr.hh"
+#include "menon/bits/strrev.hh"
 
 #endif  // !MENON_STRING_HH_
