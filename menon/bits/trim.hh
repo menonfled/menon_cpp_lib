@@ -19,6 +19,14 @@ namespace menon
       return { sv.cbegin() + pos, sv.cend() };
     }
 
+    template <typename Char, typename Traits>
+    constexpr auto rtrim_helper(std::basic_string_view<Char, Traits> sv, std::basic_string_view<Char, Traits> character_mask)
+      -> std::basic_string_view<Char, Traits>
+    {
+      auto pos = sv.find_last_not_of(character_mask);
+      return { sv.cbegin(), sv.cbegin() + pos + 1 };
+    }
+
     template <typename Char>
     constexpr Char const default_character_mask[] =
     {
@@ -52,6 +60,29 @@ namespace menon
     auto t = sv(s);
     using char_type = typename decltype(t)::value_type;
     return detail::ltrim_helper(t, sv(detail::default_character_mask<char_type>));
+  }
+
+  /// 文字列の末尾から空白（または他の文字）を除去する。
+  /// @param[in]  s               元の文字列
+  /// @param[in]  character_mask  除去する文字の並び
+  /// @return     sの末尾からcharacter_maskに含まれる文字を除いた部分文字列をsring_viewで返す。
+  template <typename String1, typename String2>
+  constexpr auto rtrim(String1 const& s, String2 const& character_mask )
+  {
+    using ::menon::sv;
+    return detail::rtrim_helper(sv(s), sv(character_mask));
+  }
+
+  /// 文字列の末尾から空白を除去する。
+  /// @param[in]  s               元の文字列
+  /// @return     sの末尾から空白類文字を除いた部分文字列をsring_viewで返す。
+  template <typename String>
+  constexpr auto rtrim(String const& s)
+  {
+    using ::menon::sv;
+    auto t = sv(s);
+    using char_type = typename decltype(t)::value_type;
+    return detail::rtrim_helper(t, sv(detail::default_character_mask<char_type>));
   }
 }
 
