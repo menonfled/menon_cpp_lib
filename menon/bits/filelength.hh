@@ -21,7 +21,7 @@ namespace menon
   /// @param[in]  fd    ファイルディスクリプタ
   /// @return     成功時はファイルサイズを返す。失敗時は負値を返しerrnoを設定する。
   inline auto filelength(int fd)
-    -> long long
+    -> off_t
   {
     struct stat t;
     if (fstat(fd, &t) < 0)
