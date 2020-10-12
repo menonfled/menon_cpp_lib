@@ -16,7 +16,7 @@ int main()
     BOOST_TEST_EQ(d.quot, 12345u / 67);
     BOOST_TEST_EQ(d.rem, 12345u % 67);
     BOOST_TEST_THROWS(menon::div(123u, 0), std::invalid_argument);
-    BOOST_TEST_EQ(menon::div(INT_MIN, -1u).quot, INT_MIN / (-1u));
+    BOOST_TEST_THROWS(menon::div(INT_MIN, -1u), std::out_of_range);
   }
   {
     constexpr auto d = menon::div(12345LL, 67);

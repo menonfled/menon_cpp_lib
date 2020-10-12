@@ -27,17 +27,34 @@ namespace menon
   /// @return     numer÷denomの商と剰余をdiv_t型で返す。
   /// @throw      remが0の場合、invalid_argument例外を送出する。
   /// @throw      quot/remが符号付き整数型であり、quotが型の最小値かつremが-1の場合、out_of_range例外を送出する。
+  /// @throw      結果の商または値を表現できない場合はout_of_range例外を送出する。
   template <std::integral T, std::integral U>
   constexpr auto div(T numer, U denom)
+    -> div_t<decltype(numer / denom)>
   {
     using value_type = decltype(numer / denom);
     if (denom == 0)
       throw std::invalid_argument("menon::div");
     if constexpr (std::is_signed_v<value_type>)
+    {
       if (numer == std::numeric_limits<value_type>::min() && denom == -1)
         throw std::out_of_range("menon::div");
-    div_t<value_type> r { numer / denom, numer % denom };
-    return r;
+    }
+    else
+    {
+      // 商または剰余を表現できない場合はout_of_range例外を送出
+      if constexpr (std::is_signed_v<T>)
+      {
+        if (numer < 0)
+          throw std::out_of_range("menon::div");
+      }
+      else if constexpr (std::is_signed_v<U>)
+      {
+        if (denom < 0)
+          throw std::out_of_range("menon::div");
+      }
+    }
+    return { numer / denom, numer % denom };
   }
 
   /// 浮動小数点除算における商と剰余
