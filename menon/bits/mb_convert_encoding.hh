@@ -81,6 +81,17 @@ namespace menon
     using from_char_type = typename decltype(t)::value_type;
     return detail::mb_convert_encoding_helper<Char>(t, to_encoding, get_internal_encoding<from_char_type>());
   }
+
+  /// バイト列のエンコーディングを変換した文字列を生成する。
+  /// @param[in]  bytes         変換対象のバイト列
+  /// @param[in]  to_encoding   変換先エンコーディング
+  /// @param[in]  from_encoding 変換後エンコーディング
+  template <typename Char>
+  inline auto mb_convert_encoding(std::byte const* bytes, std::size_t n, char const* to_encoding, char const* from_encoding = mb_internal_encoding())
+    -> std::string
+  {
+    return detail::mb_convert_encoding_helper<Char>(sv(bytes, n), to_encoding, from_encoding);
+  }
 }
 
 #endif  // !MENON_BITS_MB_CONVERT_ENCODING_HH_

@@ -20,5 +20,9 @@ int main()
   BOOST_TEST(menon::mb_convert_encoding<char32_t>(s, menon::get_internal_encoding<char32_t>()) == c32_s);
   BOOST_TEST(menon::mb_convert_encoding<wchar_t>(s, menon::get_internal_encoding<wchar_t>()) == wcs_s);
   BOOST_TEST(menon::mb_convert_encoding<char>(wcs_s, "UTF-8") == utf8_s);
+
+  std::byte bytes[] = { std::byte('a'), std::byte('b'), std::byte('c') };
+  BOOST_TEST_CSTR_EQ(menon::mb_convert_encoding<char>(bytes, 3, "UTF-8", "ASCII").c_str(), "abc");
+
   return boost::report_errors();
 }
