@@ -52,6 +52,14 @@ namespace menon
     return { s, n };
   }
 
+  constexpr auto sv(std::byte const* bytes, std::size_t n)
+    -> std::basic_string_view<std::byte>
+  {
+    if (bytes == nullptr)
+      return {};
+    return { bytes, n };
+  }
+
   /// string_viewからstring_viewへの変換
   /// @param[in]  sv  変換対象の文字列
   /// @return     sv
