@@ -28,6 +28,7 @@ namespace menon
       Expects(stream != nullptr);
 
       auto n = filelength(stream);
+      Expects(offset < n);
       if (offset >= 0)
         menon::fseek(stream, offset, SEEK_SET);
       offset = menon::ftell(stream);
