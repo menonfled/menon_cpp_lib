@@ -49,12 +49,32 @@ void test_stream_get_contents(char const* path)
   std::fclose(stream);
 }
 
+void test_file_get_contents(char const* path)
+{
+  {
+    auto r = menon::file_get_contents(path);
+    BOOST_TEST(std::equal(r.cbegin(), r.cend(), std::begin(test_data), std::end(test_data)));
+  }
+  {
+    auto r = menon::file_get_contents(path, -1, 10);
+    BOOST_TEST(std::equal(r.cbegin(), r.cend(), std::begin(test_data) + 10, std::end(test_data)));
+  }
+  {
+    auto r = menon::file_get_contents(path, 100, 7);
+    BOOST_TEST(std::equal(r.cbegin(), r.cend(), std::begin(test_data) + 7, std::begin(test_data) + 7 + 100));
+  }
+  {
+    BOOST_TEST_THROWS(menon::file_get_contents(":*"), std::invalid_argument); 
+  }
+}
+
 int main()
 {
   auto path = "test.data";
 
   make_test_file(path);
   test_stream_get_contents(path);
+  test_file_get_contents(path);
   std::remove(path);
 
   return boost::report_errors();

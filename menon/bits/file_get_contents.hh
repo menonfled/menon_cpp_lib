@@ -55,6 +55,29 @@ namespace menon
   {
     return detail::stream_get_contents_helper<std::vector<std::byte>>(stream, maxlength, offset);
   }
+
+  /// ファイルの内容をコンテナに読み込む
+  /// @param[in]  path        読み込むファイルのパス
+  /// @param[in]  maxlength   読み込む最大要素数。負値の場合はファイルの末尾まで読み込む。
+  /// @param[in]  offset      読み込みファイルの先頭位置。負値の場合は先頭から読み込む。
+  /// @return     読み込んだデータをvector<byte>で返す。
+  /// @throw      pathがオープンできなければinvalid_argument例外を送出する。
+  inline auto file_get_contents(std::filesystem::path const& path, off_t maxlength = -1, off_t offset = -1)
+  {
+    std::vector<std::byte> r;
+    if (auto stream = std::fopen(path.string().c_str(), "rb"))
+    {
+      auto _ = gsl::finally([stream]() {
+        std::fclose(stream);
+      });
+      r = stream_get_contents(stream, maxlength, offset);
+    }
+    else
+    {
+      throw std::invalid_argument("menon::file_get_contents");
+    }
+    return r;
+  }
 }
 
 #endif  // !MENON_BITS_FILE_GET_CONTENTS_HH_
