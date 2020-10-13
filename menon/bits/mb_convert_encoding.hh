@@ -87,7 +87,7 @@ namespace menon
   /// @param[in]  to_encoding   変換先エンコーディング
   /// @param[in]  from_encoding 変換後エンコーディング
   template <typename Char>
-  inline auto mb_convert_encoding(std::byte const* bytes, std::size_t n, char const* to_encoding, char const* from_encoding = mb_internal_encoding())
+  inline auto mb_convert_encoding(std::byte const* bytes, std::size_t n, char const* to_encoding, char const* from_encoding)
     -> std::string
   {
     return detail::mb_convert_encoding_helper<Char>(sv(bytes, n), to_encoding, from_encoding);
