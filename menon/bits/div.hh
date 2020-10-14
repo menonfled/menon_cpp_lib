@@ -5,7 +5,7 @@
 #define MENON_BITS_DIV_HH_
 #pragma once
 
-#include "menon/bits/config.hh"
+#include "menon/bits/abs.hh"
 #include <cmath>
 #include <concepts>
 #include <limits>
@@ -30,6 +30,44 @@ namespace menon
     bool quot_sign; ///< 商の符号
     bool rem_sign;  ///< 剰余の符号
   };
+
+  namespace detail
+  {
+    template <std::unsigned_integral T>
+    constexpr auto udiv_helper(T numer, T denom)
+      -> udiv_t<T>
+    {
+      if (denom == 0)
+        throw std::invalid_argument("menon::udiv");
+      return { numer / denom, numer % denom, false, false };
+    }
+
+    template <std::signed_integral T>
+    constexpr auto udiv_helper(T numer, T denom)
+      -> udiv_t<std::make_unsigned_t<T>>
+    {
+      if (denom == 0)
+        throw std::invalid_argument("menon::udiv");
+      auto u_numer = uabs(numer);
+      auto u_denom = uabs(denom);
+      bool sign_quot = (numer < 0) != (denom < 0); 
+      return { u_numer / u_denom, u_numer % u_denom, sign_quot, sign_quot && (numer < 0) };
+    }
+
+    template <std::floating_point T>
+    auto floating_udiv_helper(T numer, T denom)
+      -> udiv_t<T>
+    {
+      using value_type = decltype(numer / denom);
+      if (denom == 0 && numer != 0)
+        throw std::invalid_argument("menon::div");
+      value_type quot;
+      value_type rem;
+      std::modf(numer / denom, &quot);
+      rem = std::fmod(numer, denom);
+      return { std::abs(quot), std::abs(rem), quot < 0, rem < 0 };
+    }
+  }
 
   /// 整数除算における商と剰余
   /// @param[in]  numer   被除数
@@ -87,13 +125,19 @@ namespace menon
     return r;
   }
 
-  template <std::unsigned_integral T, std::unsigned_integral U>
+  /// オーバーフローが発生しない除算における商と剰余
+  /// @param[in]  numer   被除数
+  /// @param[in]  denom   除数
+  /// @return     numer÷denomの商と剰余をudiv_t型で返す。
+  /// @throw      remが0の場合、invalid_argument例外を送出する。
+  template <typename T, typename U>
   constexpr auto udiv(T numer, U denom)
-    -> udiv_t<decltype(numer / denom)>
   {
-    if (denom == 0)
-      throw std::invalid_argument("menon::udiv");
-    return { numer / denom, numer % denom, false, false };
+    using value_type = decltype(numer / denom);
+    if constexpr (std::is_floating_point_v<value_type>)
+      return detail::floating_udiv_helper(static_cast<value_type>(numer), static_cast<value_type>(denom));
+    else
+      return detail::udiv_helper(static_cast<value_type>(numer), static_cast<value_type>(denom));
   }
 }
 
