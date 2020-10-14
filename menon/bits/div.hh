@@ -21,6 +21,16 @@ namespace menon
     T rem;  ///< 剰余
   };
 
+  /// udiv関数の結果
+  template <typename T>
+  struct udiv_t
+  {
+    T quot; ///< 商の絶対値
+    T rem;  ///< 剰余の絶対値
+    bool quot_sign; ///< 商の符号
+    bool rem_sign;  ///< 剰余の符号
+  };
+
   /// 整数除算における商と剰余
   /// @param[in]  numer   被除数
   /// @param[in]  denom   除数
@@ -75,6 +85,15 @@ namespace menon
     std::modf(numer / denom, &r.quot);
     r.rem = std::fmod(numer, denom);
     return r;
+  }
+
+  template <std::unsigned_integral T, std::unsigned_integral U>
+  constexpr auto udiv(T numer, U denom)
+    -> udiv_t<decltype(numer / denom)>
+  {
+    if (denom == 0)
+      throw std::invalid_argument("menon::div");
+    return { numer / denom, numer % denom, false, false };
   }
 }
 

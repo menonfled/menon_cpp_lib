@@ -2,7 +2,7 @@
 #include <boost/core/lightweight_test.hpp>
 #include <climits>
 
-int main()
+void test_div()
 {
   {
     constexpr auto d = menon::div(12345, 67);
@@ -37,5 +37,31 @@ int main()
     BOOST_TEST(std::isnan(menon::div(INFINITY, INFINITY).quot));
     BOOST_TEST(std::isnan(menon::div(0.0, 0.0).quot));
   }
+}
+
+void test_udiv()
+{
+  {
+    constexpr auto d = menon::udiv(12345u, 67u);
+    BOOST_TEST_EQ(d.quot, 12345u / 67u);
+    BOOST_TEST_EQ(d.rem, 12345u % 67u);
+    BOOST_TEST_NOT(d.quot_sign);
+    BOOST_TEST_NOT(d.rem_sign);
+    BOOST_TEST_THROWS(menon::udiv(123u, 0u), std::invalid_argument);
+  }
+  {
+    constexpr auto d = menon::udiv(12345ull, 67u);
+    BOOST_TEST_EQ(d.quot, 12345ull / 67u);
+    BOOST_TEST_EQ(d.rem, 12345ull % 67u);
+    BOOST_TEST_NOT(d.quot_sign);
+    BOOST_TEST_NOT(d.rem_sign);
+    BOOST_TEST_THROWS(menon::udiv(123u, 0u), std::invalid_argument);
+  }
+}
+
+int main()
+{
+  test_div();
+  test_udiv();
   return boost::report_errors();
 }
