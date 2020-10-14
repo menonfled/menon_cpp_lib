@@ -92,7 +92,7 @@ namespace menon
     -> udiv_t<decltype(numer / denom)>
   {
     if (denom == 0)
-      throw std::invalid_argument("menon::div");
+      throw std::invalid_argument("menon::udiv");
     return { numer / denom, numer % denom, false, false };
   }
 }
