@@ -102,6 +102,35 @@ namespace menon
     using ::menon::sv;
     return detail::puts_helper<'\n'>(sv(s), os);
   }
+
+  /// ストリームに文字列を書き込む
+  /// @param[in]  s       書き込む文字列
+  /// @param[in]  stream  ストリーム
+  /// @return     成功時は0を、失敗時はEOFを返す。
+  /// 標準関数のfputs関数と同様だが以下の点が異なる。
+  ///
+  /// - char型のナル終端文字列以外を指定できる。
+  template <typename String>
+  auto fputs(String const& s, std::FILE* stream)
+  {
+    using ::menon::sv;
+    return detail::puts_helper<'\0'>(sv(s), stream);
+  }
+
+  /// ストリームに文字列を書き込む
+  /// @param[in]  s       書き込む文字列
+  /// @param[in]  os      出力ストリーム
+  /// @return     成功時は0を、失敗時はEOFを返す。
+  /// 標準関数のfputs関数と同様だが以下の点が異なる。
+  ///
+  /// - 出力先にostreamを指定できる。
+  /// - char型のナル終端文字列以外を指定できる。
+  template <typename String>
+  auto fputs(String const& s, std::ostream& os)
+  {
+    using ::menon::sv;
+    return detail::puts_helper<'\0'>(sv(s), os);
+  }
 }
 
 #endif  // !MENON_BITS_PUTS_HH_

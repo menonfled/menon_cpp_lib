@@ -62,8 +62,48 @@ void test_puts()
   }
 }
 
+void test_fputs()
+{
+  using namespace std::literals;
+  char const* path = "test.data";
+  auto test_s = "これはテストです。";
+  auto test_str = "これはテストです。"s;
+  auto test_wcs = L"これはテストです。";
+  auto test_wstr = L"これはテストです。"s;
+
+  {
+    auto stream = std::fopen(path, "w");
+    BOOST_TEST_NE(stream, nullptr);
+    BOOST_TEST_EQ(menon::fputs(test_s, stream), 0);
+    std::fclose(stream);
+    BOOST_TEST_EQ(read_test_file(path, true), test_s);
+  }
+  {
+    auto stream = std::fopen(path, "w");
+    BOOST_TEST_NE(stream, nullptr);
+    BOOST_TEST_EQ(menon::fputs(test_str, stream), 0);
+    std::fclose(stream);
+    BOOST_TEST_EQ(read_test_file(path, true), test_s);
+  }
+  {
+    auto stream = std::fopen(path, "w");
+    BOOST_TEST_NE(stream, nullptr);
+    BOOST_TEST_EQ(menon::fputs(test_wcs, stream), 0);
+    std::fclose(stream);
+    BOOST_TEST_EQ(read_test_file(path, true), test_s);
+  }
+  {
+    auto stream = std::fopen(path, "w");
+    BOOST_TEST_NE(stream, nullptr);
+    BOOST_TEST_EQ(menon::fputs(test_wstr, stream), 0);
+    std::fclose(stream);
+    BOOST_TEST_EQ(read_test_file(path, true), test_s);
+  }
+}
+
 int main()
 {
   test_puts();
+  test_fputs();
   return boost::report_errors();
 }
