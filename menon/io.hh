@@ -7,6 +7,7 @@
 
 #include "menon/bits/filelength.hh"
 #include "menon/bits/gets.hh"
+#include "menon/bits/puts.hh"
 #include "menon/bits/iostream.hh"
 #include "menon/bits/fseek.hh"
 #include "menon/bits/filelength.hh"
