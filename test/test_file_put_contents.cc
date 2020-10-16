@@ -45,6 +45,26 @@ void test_stream_put_contents(char const* path)
   }
 }
 
+void test_file_put_contents(char const* path)
+{
+  auto n = sizeof(test_data);
+
+  {
+    BOOST_TEST_EQ(menon::file_put_contents(path, std::span<std::byte>(test_data)), n);
+    auto data = get_test_file(path);
+    BOOST_TEST_EQ(data.size(), n);
+    BOOST_TEST_EQ(std::memcmp(data.data(), test_data, n), 0);
+  }
+  {
+    menon::file_put_contents(path, std::span<std::byte>(test_data));
+    menon::file_put_contents(path, std::span<std::byte>(test_data), menon::FILE_APPEND);
+    auto data = get_test_file(path);
+    BOOST_TEST_EQ(data.size(), n * 2);
+    BOOST_TEST_EQ(std::memcmp(data.data(), test_data, n), 0);
+    BOOST_TEST_EQ(std::memcmp(data.data() + n, test_data, n), 0);
+  }
+}
+
 int main()
 {
   for (std::size_t i = 0; i < sizeof(test_data); i++)
@@ -52,5 +72,6 @@ int main()
 
   auto path = "test.data";
   test_stream_put_contents(path);
+  test_file_put_contents(path);
   return boost::report_errors();
 }
