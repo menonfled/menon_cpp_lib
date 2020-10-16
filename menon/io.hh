@@ -12,5 +12,6 @@
 #include "menon/bits/fseek.hh"
 #include "menon/bits/filelength.hh"
 #include "menon/bits/file_get_contents.hh"
+#include "menon/bits/file_put_contents.hh"
 
 #endif  // !MENON_IO_HH_
