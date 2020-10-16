@@ -47,6 +47,34 @@ void test_stream_get_contents(char const* path)
     BOOST_TEST(std::equal(r.cbegin(), r.cend(), std::begin(test_data) + 20, std::end(test_data)));
   }
   std::fclose(stream);
+
+  {
+    std::ifstream ifs(path, std::ios_base::in | std::ios_base::binary);
+    auto r = menon::stream_get_contents(ifs);
+    BOOST_TEST(std::equal(r.cbegin(), r.cend(), std::begin(test_data), std::end(test_data)));
+  }
+  {
+    std::ifstream ifs(path, std::ios_base::in | std::ios_base::binary);
+    auto r = menon::stream_get_contents(ifs, -1, 10);
+    BOOST_TEST(std::equal(r.cbegin(), r.cend(), std::begin(test_data) + 10, std::end(test_data)));
+  }
+  {
+    std::ifstream ifs(path, std::ios_base::in | std::ios_base::binary);
+    auto r = menon::stream_get_contents(ifs, 100, 7);
+    BOOST_TEST(std::equal(r.cbegin(), r.cend(), std::begin(test_data) + 7, std::begin(test_data) + 7 + 100));
+  }
+  {
+    std::ifstream ifs(path, std::ios_base::in | std::ios_base::binary);
+    ifs.seekg(20);
+    auto r = menon::stream_get_contents(stream, 100);
+    BOOST_TEST(std::equal(r.cbegin(), r.cend(), std::begin(test_data) + 20, std::begin(test_data) + 20 + 100));
+  }
+  {
+    std::ifstream ifs(path, std::ios_base::in | std::ios_base::binary);
+    ifs.seekg(20);
+    auto r = menon::stream_get_contents(ifs);
+    BOOST_TEST(std::equal(r.cbegin(), r.cend(), std::begin(test_data) + 20, std::end(test_data)));
+  }
 }
 
 void test_file_get_contents(char const* path)

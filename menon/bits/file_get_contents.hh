@@ -9,11 +9,13 @@
 #include "menon/bits/fseek.hh"
 #include <cstddef>
 #include <cstdio>
+#include <limits>
 #include <type_traits>
 #include <algorithm>
 #include <filesystem>
 #include <vector>
 #include <iterator>
+#include <fstream>
 
 namespace menon
 {
@@ -43,6 +45,45 @@ namespace menon
       r.resize(size);
       return r;
     }
+
+    template <typename Result>
+    auto stream_get_contents_helper(std::istream& is, off_t maxlength)
+    {
+      using value_type = typename Result::value_type;
+      // is_podが非推奨になったので代替表現を使用
+      static_assert(std::is_trivially_copyable_v<value_type> && std::is_standard_layout_v<value_type>);      
+      Expects(is.good());
+
+      Result r;
+      std::istream::sentry x(is);
+      if (x)
+      {
+        auto* sbuf = is.rdbuf();
+        while (maxlength-- > 0)
+        {
+          value_type element;
+          if (sbuf->sgetn(reinterpret_cast<char*>(&element), sizeof(value_type)) < 1)
+            break;
+          r.push_back(element);
+        }
+      }
+      return r;
+    }
+
+    template <typename Result>
+    auto stream_get_contents_helper(std::ifstream& ifs, off_t maxlength, off_t offset)
+    {
+      using value_type = typename Result::value_type;
+      // is_podが非推奨になったので代替表現を使用
+      static_assert(std::is_trivially_copyable_v<value_type> && std::is_standard_layout_v<value_type>);      
+      Expects(ifs.good());
+      if (offset >= 0)
+        ifs.seekg(offset);
+      offset = static_cast<off_t>(ifs.tellg());
+      if (maxlength < 0)
+        maxlength = std::numeric_limits<off_t>::max() - offset;
+      return stream_get_contents_helper<Result>(ifs, maxlength);
+    }
   }
 
   /// 残りのストリームをコンテナに読み込む
@@ -54,6 +95,28 @@ namespace menon
     -> std::vector<std::byte>
   {
     return detail::stream_get_contents_helper<std::vector<std::byte>>(stream, maxlength, offset);
+  }
+
+  /// 残りのストリームをコンテナに読み込む
+  /// @param[in]  ifs         入力ストリーム
+  /// @param[in]  maxlength   読み込む最大要素数。負値の場合はファイルの末尾まで読み込む。
+  /// @param[in]  offset      読み込みファイルの先頭位置。負値の場合は現在のシーク位置から読み込む。
+  /// @return     読み込んだデータをvector<byte>で返す。
+  inline auto stream_get_contents(std::ifstream& ifs, off_t maxlength = -1, off_t offset = -1)
+    -> std::vector<std::byte>
+  {
+    return detail::stream_get_contents_helper<std::vector<std::byte>>(ifs, maxlength, offset);
+  }
+
+
+  /// 残りのストリームをコンテナに読み込む
+  /// @param[in]  is          入力ストリーム
+  /// @param[in]  maxlength   読み込む最大要素数。負値の場合はファイルの末尾まで読み込む。
+  /// @return     読み込んだデータをvector<byte>で返す。
+  inline auto stream_get_contents(std::istream& is, off_t maxlength = -1)
+    -> std::vector<std::byte>
+  {
+    return detail::stream_get_contents_helper<std::vector<std::byte>>(is, maxlength);
   }
 
   /// ファイルの内容をコンテナに読み込む
