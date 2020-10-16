@@ -24,6 +24,7 @@ namespace menon
   template <typename T>
 
   inline auto stream_put_contents(std::FILE* stream, std::span<T> data)
+    -> std::size_t
   {
     static_assert(std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T>);
     Expects(stream != nullptr);
@@ -37,6 +38,7 @@ namespace menon
   /// @attention  テンプレート引数TはPOD型であること
   template <typename T>
   inline auto stream_put_contents(std::ostream& os, std::span<T> data)
+    -> std::size_t
   {
     static_assert(std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T>);
     Expects(os.good());
