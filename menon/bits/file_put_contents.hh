@@ -22,7 +22,8 @@ namespace menon
   /// @return     書き込んだバイト数を返す。
   /// @attention  テンプレート引数TはPOD型であること
   template <typename T>
-  auto stream_put_contents(std::FILE* stream, std::span<T> data)
+
+  inline auto stream_put_contents(std::FILE* stream, std::span<T> data)
   {
     static_assert(std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T>);
     Expects(stream != nullptr);
@@ -35,7 +36,7 @@ namespace menon
   /// @return     書き込んだバイト数を返す。
   /// @attention  テンプレート引数TはPOD型であること
   template <typename T>
-  auto stream_put_contents(std::ostream& os, std::span<T> data)
+  inline auto stream_put_contents(std::ostream& os, std::span<T> data)
   {
     static_assert(std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T>);
     Expects(os.good());
