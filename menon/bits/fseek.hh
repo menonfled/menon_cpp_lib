@@ -129,6 +129,24 @@ namespace menon
       throw std::runtime_error(std::strerror(errno));
     return r;
   }
+
+  /// シーク位置の取得
+  /// @param[in]  is      入力ストリーム
+  /// @return     現在のシーク位置を返す。
+  template <typename Char, typename Traits>
+  inline off_t ftell(std::basic_istream<Char, Traits>& is)
+  {
+    return is.tellg();
+  }
+
+  /// シーク位置の取得
+  /// @param[in]  is      出力ストリーム
+  /// @return     現在のシーク位置を返す。
+  template <typename Char, typename Traits>
+  inline off_t ftell(std::basic_ostream<Char, Traits>& is)
+  {
+    return is.tellp();
+  }
 }
 
 #endif  // !MENON_BITS_FSEEK_HH_
