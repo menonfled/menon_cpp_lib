@@ -38,6 +38,7 @@ namespace menon
   auto stream_put_contents(std::ostream& os, std::span<T> data)
   {
     static_assert(std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T>);
+    Expects(os.good());
     return os.rdbuf()->sputn(reinterpret_cast<char const*>(data.data()), sizeof(T) * data.size());
   }
 }
