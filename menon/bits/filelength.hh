@@ -48,6 +48,15 @@ namespace menon
       return -1LL;
     return static_cast<long long>(t.st_size);
   }
+
+  /// ファイルサイズの取得
+  /// @param[in]  path    パス名
+  /// @return     成功時はファイルサイズを返す。失敗時は負値を返しerrnoを設定する。
+  /// この関数はfilelengthのシノニムである。
+  inline auto filesize(std::filesystem::path const& path)
+  {
+    return filelength(path);
+  }
 }
 
 #endif  // !MENON_BITS_FILELENGTH_HH_

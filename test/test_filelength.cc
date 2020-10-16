@@ -37,6 +37,8 @@ int main()
 
   std::filesystem::path t(path);
   BOOST_TEST_EQ(menon::filelength(t), n);
+  BOOST_TEST_EQ(menon::filesize(t), n);
+  BOOST_TEST_EQ(menon::filesize(path), n);
 
   std::remove(path);
   return boost::report_errors();
