@@ -147,6 +147,7 @@ namespace menon
     return static_cast<T>(sign ? -r : r);
   }
 
+
   /// 文字列からlong型への変換
   /// @param[in]  s       変換対象の文字列
   /// @param[out] endptr  解析を終えた位置の格納先
