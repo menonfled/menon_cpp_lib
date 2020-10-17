@@ -81,13 +81,15 @@ namespace menon
           if (r > std::numeric_limits<T>::max() / radix)
             *overflow = true;
         }
-        r *= radix;
         auto c = tolower(*next);
         if (c > 0x7e)
           break;
         if (auto ptr = std::strchr(detail::alnum, c))
         {
           auto d = static_cast<T>(ptr - detail::alnum);
+          if (d >= static_cast<T>(radix))
+            break;
+          r *= static_cast<T>(radix);
           if constexpr (std::is_integral_v<T>)
           {
             if (r > std::numeric_limits<T>::max() - d)
@@ -147,6 +149,32 @@ namespace menon
     return static_cast<T>(sign ? -r : r);
   }
 
+  /// 文字列から浮動小数点数への変換
+  /// @param[in]  s       変換対象の文字列
+  /// @param[out] endpos  解析を終えた位置の格納先
+  template <std::floating_point T, typename String>
+  auto strto(String const& s, std::size_t* endpos = nullptr)
+    -> T
+  {
+    using ::menon::sv;
+    auto t = sv(s);
+    auto next = t.cbegin();
+    auto last = t.cend();
+    int sign = detail::space_sign(next, last);
+    int radix = detail::default_radix(next, last);
+    if (radix == 8)
+      radix = 10;
+
+    // 符号無し整数として解析する。
+    bool overflow;
+    auto r = detail::strto_helper<T>(next, last, radix, &overflow);
+
+    if (overflow)
+      throw std::overflow_error("menon::strto");
+    if (endpos)
+      *endpos = static_cast<std::size_t>(next - t.cbegin());
+    return static_cast<T>(sign ? -r : r);
+  }
 
   /// 文字列からlong型への変換
   /// @param[in]  s       変換対象の文字列

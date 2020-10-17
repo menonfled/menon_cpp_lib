@@ -14,7 +14,7 @@ int main()
     BOOST_TEST_EQ(endpos, 6);
     BOOST_TEST_EQ(menon::strto<int>("0x12345", &endpos), 0x12345);
     BOOST_TEST_EQ(endpos, 7);
-    BOOST_TEST_EQ(menon::strto<int>("abcd", &endpos, 16), 0xabcd);
+    BOOST_TEST_EQ(menon::strto<int>("abcdx", &endpos, 16), 0xabcd);
     BOOST_TEST_EQ(endpos, 4);
     BOOST_TEST_EQ(menon::strto<long>("abcd", &endpos, 36), std::strtol("abcd", nullptr, 36));
     BOOST_TEST_EQ(endpos, 4);
