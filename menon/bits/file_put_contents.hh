@@ -10,7 +10,7 @@
 #include <type_traits>
 #include <filesystem>
 #include <ostream>
-#include <span>
+#include <iterator>
 
 namespace menon
 {
@@ -21,14 +21,14 @@ namespace menon
   /// @param[in]  data        書き込むデータ
   /// @return     書き込んだバイト数を返す。
   /// @attention  テンプレート引数TはPOD型であること
-  template <typename T>
-
-  inline auto stream_put_contents(std::FILE* stream, std::span<T> data)
-    -> std::size_t
+  template <typename C>
+  inline auto stream_put_contents(std::FILE* stream, C const& data)
+    -> decltype(std::data(data), std::size_t())
   {
-    static_assert(std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T>);
+    using value_type = std::remove_cv_t<std::remove_reference_t<decltype(*std::data(data))>>;
+    static_assert(std::is_standard_layout_v<value_type> && std::is_trivially_copyable_v<value_type>);
     Expects(stream != nullptr);
-    return std::fwrite(data.data(), 1, sizeof(T) * data.size(), stream);
+    return std::fwrite(std::data(data), 1, sizeof(value_type) * std::size(data), stream);
   }
 
   /// 出力ストリームにデータを書き込む
@@ -36,13 +36,14 @@ namespace menon
   /// @param[in]  data        書き込むデータ
   /// @return     書き込んだバイト数を返す。
   /// @attention  テンプレート引数TはPOD型であること
-  template <typename T>
-  inline auto stream_put_contents(std::ostream& os, std::span<T> data)
-    -> std::size_t
+  template <typename C>
+  inline auto stream_put_contents(std::ostream& os, C const& data)
+    -> decltype(std::data(data), std::size_t())
   {
-    static_assert(std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T>);
+    using value_type = std::remove_cv_t<std::remove_reference_t<decltype(*std::data(data))>>;
+    static_assert(std::is_standard_layout_v<value_type> && std::is_trivially_copyable_v<value_type>);
     Expects(os.good());
-    return os.rdbuf()->sputn(reinterpret_cast<char const*>(data.data()), sizeof(T) * data.size());
+    return os.rdbuf()->sputn(reinterpret_cast<char const*>(std::data(data)), sizeof(value_type) * data.size());
   }
 
   /// ファイルにデータを書き込む
@@ -58,11 +59,12 @@ namespace menon
   /// - contextは指定不可
   ///
   /// FILE_APPENDを指定した場合、既存のファイルに追記する。
-  template <typename T>
-  auto file_put_contents(std::filesystem::path const& path, std::span<T> data, int flags = 0)
-    -> std::size_t
+  template <typename C>
+  auto file_put_contents(std::filesystem::path const& path, C const& data, int flags = 0)
+    -> decltype(std::data(data), std::size_t())
   {
-    static_assert(std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T>);
+    using value_type = std::remove_cv_t<std::remove_reference_t<decltype(*std::data(data))>>;
+    static_assert(std::is_standard_layout_v<value_type> && std::is_trivially_copyable_v<value_type>);
     char const* omode = "wb";
     if (flags & FILE_APPEND)
       omode = "ab";

@@ -3,6 +3,8 @@
 #include <cstddef>
 #include <cstring>
 #include <fstream>
+#include <vector>
+#include <span>
 
 std::byte test_data[256];
 
@@ -27,7 +29,7 @@ void test_stream_put_contents(char const* path)
   {
     auto stream = std::fopen(path, "wb");
     BOOST_TEST_NE(stream, nullptr);
-    BOOST_TEST_EQ(menon::stream_put_contents(stream, std::span<std::byte>(test_data)), n);
+    BOOST_TEST_EQ(menon::stream_put_contents(stream, test_data), n);
     std::fclose(stream);
     auto data = get_test_file(path);
     BOOST_TEST_EQ(data.size(), n);
@@ -50,13 +52,20 @@ void test_file_put_contents(char const* path)
   auto n = sizeof(test_data);
 
   {
-    BOOST_TEST_EQ(menon::file_put_contents(path, std::span<std::byte>(test_data)), n);
+    BOOST_TEST_EQ(menon::file_put_contents(path, test_data), n);
     auto data = get_test_file(path);
     BOOST_TEST_EQ(data.size(), n);
     BOOST_TEST_EQ(std::memcmp(data.data(), test_data, n), 0);
   }
   {
-    menon::file_put_contents(path, std::span<std::byte>(test_data));
+    std::vector<std::byte> v(test_data, test_data + n);
+    BOOST_TEST_EQ(menon::file_put_contents(path, v), n);
+    auto data = get_test_file(path);
+    BOOST_TEST_EQ(data.size(), n);
+    BOOST_TEST_EQ(std::memcmp(data.data(), test_data, n), 0);
+  }
+  {
+    menon::file_put_contents(path, test_data);
     menon::file_put_contents(path, std::span<std::byte>(test_data), menon::FILE_APPEND);
     auto data = get_test_file(path);
     BOOST_TEST_EQ(data.size(), n * 2);
