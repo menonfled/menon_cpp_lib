@@ -76,6 +76,11 @@ namespace menon
       T r = 0;
       while (next != last)
       {
+        if constexpr (std::is_integral_v<T>)
+        {
+          if (r > std::numeric_limits<T>::max() / radix)
+            *overflow = true;
+        }
         r *= radix;
         auto c = tolower(*next);
         if (c > 0x7e)
@@ -85,7 +90,7 @@ namespace menon
           auto d = static_cast<T>(ptr - detail::alnum);
           if constexpr (std::is_integral_v<T>)
           {
-            if (r + d <= r)
+            if (r > std::numeric_limits<T>::max() - d)
               *overflow = true;
           }
           r += d;
@@ -107,7 +112,7 @@ namespace menon
 
   /// 文字列から整数への変換
   /// @param[in]  s       変換対象の文字列
-  /// @param[out] endpos  解析を終えた位置
+  /// @param[out] endpos  解析を終えた位置の格納先
   /// @param[in]  radix   基数（0, 2～36）
   template <std::integral T, typename String>
   auto strto(String const& s, std::size_t* endpos = nullptr, int radix = 0)
@@ -140,6 +145,62 @@ namespace menon
     if (endpos)
       *endpos = static_cast<std::size_t>(next - t.cbegin());
     return static_cast<T>(sign ? -r : r);
+  }
+
+  /// 文字列からlong型への変換
+  /// @param[in]  s       変換対象の文字列
+  /// @param[out] endptr  解析を終えた位置の格納先
+  /// @param[in]  radix   基数（0, 2～36）
+  template <std::integral Char>
+  inline auto strtol(Char* s, Char** endptr, int radix = 0)
+  {
+    std::size_t endpos;
+    auto r = strto<long>(s, &endpos, radix);
+    if (endptr)
+      *endptr = s + endpos;
+    return r;
+  }
+
+  /// 文字列からunsigned long型への変換
+  /// @param[in]  s       変換対象の文字列
+  /// @param[out] endptr  解析を終えた位置の格納先
+  /// @param[in]  radix   基数（0, 2～36）
+  template <std::integral Char>
+  inline auto strtoul(Char* s, Char** endptr, int radix = 0)
+  {
+    std::size_t endpos;
+    auto r = strto<unsigned long>(s, &endpos, radix);
+    if (endptr)
+      *endptr = s + endpos;
+    return r;
+  }
+
+  /// 文字列からlong long型への変換
+  /// @param[in]  s       変換対象の文字列
+  /// @param[out] endptr  解析を終えた位置の格納先
+  /// @param[in]  radix   基数（0, 2～36）
+  template <std::integral Char>
+  inline auto strtoll(Char* s, Char** endptr, int radix = 0)
+  {
+    std::size_t endpos;
+    auto r = strto<long long>(s, &endpos, radix);
+    if (endptr)
+      *endptr = s + endpos;
+    return r;
+  }
+
+  /// 文字列からunsigned long long型への変換
+  /// @param[in]  s       変換対象の文字列
+  /// @param[out] endptr  解析を終えた位置の格納先
+  /// @param[in]  radix   基数（0, 2～36）
+  template <std::integral Char>
+  inline auto strtoull(Char* s, Char** endptr, int radix = 0)
+  {
+    std::size_t endpos;
+    auto r = strto<unsigned long long>(s, &endpos, radix);
+    if (endptr)
+      *endptr = s + endpos;
+    return r;
   }
 }
 
