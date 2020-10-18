@@ -8,5 +8,6 @@
 #include "menon/bits/strto.hh"
 #include "menon/bits/swap.hh"
 #include "menon/bits/compare.hh"
+#include "menon/bits/max.hh"
 
 #endif  // !MENON_BITS_UTILITY_HH_
