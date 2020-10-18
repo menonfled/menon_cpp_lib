@@ -24,6 +24,10 @@ int main()
     constexpr auto r = menon::max("abc"sv, "def"sv);
     BOOST_TEST_EQ(r, "def"sv);
   }
+  {
+    constexpr auto r = menon::max(1, 2, 3);
+    BOOST_TEST_EQ(r, 3);
+  }
 
   {
     constexpr auto r = menon::min(1, 2);
@@ -42,6 +46,10 @@ int main()
   {
     constexpr auto r = menon::min("abc"sv, "def"sv);
     BOOST_TEST_EQ(r, "abc"sv);
+  }
+  {
+    constexpr auto r = menon::min(1, 2, 3);
+    BOOST_TEST_EQ(r, 1);
   }
   return boost::report_errors();
 }

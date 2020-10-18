@@ -54,6 +54,16 @@ namespace menon
     return rhs < lhs ? lhs : rhs;
   }
 
+  /// 最大値
+  /// @param[in]  arg0    比較する値
+  /// @param[in]  args    比較する値の並び
+  /// @return     引数として与えた値を比較し、最も大きい値を返す。
+  template <typename T, typename... Args>
+  constexpr auto max(T arg0, Args... args)
+  {
+    return max(arg0, max(args...));
+  }
+
   /// 最小値
   /// @param[in]  lhs     比較する値
   /// @param[in]  rhs     比較する値
@@ -96,6 +106,16 @@ namespace menon
   constexpr auto min(T lhs, U rhs)
   {
     return lhs < rhs ? lhs : rhs;
+  }
+
+  /// 最小値
+  /// @param[in]  arg0    比較する値
+  /// @param[in]  args    比較する値の並び
+  /// @return     引数として与えた値を比較し、最も小さい値を返す。
+  template <typename T, typename... Args>
+  constexpr auto min(T arg0, Args... args)
+  {
+    return min(arg0, min(args...));
   }
 }
 
