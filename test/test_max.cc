@@ -28,6 +28,10 @@ int main()
     constexpr auto r = menon::max(1, 2, 3);
     BOOST_TEST_EQ(r, 3);
   }
+  {
+    constexpr auto r = menon::max(1, 2, 3, 4L, 5LL);
+    BOOST_TEST_EQ(r, 5LL);
+  }
 
   {
     constexpr auto r = menon::min(1, 2);
@@ -50,6 +54,10 @@ int main()
   {
     constexpr auto r = menon::min(1, 2, 3);
     BOOST_TEST_EQ(r, 1);
+  }
+  {
+    constexpr auto r = menon::min(-1LL, 0L, 1, 2, 3);
+    BOOST_TEST_EQ(r, -1LL);
   }
   return boost::report_errors();
 }
