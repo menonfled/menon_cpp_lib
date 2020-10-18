@@ -21,6 +21,12 @@ int main()
     BOOST_TEST_EQ(r, y);
   }
   {
+    constexpr double x = 1.23;
+    constexpr int y = 2;
+    constexpr auto r = menon::max(x, y);
+    BOOST_TEST_EQ(r, y);
+  }
+  {
     constexpr auto r = menon::max("abc"sv, "def"sv);
     BOOST_TEST_EQ(r, "def"sv);
   }
@@ -43,6 +49,12 @@ int main()
   }
   {
     constexpr double x = 1.23;
+    constexpr double y = 2.34f;
+    constexpr auto r = menon::min(x, y);
+    BOOST_TEST_EQ(r, x);
+  }
+  {
+    constexpr unsigned x = 1u;
     constexpr double y = 2.34f;
     constexpr auto r = menon::min(x, y);
     BOOST_TEST_EQ(r, x);
