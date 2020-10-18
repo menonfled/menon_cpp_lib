@@ -5,7 +5,7 @@
 #define MENON_BITS_MAX_HH_
 #pragma once
 
-#include "menon/bits/compare.hh"
+#include "menon/bits/config.hh"
 #include <concepts>
 
 namespace menon
@@ -15,10 +15,11 @@ namespace menon
   /// @param[in]  rhs     比較する値
   /// @return     lhsとrhsを比較し、大きい方の値を返す。
   /// lhsとrhsは同じ型でなければならない。
+  /// @attention  std::maxと異なり、参照ではなく値を返すことに注意
   template <typename T>
-  constexpr auto max(T&& lhs, T&& rhs)
+  constexpr auto max(T const& lhs, T const& rhs)
   {
-    return rhs < lhs ? std::forward<T>(lhs) : std::forward<T>(rhs);
+    return rhs < lhs ? lhs : rhs;
   }
 
   /// 最大値
@@ -89,10 +90,11 @@ namespace menon
   /// @param[in]  rhs     比較する値
   /// @return     lhsとrhsを比較し、小さい方の値を返す。
   /// lhsとrhsは同じ型でなければならない。
+  /// @attention  std::maxと異なり、参照ではなく値を返すことに注意
   template <typename T>
-  constexpr auto min(T&& lhs, T&& rhs)
+  constexpr auto min(T const& lhs, T const rhs)
   {
-    return lhs < rhs ? std::forward<T>(lhs) : std::forward<T>(rhs);
+    return lhs < rhs ? lhs : rhs;
   }
 
   /// 最小値
