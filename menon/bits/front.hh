@@ -32,6 +32,29 @@ namespace menon
     static_assert(N > 0);
     return &array[0];
   }
+
+  /// 末尾要素へのポインタ
+  /// @param[in]  container     列コンテナ
+  /// @return     containerが空でなければ末尾要素へのポインタを、空の場合はnullptrを返す。
+  template <typename C>
+  constexpr auto back(C const& container)
+    -> typename C::const_pointer
+  {
+    if (container.empty())
+      return nullptr;
+    return &container.back();
+  }
+
+  /// 末尾要素へのポインタ
+  /// @param[in]  array         配列
+  /// @return     配列の末尾要素へのポインタを返す。
+  template <typename T, std::size_t N>
+  constexpr auto back(T const (&array)[N])
+    -> T const*
+  {
+    static_assert(N > 0);
+    return &array[N - 1];
+  }
 }
 
 #endif  // !MENON_BITS_FRONT_HH_
