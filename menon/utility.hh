@@ -10,5 +10,6 @@
 #include "menon/bits/compare.hh"
 #include "menon/bits/max.hh"
 #include "menon/bits/clamp.hh"
+#include "menon/bits/front.hh"
 
 #endif  // !MENON_BITS_UTILITY_HH_
