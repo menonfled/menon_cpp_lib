@@ -10,7 +10,11 @@
 #include <stdexcept>
 #include <type_traits>
 
+#ifndef MENON_HAS_RESERVE_
+#define MENON_HAS_RESERVE_
 MENON_DEFINE_HAS_MEMBER(reserve)
+#endif
+
 #ifndef MENON_HAS_CLEAR_
 #define MENON_HAS_CLEAR_
 MENON_DEFINE_HAS_MEMBER(clear)
