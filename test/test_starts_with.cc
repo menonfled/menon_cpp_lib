@@ -15,5 +15,14 @@ int main()
     BOOST_TEST(menon::starts_with("abcde", 'a'));
     BOOST_TEST_NOT(menon::starts_with("abcde", 'x'));
   }
+
+  {
+    BOOST_TEST(menon::ends_with("abcde", "de"));
+    BOOST_TEST_NOT(menon::ends_with("abcde", "xy"));
+  }
+  {
+    BOOST_TEST(menon::ends_with("abcde", 'e'));
+    BOOST_TEST_NOT(menon::ends_with("abcde", 'x'));
+  }
   return boost::report_errors();
 }

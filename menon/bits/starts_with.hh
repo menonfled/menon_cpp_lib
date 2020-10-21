@@ -31,8 +31,27 @@ namespace menon
     return sv(s).starts_with(x);
   }
 
+  /// 指定の文字列で終わるかの判定
+  /// @param[in]    s     判定対象の文字列
+  /// @param[in]    x     指定の文字列
+  /// @return       sがxで終わる場合はtrueを、そうでなければfalseを返す。
+  template <sv_like String1, sv_like String2>
+  constexpr bool ends_with(String1 const& s, String2 const& x)
+  {
+    using menon::sv;
+    return sv(s).ends_with(sv(x));
+  }
 
-
+  /// 指定の文字で終わるかの判定
+  /// @param[in]    s     判定対象の文字列
+  /// @param[in]    x     指定の文字
+  /// @return       sがxで終わる場合はtrueを、そうでなければfalseを返す。
+  template <sv_like String>
+  constexpr bool ends_with(String const& s, typename String::value_type x)
+  {
+    using menon::sv;
+    return sv(s).ends_with(x);
+  }
 }
 
 #endif  // !MENON_BITS_STARTS_WITH_HH_
