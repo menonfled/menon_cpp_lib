@@ -102,6 +102,31 @@ namespace menon
         return static_cast<std::optional<Iterator>>(*this) <=> static_cast<std::optional<Iterator>>(other);
       }
 
+      // 増分演算子
+      optional_iterator<Iterator>& operator++()
+      {
+        ++value();
+        return *this;
+      }
+      optional_iterator<Iterator> operator++(int)
+      {
+        auto t(*this);
+        ++value();
+        return t;
+      }
+
+      // 間接演算子
+      auto operator*() const
+      {
+        return *value();
+      }
+
+      // 矢印演算子
+      auto operator->() const
+      {
+        return value().operator->();
+      }
+
       /// イテレータの交換
       /// @param[in,out]  other    交換する相手
       /// @return         無し
@@ -117,9 +142,42 @@ namespace menon
       using std::optional<Iterator>::value_or;
       using std::optional<Iterator>::reset;
       using std::optional<Iterator>::operator bool;
-      using std::optional<Iterator>::operator*;
-      using std::optional<Iterator>::operator->;
   };
+
+  // 減分演算子
+  template <std::bidirectional_iterator Iterator>
+  inline optional_iterator<Iterator>& operator--(optional_iterator<Iterator>& oi)
+  {
+    --oi.value();
+    return oi;
+  }
+  template <std::bidirectional_iterator Iterator>
+  inline optional_iterator<Iterator> operator--(optional_iterator<Iterator>& oi, int)
+  {
+    auto t(oi);
+    --oi;
+    return oi;
+  }
+
+  template <std::random_access_iterator Iterator>
+  inline optional_iterator<Iterator> operator+(optional_iterator<Iterator> const& oi, typename Iterator::difference_type n)
+  {
+    auto t(oi);
+    t.value() += n;
+    return t;
+  }
+  template <std::random_access_iterator Iterator>
+  inline optional_iterator<Iterator> operator+(typename Iterator::difference_type n, optional_iterator<Iterator> const& oi)
+  {
+    auto t(oi);
+    t.value() += n;
+    return t;
+  }
+  template <std::random_access_iterator Iterator>
+  inline auto operator-(optional_iterator<Iterator> const& lhs, optional_iterator<Iterator> const& rhs)
+  {
+    return lhs.value() - rhs.value();
+  }
 }
 
 #endif  // !MENON_BITS_OPTIONAL_ITERATOR_HH_
