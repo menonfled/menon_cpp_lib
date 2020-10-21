@@ -6,26 +6,18 @@
 #pragma once
 
 #include "menon/bits/config.hh"
+#include "menon/bits/has_member.hh"
 #include <stdexcept>
 #include <type_traits>
 
+MENON_DEFINE_HAS_MEMBER(reserve)
+#ifndef MENON_HAS_CLEAR_
+#define MENON_HAS_CLEAR_
+MENON_DEFINE_HAS_MEMBER(clear)
+#endif
+
 namespace menon
 {
-  namespace detail
-  {
-    template<typename C>
-    struct has_reserve
-    {
-        static std::false_type check(...);
-        template<class T, int _ =(&T::reserve, 0)>
-          static std::true_type  check(T*);
-        static constexpr bool value = decltype(check(std::declval<C*>()))::value;
-    };
-
-    template<typename C>
-    constexpr bool has_reserve_v = has_reserve<C>::value;
-  }
-
   /// キャパシティの予約
   /// @param[in]  container   対象のコンテナ
   /// @param[in]  size        予約するサイズ（要素数）
@@ -35,11 +27,11 @@ namespace menon
   template <typename C>
   inline auto reserve(C& container, decltype(std::size(container)) size)
   {
-    if constexpr (detail::has_reserve_v<C>)
+    if constexpr (has_reserve_v<C>)
     {
       container.reserve(size);
     }
-    else
+    else if constexpr (!has_clear_v<C>)
     {
       if (size > std::size(container))
         throw std::out_of_range("menon::reserve");
