@@ -2,6 +2,7 @@
 #include <boost/core/lightweight_test.hpp>
 #include <initializer_list>
 #include <string>
+#include <string_view>
 #include <vector>
 #include <list>
 #include <set>
@@ -11,11 +12,25 @@
 int main()
 {
   {
+    std::string s;
+    BOOST_TEST(menon::has_reserve_v<decltype(s)>);
+    BOOST_TEST(menon::has_clear_v<decltype(s)>);
+    BOOST_TEST_NO_THROW(menon::reserve(s, 10));
+    BOOST_TEST_GE(s.capacity(), 10);
+  }
+  {
+    std::string_view sv("1234567890");
+    BOOST_TEST(!menon::has_reserve_v<decltype(sv)>);
+    BOOST_TEST(!menon::has_clear_v<decltype(sv)>);
+    BOOST_TEST_NO_THROW(menon::reserve(sv, 10));
+    BOOST_TEST_THROWS(menon::reserve(sv, 11), std::out_of_range);
+  }
+  {
     std::vector<int> v;
     BOOST_TEST(menon::has_reserve_v<decltype(v)>);
     BOOST_TEST(menon::has_clear_v<decltype(v)>);
     BOOST_TEST_NO_THROW(menon::reserve(v, 10));
-    BOOST_TEST_EQ(v.capacity(), 10);
+    BOOST_TEST_GE(v.capacity(), 10);
   }
   {
     std::list<int> l;
