@@ -4,7 +4,6 @@
 #include <string_view>
 #include <vector>
 
-// TODO テストコードを追加
 int main()
 {
   using namespace std::literals;
@@ -14,6 +13,36 @@ int main()
     constexpr menon::optional_iterator<std::string_view::iterator> t(sv.begin());
     BOOST_TEST(t);
     BOOST_TEST_NOT(!t);
+    auto x = t;
+    BOOST_TEST_NO_THROW(t.value());
+    BOOST_TEST_NO_THROW(*t);
+  }
+  {
+    constexpr menon::optional_iterator<std::string_view::iterator> u;
+    BOOST_TEST(!u);
+    BOOST_TEST_NOT(u);
+    BOOST_TEST_THROWS(u.value(), std::bad_optional_access);
+    BOOST_TEST_THROWS(*u, std::bad_optional_access);
+  }
+  {
+    std::vector v = { 1, 2, 3, 4, 5 };
+    menon::optional_iterator<decltype(v)::iterator> t(v.begin());
+    BOOST_TEST(t);
+    BOOST_TEST_NOT(!t);
+    BOOST_TEST_NO_THROW(t.value());
+    BOOST_TEST_NO_THROW(*t);
+    BOOST_TEST_EQ(*t, 1);
+    BOOST_TEST_NO_THROW(t[2]);
+    BOOST_TEST_EQ(t[2], 3);
+    BOOST_TEST_EQ(*++t, 2);
+    BOOST_TEST_EQ(*t++, 2);
+    BOOST_TEST_EQ(*t, 3);
+    BOOST_TEST_EQ(*--t, 2);
+    BOOST_TEST_EQ(*t--, 2);
+    BOOST_TEST_EQ(*(t + 2), 3);
+    auto u = t + 2;
+    BOOST_TEST_EQ(u - t, 2);
+    BOOST_TEST_EQ(t - u, -2);
   }
 
   return boost::report_errors();

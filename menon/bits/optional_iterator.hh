@@ -6,6 +6,7 @@
 #pragma once
 
 #include "menon/bits/config.hh"
+#include <concepts>
 #include <iterator>
 #include <optional>
 #include <utility>
@@ -110,9 +111,7 @@ namespace menon
       }
       optional_iterator<Iterator> operator++(int)
       {
-        auto t(*this);
-        ++value();
-        return t;
+        return value()++;
       }
 
       // 間接演算子
@@ -125,6 +124,18 @@ namespace menon
       auto operator->() const
       {
         return value().operator->();
+      }
+
+      // 添字演算子
+      auto operator[](std::size_t n)
+      {
+        return value()[n];
+      }
+
+      // std::optional<Iterator>への変換関数
+      constexpr operator std::optional<Iterator>() const
+      {
+        return *this;
       }
 
       /// イテレータの交換
@@ -154,24 +165,18 @@ namespace menon
   template <std::bidirectional_iterator Iterator>
   inline optional_iterator<Iterator> operator--(optional_iterator<Iterator>& oi, int)
   {
-    auto t(oi);
-    --oi;
-    return oi;
+    return oi.value()--;
   }
 
-  template <std::random_access_iterator Iterator>
-  inline optional_iterator<Iterator> operator+(optional_iterator<Iterator> const& oi, typename Iterator::difference_type n)
+  template <std::random_access_iterator Iterator, std::integral Size>
+  inline optional_iterator<Iterator> operator+(optional_iterator<Iterator> const& oi, Size n)
   {
-    auto t(oi);
-    t.value() += n;
-    return t;
+    return oi.value() + n;
   }
-  template <std::random_access_iterator Iterator>
-  inline optional_iterator<Iterator> operator+(typename Iterator::difference_type n, optional_iterator<Iterator> const& oi)
+  template <std::random_access_iterator Iterator, std::integral Size>
+  inline optional_iterator<Iterator> operator+(Size n, optional_iterator<Iterator> const& oi)
   {
-    auto t(oi);
-    t.value() += n;
-    return t;
+    return n + oi.value();
   }
   template <std::random_access_iterator Iterator>
   inline auto operator-(optional_iterator<Iterator> const& lhs, optional_iterator<Iterator> const& rhs)
