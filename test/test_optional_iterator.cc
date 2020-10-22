@@ -37,6 +37,17 @@ int main()
     BOOST_TEST(t <= sv.end());
     BOOST_TEST(sv.end() > t);
     BOOST_TEST(sv.end() >= t);
+
+    BOOST_TEST_NOT(t == std::nullopt);
+    BOOST_TEST(t != std::nullopt);
+    BOOST_TEST_NOT(std::nullopt == t);
+    BOOST_TEST(std::nullopt != t);
+
+    u.reset();
+    BOOST_TEST(u == std::nullopt);
+    BOOST_TEST_NOT(u != std::nullopt);
+    BOOST_TEST(std::nullopt == u);
+    BOOST_TEST_NOT(std::nullopt != u);
   }
   {
     constexpr menon::optional_iterator<std::string_view::iterator> u;

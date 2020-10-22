@@ -177,6 +177,27 @@ namespace menon
     return lhs != rhs.value();
   }
 
+  template <std::input_or_output_iterator Iterator>
+  inline auto operator==(optional_iterator<Iterator> const& lhs, std::nullopt_t)
+  {
+    return !lhs.has_value();
+  }
+  template <std::input_or_output_iterator Iterator>
+  inline auto operator==(std::nullopt_t, optional_iterator<Iterator> const& rhs)
+  {
+    return !rhs.has_value();
+  }
+  template <std::input_or_output_iterator Iterator>
+  inline auto operator!=(optional_iterator<Iterator> const& lhs, std::nullopt_t)
+  {
+    return lhs.has_value();
+  }
+  template <std::input_or_output_iterator Iterator>
+  inline auto operator!=(std::nullopt_t, optional_iterator<Iterator> const& rhs)
+  {
+    return rhs.has_value();
+  }
+
   // 関係演算子
   template <std::random_access_iterator Iterator>
   inline auto operator<(optional_iterator<Iterator> const& lhs, Iterator rhs)
