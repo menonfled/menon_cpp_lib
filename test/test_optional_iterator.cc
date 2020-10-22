@@ -14,6 +14,8 @@ int main()
     BOOST_TEST(t);
     BOOST_TEST_NOT(!t);
     auto x = t;
+    auto y = t;
+    auto z = std::move(y);
     BOOST_TEST_NO_THROW(t.value());
     BOOST_TEST_NO_THROW(*t);
 

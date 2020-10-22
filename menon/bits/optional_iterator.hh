@@ -28,10 +28,10 @@ namespace menon
       using iterator_category = typename iterator_traits::iterator_category;
 
       // コンストラクタとデストラクタ
-      constexpr optional_iterator() = default;
+      constexpr optional_iterator() noexcept = default;
       constexpr optional_iterator(optional_iterator const&) = default;
-      constexpr optional_iterator(optional_iterator&&) = default;
-      constexpr optional_iterator(std::nullopt_t nullopt)
+      constexpr optional_iterator(optional_iterator&&) noexcept = default;
+      constexpr optional_iterator(std::nullopt_t nullopt) noexcept
         : std::optional<Iterator>(nullopt)
       {
       }
@@ -39,12 +39,12 @@ namespace menon
         : std::optional<Iterator>(iterator)
       {
       }
-      template <std::input_or_output_iterator OtherIterator>
+      template <typename OtherIterator>
         constexpr optional_iterator(OtherIterator&& iterator)
           : std::optional<Iterator>(std::forward<OtherIterator>(iterator))
       {
       }
-      template <std::input_or_output_iterator OtherIterator>
+      template <typename OtherIterator>
         constexpr optional_iterator(optional_iterator<OtherIterator> const& other)
           : std::optional<Iterator>(other)
       {
@@ -64,13 +64,13 @@ namespace menon
         std::optional<Iterator>::operator=(std::forward<Iterator>(iterator));
         return *this;
       }
-      template <std::input_or_output_iterator OtherIterator>
+      template <typename OtherIterator>
         optional_iterator& operator=(OtherIterator&& iterator)
       {
         std::optional<Iterator>::operator=(std::forward<OtherIterator>(iterator));
         return *this;
       }
-      template <std::input_or_output_iterator OtherIterator>
+      template <typename OtherIterator>
         optional_iterator& operator=(optional_iterator<OtherIterator> const& other)
       {
         std::optional<Iterator>::operator=(other);
