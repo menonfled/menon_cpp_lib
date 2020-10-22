@@ -100,7 +100,7 @@ namespace menon
       // 宇宙船演算子
       constexpr auto operator<=>(optional_iterator<Iterator> const& other) const
       {
-        return static_cast<std::optional<Iterator>>(*this) <=> static_cast<std::optional<Iterator>>(other);
+        return value() <=> other.value();
       }
 
       // 増分演算子
@@ -154,6 +154,70 @@ namespace menon
       using std::optional<Iterator>::reset;
       using std::optional<Iterator>::operator bool;
   };
+
+  // 等価演算子
+  template <std::input_or_output_iterator Iterator>
+  inline auto operator==(optional_iterator<Iterator> const& lhs, Iterator rhs)
+  {
+    return lhs.value() == rhs;
+  }
+  template <std::input_or_output_iterator Iterator>
+  inline auto operator==(Iterator lhs, optional_iterator<Iterator> const& rhs)
+  {
+    return lhs == rhs.value();
+  }
+  template <std::input_or_output_iterator Iterator>
+  inline auto operator!=(optional_iterator<Iterator> const& lhs, Iterator rhs)
+  {
+    return lhs.value() != rhs;
+  }
+  template <std::input_or_output_iterator Iterator>
+  inline auto operator!=(Iterator lhs, optional_iterator<Iterator> const& rhs)
+  {
+    return lhs != rhs.value();
+  }
+
+  // 関係演算子
+  template <std::random_access_iterator Iterator>
+  inline auto operator<(optional_iterator<Iterator> const& lhs, Iterator rhs)
+  {
+    return lhs.value() < rhs;
+  }
+  template <std::random_access_iterator Iterator>
+  inline auto operator<(Iterator lhs, optional_iterator<Iterator> const& rhs)
+  {
+    return lhs < rhs.value();
+  }
+  template <std::random_access_iterator Iterator>
+  inline auto operator>(optional_iterator<Iterator> const& lhs, Iterator rhs)
+  {
+    return rhs < lhs;
+  }
+  template <std::random_access_iterator Iterator>
+  inline auto operator>(Iterator lhs, optional_iterator<Iterator> const& rhs)
+  {
+    return rhs < lhs;
+  }
+  template <std::random_access_iterator Iterator>
+  inline auto operator<=(optional_iterator<Iterator> const& lhs, Iterator rhs)
+  {
+    return !(lhs > rhs);
+  }
+  template <std::random_access_iterator Iterator>
+  inline auto operator<=(Iterator lhs, optional_iterator<Iterator> const& rhs)
+  {
+    return !(lhs > rhs);
+  }
+  template <std::random_access_iterator Iterator>
+  inline auto operator>=(optional_iterator<Iterator> const& lhs, Iterator rhs)
+  {
+    return !(lhs < rhs);
+  }
+  template <std::random_access_iterator Iterator>
+  inline auto operator>=(Iterator lhs, optional_iterator<Iterator> const& rhs)
+  {
+    return !(lhs < rhs);
+  }
 
   // 減分演算子
   template <std::bidirectional_iterator Iterator>

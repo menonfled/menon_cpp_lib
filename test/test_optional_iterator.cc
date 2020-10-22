@@ -16,6 +16,27 @@ int main()
     auto x = t;
     BOOST_TEST_NO_THROW(t.value());
     BOOST_TEST_NO_THROW(*t);
+
+    menon::optional_iterator<std::string_view::iterator> u(sv.begin());
+    BOOST_TEST(t == u);
+    BOOST_TEST(u == t);
+    BOOST_TEST(t == sv.begin());
+    BOOST_TEST(sv.begin() == t);
+
+    ++u;
+    BOOST_TEST(t != u);
+    BOOST_TEST(u != t);
+    BOOST_TEST(t != sv.begin() + 1);
+    BOOST_TEST(sv.begin() + 1 != t);
+
+    BOOST_TEST(t < u);
+    BOOST_TEST(t <= u);
+    BOOST_TEST(u > t);
+    BOOST_TEST(u >= t);
+    BOOST_TEST(sv.begin() < u);
+    BOOST_TEST(t <= sv.end());
+    BOOST_TEST(sv.end() > t);
+    BOOST_TEST(sv.end() >= t);
   }
   {
     constexpr menon::optional_iterator<std::string_view::iterator> u;
