@@ -35,8 +35,8 @@ namespace menon
         : std::optional<Iterator>(nullopt)
       {
       }
-      constexpr optional_iterator(Iterator&& iterator)
-        : std::optional<Iterator>(std::forward<Iterator>(iterator))
+      constexpr optional_iterator(Iterator iterator)
+        : std::optional<Iterator>(iterator)
       {
       }
       template <std::input_or_output_iterator OtherIterator>
