@@ -76,8 +76,8 @@ namespace menon
   inline auto cfind(C const& c, typename C::value_type value)
     -> decltype(&c.front())
   {
-    auto it = std::find(c.cbegin(), c.cend(), value);
-    if (it != c.cend())
+    auto it = std::find(c.begin(), c.end(), value);
+    if (it != c.end())
       return &*it;
     return nullptr;
   }
@@ -146,7 +146,35 @@ namespace menon
   /// @param[in]  pred  述語
   /// @return     cにpred(*i) != false（iはcの反復子）に合致する要素があればその要素へのポインタを返す。なければnullptrを返す。
   template <typename T, std::size_t N, typename Pred>
-  inline auto find(T (&a)[N], Pred pred)
+  inline auto find_if(T (&a)[N], Pred pred)
+    -> T*
+  {
+    auto p = std::find_if(a + 0, a + N, pred);
+    if (p != a + N)
+      return p;
+    return nullptr;
+  }
+
+  /// 列から条件に合致する値を探索する。
+  /// @param[in]  c     列コンテナ
+  /// @param[in]  pred  述語
+  /// @return     cにpred(*i) != false（iはcの反復子）に合致する要素があればその要素へのポインタを返す。なければnullptrを返す。
+  template <typename C, typename Pred>
+  inline auto cfind_if(C const& c, Pred pred)
+    -> decltype(&c.front())
+  {
+    auto it = std::find_if(c.begin(), c.end(), pred);
+    if (it != c.end())
+      return &*it;
+    return nullptr;
+  }
+
+  /// 列から条件に合致する値を探索する。
+  /// @param[in]  c     列コンテナ
+  /// @param[in]  pred  述語
+  /// @return     cにpred(*i) != false（iはcの反復子）に合致する要素があればその要素へのポインタを返す。なければnullptrを返す。
+  template <typename T, std::size_t N, typename Pred>
+  inline auto cfind_if(T const (&a)[N], Pred pred)
     -> T*
   {
     auto p = std::find_if(a + 0, a + N, pred);

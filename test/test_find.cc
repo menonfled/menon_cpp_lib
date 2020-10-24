@@ -147,6 +147,25 @@ void test_find_if()
       BOOST_TEST_NOT(p);
     }
   }
+
+  {
+    std::vector v = { 3, 2, 7, 1, 9, 5 };
+    {
+      auto p = menon::cfind_if(v, [](auto value) {
+        return value % 2 == 0;
+      });
+      BOOST_TEST(p);
+      if (p)
+      {
+        BOOST_TEST_EQ(*p, 2);
+        BOOST_TEST_EQ(p, v.data() + 1);
+      }
+      p = menon::cfind_if(v, [](auto value) {
+        return value > 10;        
+      });
+      BOOST_TEST_NOT(p);
+    }
+  }
 }
 
 int main()
