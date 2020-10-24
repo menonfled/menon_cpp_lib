@@ -7,7 +7,7 @@
 #include <set>
 #include <string>
 
-int main()
+void test_find()
 {
   {
     std::vector v = { 3, 2, 7, 1, 9, 5 };
@@ -125,5 +125,33 @@ int main()
     p = menon::cfind(m, "k");
     BOOST_TEST_NOT(p);
   }
+}
+
+void test_find_if()
+{
+  {
+    std::vector v = { 3, 2, 7, 1, 9, 5 };
+    {
+      auto p = menon::find_if(v, [](auto value) {
+        return value % 2 == 0;
+      });
+      BOOST_TEST(p);
+      if (p)
+      {
+        BOOST_TEST_EQ(*p, 2);
+        BOOST_TEST_EQ(p, v.data() + 1);
+      }
+      p = menon::find_if(v, [](auto value) {
+        return value > 10;        
+      });
+      BOOST_TEST_NOT(p);
+    }
+  }
+}
+
+int main()
+{
+  test_find();
+  test_find_if();
   return boost::report_errors();
 }

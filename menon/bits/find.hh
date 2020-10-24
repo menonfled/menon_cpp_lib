@@ -1,5 +1,5 @@
 /// @file   menon/bits/find.hh
-/// find関数の定義
+/// find系関数の定義
 /// @author @menonfled
 #ifndef MENON_BITS_FIND_HH_
 #define MENON_BITS_FIND_HH_
@@ -124,6 +124,34 @@ namespace menon
     auto it = const_cast<std::add_const_t<C>&>(c).find(key);
     if (it != c.cend())
       return &it->second;
+    return nullptr;
+  }
+
+  /// 列から条件に合致する値を探索する。
+  /// @param[in]  c     列コンテナ
+  /// @param[in]  pred  述語
+  /// @return     cにpred(*i) != false（iはcの反復子）に合致する要素があればその要素へのポインタを返す。なければnullptrを返す。
+  template <typename C, typename Pred>
+  inline auto find_if(C& c, Pred pred)
+    -> decltype(&c.front())
+  {
+    auto it = std::find_if(c.begin(), c.end(), pred);
+    if (it != c.end())
+      return &*it;
+    return nullptr;
+  }
+
+  /// 列から条件に合致する値を探索する。
+  /// @param[in]  c     列コンテナ
+  /// @param[in]  pred  述語
+  /// @return     cにpred(*i) != false（iはcの反復子）に合致する要素があればその要素へのポインタを返す。なければnullptrを返す。
+  template <typename T, std::size_t N, typename Pred>
+  inline auto find(T (&a)[N], Pred pred)
+    -> T*
+  {
+    auto p = std::find_if(a + 0, a + N, pred);
+    if (p != a + N)
+      return p;
     return nullptr;
   }
 }
