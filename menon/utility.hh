@@ -14,6 +14,7 @@
 #include "menon/bits/front.hh"
 #include "menon/bits/reserve.hh"
 #include "menon/bits/assign.hh"
+#include "menon/bits/append.hh"
 #include "menon/bits/rand.hh"
 
 #endif  // !MENON_BITS_UTILITY_HH_
