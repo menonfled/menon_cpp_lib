@@ -5,6 +5,7 @@
 #include <string_view>
 #include <numeric>
 #include <random>
+#include <cstring>
 
 std::random_device seed_gen;
 std::mt19937 engine(seed_gen());
@@ -19,6 +20,15 @@ void test_sort()
     std::shuffle(v.begin(), v.end(), engine);
     menon::sort(v);
     BOOST_TEST_ALL_EQ(v.begin(), v.end(), v2.begin(), v2.end());
+  }
+  {
+    int a[256];
+    std::iota(std::begin(a), std::end(a), 0);
+    int b[256];
+    std::memcpy(b, a, sizeof(a));
+    std::shuffle(std::begin(a), std::end(a), engine);
+    menon::sort(a);
+    BOOST_TEST_ALL_EQ(std::cbegin(a), std::cend(a), std::cbegin(b), std::cend(b));
   }
   {
     std::vector<int> v;
@@ -40,6 +50,16 @@ void test_sort()
     menon::sort(v, std::greater<int>());
     std::reverse(v2.begin(), v2.end());
     BOOST_TEST_ALL_EQ(v.begin(), v.end(), v2.begin(), v2.end());
+  }
+  {
+    int a[256];
+    std::iota(std::begin(a), std::end(a), 0);
+    int b[256];
+    std::memcpy(b, a, sizeof(a));
+    std::shuffle(std::begin(a), std::end(a), engine);
+    menon::sort(a, std::greater<int>());
+    std::reverse(std::begin(b), std::end(b));
+    BOOST_TEST_ALL_EQ(std::cbegin(a), std::cend(a), std::cbegin(b), std::cend(b));
   }
   {
     std::vector<int> v;
