@@ -9,5 +9,6 @@
 #include <cstdlib>
 #include "menon/bits/find.hh"
 #include "menon/bits/for_each_n.hh"
+#include "menon/bits/sort.hh"
 
 #endif  // !MENON_ALGORITHM_HH_
