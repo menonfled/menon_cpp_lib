@@ -38,6 +38,9 @@ namespace menon
     }
   }
 
+  /// ファイル位置表示子型
+  using fpos_t = off_t;
+
   /// 指定位置へのシーク
   /// @param[in]  stream    ストリーム
   /// @param[in]  offset    whenceからのオフセット位置
@@ -146,6 +149,32 @@ namespace menon
   inline off_t ftell(std::basic_ostream<Char, Traits>& is)
   {
     return is.tellp();
+  }
+
+  /// ファイル位置の取得
+  /// @param[in]  stream    ストリーム
+  /// @param[out] pos       ファイル位置の格納先
+  /// @return     0を返す。
+  /// @throw      失敗時はruntime_error例外が発生する。
+  inline int fgetpos(std::FILE* stream, fpos_t* pos)
+  {
+    Expects(stream != nullptr);
+    Expects(pos != nullptr);
+    *pos = menon::ftell(stream);
+    return 0;
+  }
+
+  /// ファイル位置の設定
+  /// @param[in]  stream    ストリーム
+  /// @param[in]  pos       ファイル位置
+  /// @return     0を返す。
+  /// @throw      失敗時はruntime_error例外が発生する。
+  inline int fsetpos(std::FILE* stream, fpos_t const* pos)
+  {
+    Expects(stream != nullptr);
+    Expects(pos != nullptr);
+    menon::fseek(stream, *pos, SEEK_SET);
+    return 0;
   }
 }
 

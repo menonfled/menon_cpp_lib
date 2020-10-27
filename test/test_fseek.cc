@@ -29,6 +29,17 @@ int main()
   }
 
   {
+    auto stream = std::fopen(path, "rb");
+    menon::fpos_t pos;
+    menon::fseek(stream, 100, SEEK_SET);
+    BOOST_TEST_EQ(menon::fgetpos(stream, &pos), 0);
+    BOOST_TEST_EQ(pos, 100);
+    BOOST_TEST_EQ(menon::fsetpos(stream, &pos), 0);
+    BOOST_TEST_EQ(std::ftell(stream), 100);
+    std::fclose(stream);
+  }
+
+  {
     std::ifstream ifs(path);
     menon::fseek(ifs, 100, SEEK_SET);
     BOOST_TEST_EQ(ifs.tellg(), 100);
