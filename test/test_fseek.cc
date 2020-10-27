@@ -46,6 +46,16 @@ int main()
   }
 
   {
+    std::ifstream ifs(path);
+    menon::fpos_t pos;
+    menon::fseek(ifs, 100, SEEK_SET);
+    BOOST_TEST_EQ(menon::fgetpos(ifs, &pos), 0);
+    BOOST_TEST_EQ(pos, 100);
+    BOOST_TEST_EQ(menon::fsetpos(ifs, &pos), 0);
+    BOOST_TEST_EQ(ifs.tellg(), 100);
+  }
+
+  {
     std::fstream fs(path);
     menon::fseek(fs, 100, SEEK_SET);
     BOOST_TEST_EQ(fs.tellp(), 100);
