@@ -196,16 +196,42 @@ namespace menon
     return 0;
   }
 
+  /// ファイル位置の取得
+  /// @param[in]  os        出力ストリーム
+  /// @param[out] pos       ファイル位置の格納先
+  /// @return     0を返す。
+  /// @throw      失敗時はruntime_error例外が発生する。
+  template <typename Char, typename Traits>
+  inline int fgetpos(std::basic_ostream<Char, Traits>& os, fpos_t* pos)
+  {
+    Expects(pos != nullptr);
+    *pos = menon::ftell(os);
+    return 0;
+  }
+
   /// ファイル位置の設定
   /// @param[in]  is        入力ストリーム
   /// @param[in]  pos       ファイル位置
   /// @return     0を返す。
   /// @throw      失敗時はruntime_error例外が発生する。
   template <typename Char, typename Traits>
-  inline int fsetpos(std::basic_istream<Char, Traits>& stream, fpos_t const* pos)
+  inline int fsetpos(std::basic_istream<Char, Traits>& is, fpos_t const* pos)
   {
     Expects(pos != nullptr);
-    menon::fseek(stream, *pos, SEEK_SET);
+    menon::fseek(is, *pos, SEEK_SET);
+    return 0;
+  }
+
+  /// ファイル位置の設定
+  /// @param[in]  os        出力ストリーム
+  /// @param[in]  pos       ファイル位置
+  /// @return     0を返す。
+  /// @throw      失敗時はruntime_error例外が発生する。
+  template <typename Char, typename Traits>
+  inline int fsetpos(std::basic_ostream<Char, Traits>& os, fpos_t const* pos)
+  {
+    Expects(pos != nullptr);
+    menon::fseek(os, *pos, SEEK_SET);
     return 0;
   }
 }

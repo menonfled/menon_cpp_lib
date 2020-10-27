@@ -68,6 +68,16 @@ int main()
     BOOST_TEST_EQ(ofs.tellp(), 100);
   }
 
+  {
+    std::ofstream ofs(path);
+    menon::fpos_t pos;
+    menon::fseek(ofs, 100, SEEK_SET);
+    BOOST_TEST_EQ(menon::fgetpos(ofs, &pos), 0);
+    BOOST_TEST_EQ(pos, 100);
+    BOOST_TEST_EQ(menon::fsetpos(ofs, &pos), 0);
+    BOOST_TEST_EQ(ofs.tellp(), 100);
+  }
+
   std::remove(path);
   return boost::report_errors();
 }
