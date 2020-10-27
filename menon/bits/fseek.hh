@@ -136,19 +136,25 @@ namespace menon
   /// シーク位置の取得
   /// @param[in]  is      入力ストリーム
   /// @return     現在のシーク位置を返す。
+  /// @throw      失敗時はruntime_error例外が発生する。
   template <typename Char, typename Traits>
   inline off_t ftell(std::basic_istream<Char, Traits>& is)
   {
-    return is.tellg();
+    if (is.bad())
+      throw std::runtime_error("menon::ftell");
+    return static_cast<off_t>(is.tellg());
   }
 
   /// シーク位置の取得
-  /// @param[in]  is      出力ストリーム
+  /// @param[in]  os      出力ストリーム
   /// @return     現在のシーク位置を返す。
+  /// @throw      失敗時はruntime_error例外が発生する。
   template <typename Char, typename Traits>
-  inline off_t ftell(std::basic_ostream<Char, Traits>& is)
+  inline off_t ftell(std::basic_ostream<Char, Traits>& os)
   {
-    return is.tellp();
+    if (os.bad())
+      throw std::runtime_error("menon::ftell");
+    return static_cast<off_t>(os.tellp());
   }
 
   /// ファイル位置の取得
