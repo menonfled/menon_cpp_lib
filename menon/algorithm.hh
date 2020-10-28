@@ -10,5 +10,6 @@
 #include "menon/bits/find.hh"
 #include "menon/bits/for_each_n.hh"
 #include "menon/bits/sort.hh"
+#include "menon/bits/fill.hh"
 
 #endif  // !MENON_ALGORITHM_HH_
