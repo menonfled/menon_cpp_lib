@@ -1,4 +1,5 @@
-﻿#include "menon/algorithm.hh"
+﻿// test_sort.cc
+#include "menon/algorithm.hh"
 #include <boost/core/lightweight_test.hpp>
 #include <vector>
 #include <string>
@@ -10,9 +11,10 @@
 std::random_device seed_gen;
 std::mt19937 engine(seed_gen());
 
+// sort関数のテストコード
 void test_sort()
 {
-  {
+  {  // RandomAccessIteratorを持つ列コンテナに対するテスト
     std::vector<int> v;
     v.resize(256);
     std::iota(v.begin(), v.end(), 0);
@@ -21,7 +23,7 @@ void test_sort()
     menon::sort(v);
     BOOST_TEST_ALL_EQ(v.begin(), v.end(), v2.begin(), v2.end());
   }
-  {
+  { // 配列に対するテスト
     int a[256];
     std::iota(std::begin(a), std::end(a), 0);
     int b[256];
@@ -30,7 +32,7 @@ void test_sort()
     menon::sort(a);
     BOOST_TEST_ALL_EQ(std::cbegin(a), std::cend(a), std::cbegin(b), std::cend(b));
   }
-  {
+  { // listに対するテスト
     std::vector<int> v;
     v.resize(256);
     std::iota(v.begin(), v.end(), 0);
@@ -41,7 +43,7 @@ void test_sort()
     BOOST_TEST_ALL_EQ(l.begin(), l.end(), v2.begin(), v2.end());
   }
 
-  {
+  { // RandomAccessIteratorを持つ列コンテナに対する降順ソートのテスト
     std::vector<int> v;
     v.resize(256);
     std::iota(v.begin(), v.end(), 0);
@@ -51,7 +53,7 @@ void test_sort()
     std::reverse(v2.begin(), v2.end());
     BOOST_TEST_ALL_EQ(v.begin(), v.end(), v2.begin(), v2.end());
   }
-  {
+  { // 配列に対する降順ソートのテスト
     int a[256];
     std::iota(std::begin(a), std::end(a), 0);
     int b[256];
@@ -61,7 +63,7 @@ void test_sort()
     std::reverse(std::begin(b), std::end(b));
     BOOST_TEST_ALL_EQ(std::cbegin(a), std::cend(a), std::cbegin(b), std::cend(b));
   }
-  {
+  { // listに対する降順ソートのテスト
     std::vector<int> v;
     v.resize(256);
     std::iota(v.begin(), v.end(), 0);
@@ -74,9 +76,10 @@ void test_sort()
   }
 }
 
+// stable_sort関数のテストコード
 void test_stable_sort()
 {
-  {
+  { // RandomAccessIteratorを持つ列コンテナに対するテスト
     std::vector<int> v;
     v.resize(256);
     std::iota(v.begin(), v.end(), 0);
@@ -85,7 +88,7 @@ void test_stable_sort()
     menon::stable_sort(v);
     BOOST_TEST_ALL_EQ(v.begin(), v.end(), v2.begin(), v2.end());
   }
-  {
+  { // 配列に対するテスト
     std::vector<int> v;
     v.resize(256);
     std::iota(v.begin(), v.end(), 0);
@@ -96,7 +99,7 @@ void test_stable_sort()
     BOOST_TEST_ALL_EQ(l.begin(), l.end(), v2.begin(), v2.end());
   }
 
-  {
+  { // RandomAccessIteratorを持つ列コンテナに対する降順ソートのテスト
     std::vector<int> v;
     v.resize(256);
     std::iota(v.begin(), v.end(), 0);
@@ -106,7 +109,7 @@ void test_stable_sort()
     std::reverse(v2.begin(), v2.end());
     BOOST_TEST_ALL_EQ(v.begin(), v.end(), v2.begin(), v2.end());
   }
-  {
+  { // list対する降順ソートのテスト
     std::vector<int> v;
     v.resize(256);
     std::iota(v.begin(), v.end(), 0);
