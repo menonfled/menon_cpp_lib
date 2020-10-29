@@ -1,9 +1,11 @@
-﻿#include "menon/encoding.hh"
+﻿// tes_c16_to_c32.cc
+#include "menon/encoding.hh"
 #include <boost/core/lightweight_test.hpp>
 #include <algorithm>
 #include <iconv.h>
 #include <cstdio>
 
+// UTF-16の1文字についてのテストコード
 void test(char16_t const* c16, std::size_t n)
 {
   union
@@ -23,7 +25,7 @@ void test(char16_t const* c16, std::size_t n)
 
   std::copy(c16, c16 + n, utf16);
 
-  // std::fprintf(stderr, "c32 = U+%08x\n", c32);
+  // UTF-16LEからUTF-32LEへ変換し、比較対象のデータを作る。
   if (auto cd = iconv_open("utf-32LE", "utf-16LE"))
   {
     iconv(cd, &p_inbuf, &inbyteleft, &p_outbuf, &outbyteleft);
@@ -37,12 +39,15 @@ void test(char16_t const* c16, std::size_t n)
   char16_t s[8];
   std::copy(c16, c16 + n, s);
   char32_t c32 = 0;
-  n = menon::c16_to_c32(s, n, &c32);
 
+  // UTF-16からUTF-32への変換
+  n = menon::c16_to_c32(s, n, &c32);
   BOOST_TEST_EQ((int)c32, (int)utf32);
 
+  // BMPの場合
   if (n == 1)
   {
+    // UTF-16からUTF-32への変換
     c32 = menon::c16_to_c32(c16[0]);
     BOOST_TEST_EQ((int)c32, (int)utf32);
   }
@@ -50,6 +55,7 @@ void test(char16_t const* c16, std::size_t n)
 
 int main()
 {
+  // BMP全種類の文字を総当たりする。
   for (int i = 0; i < 0x10000; i++)
   {
     char16_t c16 = (char16_t)i;
@@ -60,6 +66,7 @@ int main()
     std::size_t n = 1;
     test(s, n);
   }
+  // サロゲートペア全種類の文字を総当たりする。
   for (int i = 0xd800; i <= 0xdbff; i++)
   {
     for (int j = 0xdc00; j <= 0xdfff; j++)
