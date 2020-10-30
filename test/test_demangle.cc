@@ -1,9 +1,11 @@
-﻿#include "menon/demangle.hh"
+﻿// test_demangle.cc
+#include "menon/demangle.hh"
 #include <boost/core/lightweight_test.hpp>
 
 int main()
 {
 #if __GNUC___ || __CLANG__
+  // GCCとClangはデマングルが必要になる。
   BOOST_TEST_EQ(menon::demangle(typeid(int).name()), "int");
   BOOST_TEST_EQ(menon::demangle(typeid(char*).name()), "char*");
 #endif
