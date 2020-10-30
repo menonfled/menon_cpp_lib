@@ -1,24 +1,26 @@
-﻿#include "menon/math.hh"
+﻿// test_div.cc
+#include "menon/math.hh"
 #include <boost/core/lightweight_test.hpp>
 #include <climits>
 
+// div関数のテストコード
 void test_div()
 {
-  {
+  { // int型どうしの演算
     constexpr auto d = menon::div(12345, 67);
     BOOST_TEST_EQ(d.quot, 12345 / 67);
     BOOST_TEST_EQ(d.rem, 12345 % 67);
     BOOST_TEST_THROWS(menon::div(123, 0), std::invalid_argument);
     BOOST_TEST_THROWS(menon::div(INT_MIN, -1), std::out_of_range);
   }
-  {
+  { // unsigned int型とint型の演算
     constexpr auto d = menon::div(12345u, 67);
     BOOST_TEST_EQ(d.quot, 12345u / 67);
     BOOST_TEST_EQ(d.rem, 12345u % 67);
     BOOST_TEST_THROWS(menon::div(123u, 0), std::invalid_argument);
     BOOST_TEST_THROWS(menon::div(INT_MIN, -1u), std::out_of_range);
   }
-  {
+  { // long long型とint型の演算
     constexpr auto d = menon::div(12345LL, 67);
     BOOST_TEST_EQ(d.quot, 12345LL / 67);
     BOOST_TEST_EQ(d.rem, 12345LL % 67);
@@ -26,7 +28,7 @@ void test_div()
     BOOST_TEST_THROWS(menon::div(LONG_LONG_MIN, -1), std::out_of_range);
     BOOST_TEST_EQ(menon::div(INT_MIN, -1LL).quot, INT_MIN / -1LL);
   }
-  {
+  { // 浮動小数点型の演算
     auto d = menon::div(12345.0, 67);
     BOOST_TEST_EQ(d.quot, 12345 / 67);
     BOOST_TEST_EQ(d.rem, 12345 % 67);
@@ -39,9 +41,10 @@ void test_div()
   }
 }
 
+// udiv関数のテストコード
 void test_udiv()
 {
-  {
+  { // unsigned int型どうしの演算
     constexpr auto d = menon::udiv(12345u, 67u);
     BOOST_TEST_EQ(d.quot, 12345u / 67u);
     BOOST_TEST_EQ(d.rem, 12345u % 67u);
@@ -49,7 +52,7 @@ void test_udiv()
     BOOST_TEST_NOT(d.rem_sign);
     BOOST_TEST_THROWS(menon::udiv(123u, 0u), std::invalid_argument);
   }
-  {
+  { // unsigned long long型とunsigned int型の演算
     constexpr auto d = menon::udiv(12345ull, 67u);
     BOOST_TEST_EQ(d.quot, 12345ull / 67u);
     BOOST_TEST_EQ(d.rem, 12345ull % 67u);
@@ -57,14 +60,14 @@ void test_udiv()
     BOOST_TEST_NOT(d.rem_sign);
     BOOST_TEST_THROWS(menon::udiv(123u, 0u), std::invalid_argument);
   }
-  {
+  { // int型どうしの演算
     constexpr auto d = menon::udiv(-12345, 67);
     BOOST_TEST_EQ(d.quot, 12345 / 67);
     BOOST_TEST_EQ(d.rem, 12345 % 67);
     BOOST_TEST(d.quot_sign);
     BOOST_TEST(d.rem_sign);
   }
-  {
+  { // 浮動小数点型の演算
     auto d = menon::udiv(-12345.0, 67);
     BOOST_TEST_EQ(d.quot, 12345 / 67);
     BOOST_TEST_EQ(d.rem, 12345 % 67);
