@@ -1,4 +1,5 @@
-﻿#include "menon/utility.hh"
+﻿// test_clamp.cc
+#include "menon/utility.hh"
 #include <boost/core/lightweight_test.hpp>
 #include <string>
 #include <string_view>
@@ -8,6 +9,7 @@ int main()
 {
   using namespace std::literals;
 
+  // 同じ型どうしのテストケース
   {
     constexpr auto r = menon::clamp(5, 1, 10);
     BOOST_TEST_EQ(r, 5);
@@ -21,6 +23,7 @@ int main()
     BOOST_TEST_EQ(r, 4);
   }
 
+  // 異なる型を与えた場合のテストケース
   {
     constexpr auto r = menon::clamp(5, 1L, 10LL);
     BOOST_TEST_EQ(r, 5LL);
@@ -40,6 +43,16 @@ int main()
   {
     constexpr auto r = menon::clamp(5.0, 1, 4);
     BOOST_TEST_EQ(r, 4);
+  }
+
+  // 文字列を与えた場合のテストコード
+  {
+    constexpr auto r = menon::clamp("abc"sv, "aaa"sv, "bbb"sv);
+    BOOST_TEST_EQ(r, "abc"sv);
+  }
+  {
+    auto r = menon::clamp("abc"s, "aaa"s, "bbb"s);
+    BOOST_TEST_EQ(r, "abc"s);
   }
 
   return boost::report_errors();

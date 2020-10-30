@@ -5,7 +5,7 @@
 #define MENON_BITS_CLAMP_HH_
 #pragma once
 
-#include "menon/bits/sv.hh"
+#include "menon/bits/config.hh"
 #include <concepts>
 #include <utility>
 
