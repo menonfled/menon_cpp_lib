@@ -1,7 +1,9 @@
-﻿#include "menon/io.hh"
+﻿// test_iostream.cc
+#include "menon/io.hh"
 #include <boost/core/lightweight_test.hpp>
 #include <sstream>
 
+// ostreamへの出力
 void test_output()
 {
   using namespace std::literals;
@@ -42,6 +44,7 @@ void test_output()
   BOOST_TEST_EQ(ss.str(), "変換テスト"s);
 }
 
+// istreamからの入力
 void test_input()
 {
   using namespace menon::iostream_ops;
