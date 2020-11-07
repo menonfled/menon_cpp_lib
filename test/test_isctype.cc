@@ -1,8 +1,10 @@
-﻿#include "menon/ctype.hh"
+﻿// test_isctype.cc
+#include "menon/ctype.hh"
 #include <boost/core/lightweight_test.hpp>
 #include <cctype>
 #include <cstdio>
 
+// テストコード生成用マクロの定義
 #define DEF_TEST(name)  \
     BOOST_TEST_EQ(menon::is##name(c), !!std::is##name(c2));  \
     BOOST_TEST_EQ(menon::isctype(c, menon::name), !!std::is##name(c2)); \
@@ -14,6 +16,7 @@
 #define DEF_TEST3(name) \
     BOOST_TEST(menon::ctype(#name) == menon::name)
 
+// is系関数のテストコード
 template <typename Char>
 void test()
 {
@@ -57,6 +60,7 @@ int main()
   test<char16_t>();
   test<char32_t>();
 
+  // ctype関数のテストコード
   DEF_TEST3(cntrl);
   DEF_TEST3(digit);
   DEF_TEST3(punct);
