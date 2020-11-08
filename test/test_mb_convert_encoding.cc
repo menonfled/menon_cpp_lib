@@ -1,4 +1,5 @@
-﻿#include "menon/encoding.hh"
+﻿// test_mb_convert_encoding.cc
+#include "menon/encoding.hh"
 #include <boost/core/lightweight_test.hpp>
 
 int main()
@@ -11,16 +12,29 @@ int main()
   char32_t const* c32_s = U"\u6587\u5b57\u30a8\u30f3\u30b3\u30fc\u30c7\u30a3\u30f3\u30b0\u306e\u5909\u63db\u30c6\u30b9\u30c8";
   wchar_t const* wcs_s = L"\u6587\u5b57\u30a8\u30f3\u30b3\u30fc\u30c7\u30a3\u30f3\u30b0\u306e\u5909\u63db\u30c6\u30b9\u30c8";
 
+  // char文字列からの変換
   BOOST_TEST_CSTR_EQ(menon::mb_convert_encoding(s, "CP932").c_str(), cp932_s);
   BOOST_TEST_CSTR_EQ(menon::mb_convert_encoding(s, "UTF-8", "CP932").c_str(), utf8_s);
+
+  // EUC-JPからの変換
   BOOST_TEST_CSTR_EQ(menon::mb_convert_encoding(eucjp_s, "CP932", "EUC-JP").c_str(), cp932_s);
 
+  // UTF-16空の変換
   BOOST_TEST(menon::mb_convert_encoding<char>(c16_s, "CP932") == cp932_s);
+
+  // UTF-32からの変換
   BOOST_TEST(menon::mb_convert_encoding<char>(c32_s, "UTF-8") == utf8_s);
+
+  // char文字列からUTF-32への変換
   BOOST_TEST(menon::mb_convert_encoding<char32_t>(s, menon::get_internal_encoding<char32_t>()) == c32_s);
+
+  // char文字列からワイド文字列への変換
   BOOST_TEST(menon::mb_convert_encoding<wchar_t>(s, menon::get_internal_encoding<wchar_t>()) == wcs_s);
+
+  // ワイド文字列からchar文字列への変換
   BOOST_TEST(menon::mb_convert_encoding<char>(wcs_s, "UTF-8") == utf8_s);
 
+  // byte配列からchar文字列への変換
   std::byte bytes[] = { std::byte('a'), std::byte('b'), std::byte('c') };
   BOOST_TEST_CSTR_EQ(menon::mb_convert_encoding<char>(bytes, 3, "UTF-8", "ASCII").c_str(), "abc");
 
