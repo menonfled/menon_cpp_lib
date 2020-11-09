@@ -1,4 +1,5 @@
-﻿#include "menon/iterator.hh"
+﻿// test_optional_iterator.cc
+#include "menon/iterator.hh"
 #include <boost/core/lightweight_test.hpp>
 #include <string>
 #include <string_view>
@@ -8,7 +9,8 @@ int main()
 {
   using namespace std::literals;
 
-  {
+  // string_viewのイテレータ
+  { // 演算子のテストコード
     constexpr auto sv = "abcde"sv;
     constexpr menon::optional_iterator<std::string_view::iterator> t(sv.begin());
     BOOST_TEST(t);
@@ -51,13 +53,15 @@ int main()
     BOOST_TEST(std::nullopt == u);
     BOOST_TEST_NOT(std::nullopt != u);
   }
-  {
+  { // 内部値へのアクセスに関するテストコード
     constexpr menon::optional_iterator<std::string_view::iterator> u;
     BOOST_TEST(!u);
     BOOST_TEST_NOT(u);
     BOOST_TEST_THROWS(u.value(), std::bad_optional_access);
     BOOST_TEST_THROWS(*u, std::bad_optional_access);
   }
+
+  // vecrorのイテレータ
   {
     std::vector v = { 1, 2, 3, 4, 5 };
     menon::optional_iterator<decltype(v)::iterator> t(v.begin());
