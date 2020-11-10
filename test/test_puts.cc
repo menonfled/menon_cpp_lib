@@ -1,8 +1,10 @@
-﻿#include "menon/io.hh"
+﻿// test_puts.cc
+#include "menon/io.hh"
 #include <boost/core/lightweight_test.hpp>
 #include <cwchar>
 #include <fstream>
 
+// テストデータの読み込み
 std::string read_test_file(char const* path, bool keep_nl)
 {
   char buf[1024];
@@ -23,6 +25,7 @@ std::string read_test_file(char const* path, bool keep_nl)
   return buf;
 }
 
+// puts関数のテストコード
 void test_puts()
 {
   using namespace std::literals;
@@ -32,28 +35,28 @@ void test_puts()
   auto test_wcs = L"これはテストです。";
   auto test_wstr = L"これはテストです。"s;
 
-  {
+  { // 文字配列の書き込み
     auto stream = std::fopen(path, "w");
     BOOST_TEST_NE(stream, nullptr);
     BOOST_TEST_EQ(menon::puts(test_s, stream), 0);
     std::fclose(stream);
     BOOST_TEST_EQ(read_test_file(path, false), test_s);
   }
-  {
+  { // stringの書き込み
     auto stream = std::fopen(path, "w");
     BOOST_TEST_NE(stream, nullptr);
     BOOST_TEST_EQ(menon::puts(test_str, stream), 0);
     std::fclose(stream);
     BOOST_TEST_EQ(read_test_file(path, false), test_s);
   }
-  {
+  { // wchar_t配列の書き込み
     auto stream = std::fopen(path, "w");
     BOOST_TEST_NE(stream, nullptr);
     BOOST_TEST_EQ(menon::puts(test_wcs, stream), 0);
     std::fclose(stream);
     BOOST_TEST_EQ(read_test_file(path, false), test_s);
   }
-  {
+  { // wstringの書き込み
     auto stream = std::fopen(path, "w");
     BOOST_TEST_NE(stream, nullptr);
     BOOST_TEST_EQ(menon::puts(test_wstr, stream), 0);
@@ -62,6 +65,7 @@ void test_puts()
   }
 }
 
+// fputs関数のテストコード
 void test_fputs()
 {
   using namespace std::literals;
@@ -71,28 +75,28 @@ void test_fputs()
   auto test_wcs = L"これはテストです。";
   auto test_wstr = L"これはテストです。"s;
 
-  {
+  { // 文字配列の書き込み
     auto stream = std::fopen(path, "w");
     BOOST_TEST_NE(stream, nullptr);
     BOOST_TEST_EQ(menon::fputs(test_s, stream), 0);
     std::fclose(stream);
     BOOST_TEST_EQ(read_test_file(path, true), test_s);
   }
-  {
+  { // stringの書き込み
     auto stream = std::fopen(path, "w");
     BOOST_TEST_NE(stream, nullptr);
     BOOST_TEST_EQ(menon::fputs(test_str, stream), 0);
     std::fclose(stream);
     BOOST_TEST_EQ(read_test_file(path, true), test_s);
   }
-  {
+  { // wchar_t配列の書き込み
     auto stream = std::fopen(path, "w");
     BOOST_TEST_NE(stream, nullptr);
     BOOST_TEST_EQ(menon::fputs(test_wcs, stream), 0);
     std::fclose(stream);
     BOOST_TEST_EQ(read_test_file(path, true), test_s);
   }
-  {
+  { // wstringの書き込み
     auto stream = std::fopen(path, "w");
     BOOST_TEST_NE(stream, nullptr);
     BOOST_TEST_EQ(menon::fputs(test_wstr, stream), 0);
