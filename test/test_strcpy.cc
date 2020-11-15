@@ -1,4 +1,5 @@
-﻿#include "menon/string.hh"
+﻿// test_strcpy.cc
+#include "menon/string.hh"
 #include <boost/core/lightweight_test.hpp>
 #include <cstring>
 #include <cwchar>
@@ -12,7 +13,7 @@ int main()
   char buf[5];
   wchar_t wbuf[5];
 
-  {
+  { // strcpy関数のテストコード
     BOOST_TEST_EQ(menon::strcpy(buf, 0, "abc"), buf);
     BOOST_TEST_EQ(menon::strcpy((char*)nullptr, 0, "abc"), nullptr);
 
@@ -24,7 +25,7 @@ int main()
     BOOST_TEST_EQ(std::wcscmp(menon::strcpy(wbuf, L"abcdefg"), L"abcd"), 0);
   }
 
-  {
+  { // strncpy関数のテストコード
     BOOST_TEST_EQ(std::memcmp(menon::strncpy(buf, s, 3), s.c_str(), 3), 0);
     std::memset(buf, 0xff, 5);
     BOOST_TEST_EQ(std::memcmp(menon::strncpy(buf, "abc", 5), "abc\0\0", 5), 0);
