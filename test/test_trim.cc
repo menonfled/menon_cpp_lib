@@ -4,6 +4,7 @@
 
 using namespace std::literals;
 
+// ltrim関数のテストコード
 void test_ltrim()
 {
   BOOST_TEST_EQ(menon::ltrim("abcde", "ab"), "cde");
@@ -11,6 +12,7 @@ void test_ltrim()
   BOOST_TEST_EQ(menon::ltrim("abcde", "xy"), "abcde");
 }
 
+// rtrim関数のテストコード
 void test_rtrim()
 {
   BOOST_TEST_EQ(menon::rtrim("abcde", "ed"), "abc");
@@ -18,6 +20,7 @@ void test_rtrim()
   BOOST_TEST_EQ(menon::rtrim("abcde", "xy"), "abcde");
 }
 
+// trim関数のテストコード
 void test_trim()
 {
   BOOST_TEST_EQ(menon::trim("abcde", "ab"), "cde");
