@@ -15,6 +15,9 @@
 # include "menon/bits/win_workaround.hh"
 #endif
 
+/// bit_castの代替定義
+#include "menon/bits/bit_cast_workaround.hpp"
+
 // Guidelines Support Libraryの判定
 // バージョン番号を直接調べる方法方がないので、<gsl/span_ext>の有無を
 // 調べて古いバージョンの使用を禁止する。
