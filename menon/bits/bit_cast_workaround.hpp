@@ -12,7 +12,7 @@ namespace menon
   template<typename To, typename From>
   constexpr To bit_cast(From const& from) noexcept
   {
-#ifdef _MSC_VER
+#ifdef __cpp_lib_bit_cast
     return std::bit_cast<To>(from);
 #elif __clang__
     return __builtin_bit_cast(To, from);
